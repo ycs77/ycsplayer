@@ -1,0 +1,28 @@
+@layer base {
+  html {
+    @apply font-light;
+  }
+
+  body {
+    @apply text-gray-900 selection:bg-sky-400 selection:text-white;
+  }
+
+  button {
+    @apply focus:outline-none;
+  }
+
+  @media screen and (-webkit-min-device-pixel-ratio:0) {
+    ::-webkit-scrollbar {
+      @apply w-[14px] h-[14px];
+    }
+
+    ::-webkit-scrollbar-thumb {
+      @apply bg-sky-400 hover:bg-sky-500 bg-clip-padding;
+      @apply border-[4px] border-solid border-transparent rounded-full;
+    }
+
+    ::-webkit-scrollbar-track {
+      @apply bg-sky-100/50;
+    }
+  }
+}

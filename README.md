@@ -1,1 +1,61 @@
 # ycsPlayer 線上影音點播包廂
+
+## 本地安裝
+
+依賴 Laravel Homestead 環境，PHP 8.1，Node.js 18+。
+
+```bash
+cp .env.example .env
+composer install
+php artisan key:generate
+php artisan migrate
+php artisan storage:link
+yarn
+yarn dev
+```
+
+記得要轉發 Homestead 的 5173 port。
+
+### 在 Homesetad 裡建立 Vite 開發伺服器的 HTTPS 證書
+
+執行創建指令：
+
+```bash
+sudo /vagrant/scripts/create-certificate.sh localhost
+sudo chmod -R 644 /etc/ssl/certs/localhost.key
+```
+
+然後在 `.env` 裡設定本地開發用證書路徑：
+
+```
+VITE_DEV_SERVER_KEY=/etc/ssl/certs/localhost.key
+VITE_DEV_SERVER_CERT=/etc/ssl/certs/localhost.crt
+```
+
+## Pusher
+
+到 [Pusher](https://pusher.com/) 新增 APP 後將金鑰複製到 `.env`：
+
+```ini
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_HOST=
+PUSHER_PORT=443
+PUSHER_SCHEME=https
+PUSHER_APP_CLUSTER=mt1
+```
+
+## 啟動 Server
+
+啟動 Vite dev server：
+
+```bash
+yarn dev
+```
+
+啟動 Queue server：
+
+```bash
+php artisan queue:work
+```
