@@ -24,6 +24,9 @@ export default defineConfig(({ mode }) => {
       }),
       Vue({
         template: {
+          compilerOptions: {
+            isCustomElement: tag => ['video-js'].includes(tag),
+          },
           transformAssetUrls: {
             base: null,
             includeAbsolute: false,
@@ -48,7 +51,10 @@ export default defineConfig(({ mode }) => {
         dts: 'resources/js/shims/auto-components.d.ts',
       }),
       AutoImport({
-        dirs: ['resources/js/composables'],
+        dirs: [
+          'resources/js/composables',
+          'resources/js/utils',
+        ],
         imports: [
           'vue',
           '@vueuse/core',

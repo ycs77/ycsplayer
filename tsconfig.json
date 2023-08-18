@@ -19,7 +19,8 @@
     "types": [
       "vite/client",
       "unplugin-vue-define-options/macros-global",
-      "unplugin-icons/types/vue3"
+      "unplugin-icons/types/vue3",
+      "youtube"
     ]
   },
   "include": [

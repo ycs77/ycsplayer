@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fbd0f088a3effec8eea7f8e09d63fbe5",
+    "content-hash": "731a25f367ffc5cb262bdadaf1c57d77",
     "packages": [
         {
             "name": "additionapps/flexible-presenter",
@@ -6498,16 +6498,16 @@
         },
         {
             "name": "ycs77/inertia-laravel-ssr-head",
-            "version": "v1.2.1",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ycs77/inertia-laravel-ssr-head.git",
-                "reference": "e38ad7677505b6497722d5d3174b7a5cbfb7b273"
+                "reference": "3265547e6d53fdb54ebbf4f67257c26dcbe504ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ycs77/inertia-laravel-ssr-head/zipball/e38ad7677505b6497722d5d3174b7a5cbfb7b273",
-                "reference": "e38ad7677505b6497722d5d3174b7a5cbfb7b273",
+                "url": "https://api.github.com/repos/ycs77/inertia-laravel-ssr-head/zipball/3265547e6d53fdb54ebbf4f67257c26dcbe504ed",
+                "reference": "3265547e6d53fdb54ebbf4f67257c26dcbe504ed",
                 "shasum": ""
             },
             "require": {
@@ -6559,9 +6559,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ycs77/inertia-laravel-ssr-head/issues",
-                "source": "https://github.com/ycs77/inertia-laravel-ssr-head/tree/v1.2.1"
+                "source": "https://github.com/ycs77/inertia-laravel-ssr-head/tree/v1.3.0"
             },
-            "time": "2023-04-03T16:17:44+00:00"
+            "time": "2023-08-15T13:08:08+00:00"
         }
     ],
     "packages-dev": [

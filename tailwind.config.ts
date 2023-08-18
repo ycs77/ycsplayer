@@ -18,6 +18,10 @@ export default {
       xl: '1280px',
       // '2xl': '1536px',
     },
+    container: {
+      center: true,
+      padding: '1.5rem',
+    },
     extend: {},
   },
   plugins: [

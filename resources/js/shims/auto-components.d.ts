@@ -9,8 +9,13 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    copy: typeof import('./../components/PlayerAudio copy.vue')['default']
     Layout: typeof import('./../layouts/Layout.vue')['default']
     Link: typeof import('@inertiajs/vue3')['Link']
     Pagination: typeof import('./../components/Pagination.vue')['default']
+    Player: typeof import('./../components/Player.vue')['default']
+    PlayerAudio: typeof import('./../components/PlayerAudio.vue')['default']
+    PlayerVideo: typeof import('./../components/PlayerVideo.vue')['default']
+    PlayerYouTube: typeof import('./../components/PlayerYouTube.vue')['default']
   }
 }

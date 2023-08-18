@@ -4,6 +4,14 @@ import InertiaTitle from 'inertia-title/vue3'
 import Layout from '@/layouts/Layout.vue'
 import '@/styles/index.css'
 
+declare global {
+  interface Window {
+    HELP_IMPROVE_VIDEOJS: boolean
+  }
+}
+
+window.HELP_IMPROVE_VIDEOJS = false
+
 createInertiaApp({
   resolve: async name => {
     const pages = import.meta.glob('./pages/**/*.vue')
