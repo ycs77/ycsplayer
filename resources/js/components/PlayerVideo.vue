@@ -258,18 +258,16 @@ onMounted(() => {
 
       let currentTime = e.status.current_time
 
-      // // TODO: BUG 現在這串的問題是，如果已經先有人開了播放器，第2個人開啟後點擊可以正常。但如果是第一個人開的時候就會跳到後面。
-      //
-      // // 如果觸發的當前播放器，正在點擊 bigPlayButton，
-      // // 就要校正播放時間。
-      // if (!e.status.is_started &&
-      //     !player.hasStarted_ &&
-      //     e.status.timestamp > 0 &&
-      //     e.status.current_time > 0
-      // ) {
-      //   const seconds = (Date.now() - e.status.timestamp) / 1000
-      //   currentTime = Math.round((e.status.current_time + seconds) * 100) / 100
-      // }
+      // 如果觸發的當前播放器，正在點擊 bigPlayButton，
+      // 就要校正播放時間。
+      if (!e.status.is_started &&
+          !player.hasStarted_ &&
+          e.status.timestamp > 0 &&
+          e.status.current_time > 0
+      ) {
+        const seconds = (Date.now() - e.status.timestamp) / 1000
+        currentTime = Math.round((e.status.current_time + seconds) * 100) / 100
+      }
 
       if (currentTime < player.duration()) {
         player.currentTime(currentTime)

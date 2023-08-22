@@ -1,5 +1,6 @@
 <?php
 
+use App\Broadcasting\Http\Controllers\PusherWebhookController;
 use App\Enums\PlayerType;
 use App\Events\MediaPaused;
 use App\Events\MediaPlayed;
@@ -135,3 +136,5 @@ Route::post('/media/end', function (Request $request) {
 
     return response()->noContent();
 });
+
+Route::post('/pusher/webhook', PusherWebhookController::class);

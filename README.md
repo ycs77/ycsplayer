@@ -46,6 +46,8 @@ PUSHER_SCHEME=https
 PUSHER_APP_CLUSTER=mt1
 ```
 
+然後在 Pusher APP 的 Webhooks 設定裡加上 `https://your-domain.com/pusher/webhook` 連結，Event type 選擇 Channel existence。如果在本地需要測試時，可以使用 ngrok 建立臨時網址來測試，但每次測試都需要更新網址到 Pusher 的後台。
+
 ## 啟動 Server
 
 啟動 Vite dev server：
