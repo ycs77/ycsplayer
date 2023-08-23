@@ -38,7 +38,7 @@ class Room extends Model
         return $this->hasMany(PlaylistItem::class);
     }
 
-    public function onMediaPlayed(PlaylistItem $currentItem): void
+    public function onPlayerPlayed(PlaylistItem $currentItem): void
     {
         if ($this->auto_remove) {
             $currentItem->delete();

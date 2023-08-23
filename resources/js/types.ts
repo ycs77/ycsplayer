@@ -11,11 +11,11 @@ export interface PlayStatus {
   paused: boolean
 }
 
-export interface MediaOperationEvent {
+export interface PlayerOperationEvent {
   type: PlayerType
   status: PlayStatus
 }
 
-export interface MediaPlayedEvent extends MediaOperationEvent {}
-export interface MediaPausedEvent extends MediaOperationEvent {}
-export interface MediaSeekedEvent extends MediaOperationEvent {}
+export interface PlayerPlayedEvent extends PlayerOperationEvent {}
+export interface PlayerPausedEvent extends PlayerOperationEvent {}
+export interface PlayerSeekedEvent extends PlayerOperationEvent {}

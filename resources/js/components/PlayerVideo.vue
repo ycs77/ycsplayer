@@ -18,7 +18,7 @@ import type PlayToggle from 'video.js/dist/types/control-bar/play-toggle'
 import type SeekBar from 'video.js/dist/types/control-bar/progress-control/seek-bar'
 import 'videojs-youtube'
 import { Echo } from '@/echo'
-import { PlayerType, type MediaPlayedEvent, type MediaPausedEvent, type MediaSeekedEvent } from '@/types'
+import { PlayerType, type PlayerPlayedEvent, type PlayerPausedEvent, type PlayerSeekedEvent } from '@/types'
 
 const props = defineProps<{
   src: string
@@ -41,7 +41,7 @@ function play(handler?: () => void) {
     handler?.()
   }
 
-  axios.post('/media/play', {
+  axios.post('/player/play', {
     player_type: props.type,
     timestamp: hasStarted ? Date.now() : null,
     is_started: hasStarted,
@@ -67,7 +67,7 @@ function pause(handler?: () => void) {
 
   handler?.()
 
-  axios.post('/media/pause', {
+  axios.post('/player/pause', {
     player_type: props.type,
     timestamp: Date.now(),
     current_time: Math.round(player.currentTime() * 100) / 100,
@@ -77,7 +77,7 @@ function pause(handler?: () => void) {
 function seeked() {
   if (!player) return
 
-  axios.post('/media/seeked', {
+  axios.post('/player/seeked', {
     player_type: props.type,
     timestamp: Date.now(),
     current_time: Math.round(player.currentTime() * 100) / 100,
@@ -92,7 +92,7 @@ function seeked() {
 const timeUpdate = throttle(() => {
   if (!player) return
 
-  axios.post('/media/time-update', {
+  axios.post('/player/time-update', {
     player_type: props.type,
     timestamp: Date.now(),
     current_time: Math.round(player.currentTime() * 100) / 100,
@@ -103,7 +103,7 @@ const timeUpdate = throttle(() => {
 function end() {
   if (!player) return
 
-  axios.post('/media/end', {
+  axios.post('/player/end', {
     player_type: props.type,
   }).then()
 }
@@ -242,9 +242,9 @@ onMounted(() => {
   controlBar.addChild('PlayToggle', {}, 0)
   progressControl.addChild('SeekBar', {}, 0)
 
-  Echo.join(`media.${props.type}`)
+  Echo.join(`player.${props.type}`)
     // 監聽播放事件
-    .listen('MediaPlayed', (e: MediaPlayedEvent) => {
+    .listen('PlayerPlayed', (e: PlayerPlayedEvent) => {
       if (!player) return
 
       // 如果觸發的播放器是正在點擊 bigPlayButton，
@@ -253,7 +253,7 @@ onMounted(() => {
       if (!e.status.is_started && player.hasStarted_) return
 
       if (import.meta.env.DEV) {
-        console.log('MediaPlayed', e.status.current_time)
+        console.log('PlayerPlayed', e.status.current_time)
       }
 
       let currentTime = e.status.current_time
@@ -281,11 +281,11 @@ onMounted(() => {
       }
     })
     // 監聽暫停事件
-    .listen('MediaPaused', (e: MediaPausedEvent) => {
+    .listen('PlayerPaused', (e: PlayerPausedEvent) => {
       if (!player) return
 
       if (import.meta.env.DEV) {
-        console.log('MediaPaused', e.status.current_time)
+        console.log('PlayerPaused', e.status.current_time)
       }
 
       player.currentTime(e.status.current_time)
@@ -295,11 +295,11 @@ onMounted(() => {
       }
     })
     // 監聽改變進度條事件 (只發布給其他播放器)
-    .listen('MediaSeeked', (e: MediaSeekedEvent) => {
+    .listen('PlayerSeeked', (e: PlayerSeekedEvent) => {
       if (!player) return
 
       if (import.meta.env.DEV) {
-        console.log('MediaSeeked', e.status.current_time)
+        console.log('PlayerSeeked', e.status.current_time)
       }
 
       const seconds = (Date.now() - e.status.timestamp) / 1000
@@ -318,7 +318,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(async () => {
-  Echo.leave(`media.${props.type}`)
+  Echo.leave(`player.${props.type}`)
 
   if (player) {
     player.pause()

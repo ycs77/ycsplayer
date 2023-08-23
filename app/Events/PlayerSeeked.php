@@ -3,7 +3,7 @@
 namespace App\Events;
 
 use App\Enums\PlayerType;
-use App\Media\PlayStatus;
+use App\Player\PlayStatus;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MediaPlayed implements ShouldBroadcast
+class PlayerSeeked implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -29,7 +29,7 @@ class MediaPlayed implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('media.'.$this->type->value),
+            new PresenceChannel('player.'.$this->type->value),
         ];
     }
 }

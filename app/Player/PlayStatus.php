@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Media;
+namespace App\Player;
 
 use Illuminate\Contracts\Support\Arrayable;
 use JsonSerializable;

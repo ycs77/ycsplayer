@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Cache;
 
-class MediaAllConnectionClosed
+class PlayerAllConnectionClosed
 {
     /**
      * Create the event listener.
@@ -23,7 +23,7 @@ class MediaAllConnectionClosed
      */
     public function handle(PusherChannelVacated $event): void
     {
-        $channelNamespace = 'presence-media.';
+        $channelNamespace = 'presence-player.';
 
         $channels = array_map(fn (PlayerType $type) => $channelNamespace.$type->value, PlayerType::cases());
 

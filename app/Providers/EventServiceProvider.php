@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use App\Broadcasting\Events\PusherChannelVacated;
-use App\Events\MediaPaused;
-use App\Events\MediaPlayed;
-use App\Listeners\MediaAllConnectionClosed;
+use App\Events\PlayerPaused;
+use App\Events\PlayerPlayed;
+use App\Listeners\PlayerAllConnectionClosed;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,10 +22,10 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        MediaPlayed::class => [],
-        MediaPaused::class => [],
+        PlayerPlayed::class => [],
+        PlayerPaused::class => [],
         PusherChannelVacated::class => [
-            MediaAllConnectionClosed::class,
+            PlayerAllConnectionClosed::class,
         ],
     ];
 
