@@ -8,10 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * @property int $id
  * @property \App\Enums\PlayerType $type
  * @property string $title
  * @property string $url
  * @property string|null $thumbnail
+ * @property \Illuminate\Support\Carbon $created_at
+ * @property \Illuminate\Support\Carbon $updated_at
  * @property \App\Models\Room $room
  */
 class PlaylistItem extends Model
