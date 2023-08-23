@@ -30,10 +30,13 @@ const videoRef = ref() as Ref<HTMLVideoElement>
 
 let player: Player | undefined
 let playCallback = null as (() => void) | null
+let is_ended = false
 
 function play(handler?: () => void) {
   if (!player) return
   if (!player.paused()) return
+
+  is_ended = false
 
   const hasStarted = player.hasStarted_
 
@@ -91,6 +94,7 @@ function seeked() {
 
 const timeUpdate = throttle(() => {
   if (!player) return
+  if (is_ended) return
 
   axios.post('/player/time-update', {
     player_type: props.type,
@@ -102,6 +106,8 @@ const timeUpdate = throttle(() => {
 
 function end() {
   if (!player) return
+
+  is_ended = true
 
   axios.post('/player/end', {
     player_type: props.type,
