@@ -1,5 +1,5 @@
 <template>
-  <div class="relative max-w-[600px]">
+  <div class="relative">
     <video-js
       ref="videoRef"
       :class="{ 'vjs-youtube-block-touch': type === PlayerType.YouTube }"

@@ -8,16 +8,24 @@
       <h1 class="mb-4 text-2xl font-semibold">{{ room.title }}</h1>
 
       <div class="grid gap-8 md:grid-cols-2">
-        <Player
-          v-if="current_playing"
-          ref="player"
-          :key="current_playing.id"
-          :room-id="room.id"
-          :src="current_playing.url"
-          :type="current_playing.type"
-          :poster="current_playing.thumbnail ?? undefined"
-          @ended="ended"
-        />
+        <div>
+          <Player
+            v-if="current_playing"
+            ref="player"
+            :key="current_playing.id"
+            :room-id="room.id"
+            :src="current_playing.url"
+            :type="current_playing.type"
+            :poster="current_playing.thumbnail ?? undefined"
+            @ended="ended"
+          />
+
+          <div v-else>
+            <div class="flex justify-center items-center bg-gray-200 text-lg rounded-lg aspect-video">
+              請選擇播放項目
+            </div>
+          </div>
+        </div>
 
         <div>
           <ul>

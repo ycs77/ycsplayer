@@ -27,14 +27,6 @@ class RoomController extends Controller
 
     public function show(Room $room)
     {
-        $room->load('playlist_items');
-
-        if (count($room->playlist_items) && ! $room->current_playing_id) {
-            $room->update([
-                'current_playing_id' => $room->playlist_items->first()->id,
-            ]);
-        }
-
         return Inertia::render('Room/Show', [
             'room' => fn () => RoomPresenter::make($room)->preset('show'),
             'current_playing' => fn () => PlaylistItemPresenter::make($room->current_playing),
