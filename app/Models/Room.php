@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \App\Enums\RoomType $type
  * @property string $title
  * @property int|null $current_playing_id
- * @property boolean $auto_play
- * @property boolean $auto_remove
+ * @property bool $auto_play
+ * @property bool $auto_remove
  * @property string|null $note
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at

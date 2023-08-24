@@ -27,7 +27,8 @@ class PlayStatus implements JsonSerializable, Arrayable
         $this->paused = $data['paused'] ?? $this->paused;
     }
 
-    public function jsonSerialize(): array {
+    public function jsonSerialize(): array
+    {
         return $this->toArray();
     }
 

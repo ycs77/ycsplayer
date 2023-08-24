@@ -10,6 +10,7 @@ class PusherChannelOccupied
     use Dispatchable, SerializesModels;
 
     public string $channel;
+
     public int $time_ms;
 
     public function __construct(string $channel, int $time_ms)

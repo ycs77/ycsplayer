@@ -10,6 +10,7 @@ class PusherWebhookReceived
     use Dispatchable, SerializesModels;
 
     public int $time_ms;
+
     public array $events;
 
     public function __construct(int $time_ms, array $events)

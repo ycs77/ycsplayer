@@ -3,10 +3,7 @@
 namespace App\Listeners;
 
 use App\Broadcasting\Events\PusherChannelVacated;
-use App\Enums\PlayerType;
 use App\Models\Room;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Cache;
 
 class PlayerAllConnectionClosed
