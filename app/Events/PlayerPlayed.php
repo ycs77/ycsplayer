@@ -13,6 +13,9 @@ class PlayerPlayed implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * Create a new event instance.
+     */
     public function __construct(
         public string $socketId,
         public int $roomId,
