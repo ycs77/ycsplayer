@@ -62,15 +62,13 @@ class RoomController extends Controller
         }
 
         $canUpdate = false;
-        $removedItemId = null;
 
-        DB::transaction(function () use ($room, &$canUpdate, &$removedItemId) {
+        DB::transaction(function () use ($room, &$canUpdate) {
             $currentPlaying = $room->current_playing()
                 ->lockForUpdate()
                 ->first();
 
             if ($currentPlaying) {
-                $removedItemId = $currentPlaying->id;
                 $currentPlaying->delete();
                 $canUpdate = true;
             }
