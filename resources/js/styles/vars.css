@@ -1,0 +1,6 @@
+@layer base {
+  :root {
+    --layout-gap: 12px;
+    --layout-gap-lg: 20px;
+  }
+}

@@ -1,5 +1,5 @@
 @layer components {
   .link {
-    @apply text-sky-500 hover:text-sky-600;
+    @apply text-blue-500 hover:text-blue-600;
   }
 }

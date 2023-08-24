@@ -1,10 +1,8 @@
 <template>
-  <div class="relative">
-    <video-js
-      ref="videoRef"
-      :class="{ 'vjs-youtube-block-touch': type === PlayerType.YouTube }"
-    />
-  </div>
+  <video-js
+    ref="videoRef"
+    :class="{ 'vjs-youtube-block-touch': type === PlayerType.YouTube }"
+  />
 </template>
 
 <script setup lang="ts">

@@ -9,9 +9,20 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Button: typeof import('./../components/Button.vue')['default']
+    Disclosure: typeof import('@headlessui/vue')['Disclosure']
+    DisclosureButton: typeof import('@headlessui/vue')['DisclosureButton']
+    DisclosurePanel: typeof import('@headlessui/vue')['DisclosurePanel']
+    HeroiconsChevronLeft: typeof import('~icons/heroicons/chevron-left')['default']
+    HeroiconsChevronUp: typeof import('~icons/heroicons/chevron-up')['default']
+    HeroiconsCog6Tooth: typeof import('~icons/heroicons/cog6-tooth')['default']
+    HeroiconsMusicalNote: typeof import('~icons/heroicons/musical-note')['default']
+    HeroiconsPlayCircle: typeof import('~icons/heroicons/play-circle')['default']
     Layout: typeof import('./../layouts/Layout.vue')['default']
     Link: typeof import('@inertiajs/vue3')['Link']
     Pagination: typeof import('./../components/Pagination.vue')['default']
     Player: typeof import('./../components/Player.vue')['default']
+    Playlist: typeof import('./../components/Playlist.vue')['default']
+    RoomNavbar: typeof import('./../components/RoomNavbar.vue')['default']
   }
 }
