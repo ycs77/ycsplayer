@@ -5,15 +5,21 @@ namespace App\Http\Controllers;
 use App\Events\PlayerlistItemClicked;
 use App\Models\PlaylistItem;
 use App\Models\Room;
+use App\Player\PlayStatusCacheRepository;
 use App\Presenters\PlaylistItemPresenter;
 use App\Presenters\RoomPresenter;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class RoomController extends Controller
 {
+    public function __construct(
+        protected PlayStatusCacheRepository $statusCache,
+    ) {
+        //
+    }
+
     public function index()
     {
         $rooms = RoomPresenter::collection(
@@ -94,6 +100,6 @@ class RoomController extends Controller
         $room->current_playing_id = $item?->id;
         $room->save();
 
-        Cache::delete('room:'.$room->id);
+        $this->statusCache->delete($room->id);
     }
 }

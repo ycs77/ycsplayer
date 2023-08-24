@@ -6,11 +6,17 @@ use App\Events\PlayerPaused;
 use App\Events\PlayerPlayed;
 use App\Events\PlayerSeeked;
 use App\Player\PlayStatus;
+use App\Player\PlayStatusCacheRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 
 class PlayerController extends Controller
 {
+    public function __construct(
+        protected PlayStatusCacheRepository $statusCache,
+    ) {
+        //
+    }
+
     public function play(Request $request)
     {
         $request->validate([
@@ -24,8 +30,7 @@ class PlayerController extends Controller
 
         $roomId = $request->input('room_id');
 
-        /** @var PlayStatus */
-        $status = Cache::get('room:'.$roomId);
+        $status = $this->statusCache->get($roomId);
         $isFirst = false;
 
         if (! $status) {
@@ -47,7 +52,7 @@ class PlayerController extends Controller
         if ($status->isClickedBigButton || $isFirst) {
             $status->timestamp = $request->input('timestamp');
 
-            Cache::put('room:'.$roomId, $status, now()->addHours(12));
+            $this->statusCache->store($roomId, $status);
         }
 
         PlayerPlayed::broadcast($socketId, $roomId, $status, $isFirst);
@@ -70,7 +75,7 @@ class PlayerController extends Controller
         $status->currentTime = $request->input('current_time');
         $status->paused = true;
 
-        Cache::put('room:'.$roomId, $status, now()->addHours(12));
+        $this->statusCache->store($roomId, $status);
 
         PlayerPaused::broadcast($socketId, $roomId, $status);
 
@@ -95,7 +100,7 @@ class PlayerController extends Controller
         $status->currentTime = $request->input('current_time');
         $status->paused = $request->input('paused');
 
-        Cache::put('room:'.$roomId, $status, now()->addHours(12));
+        $this->statusCache->store($roomId, $status);
 
         PlayerSeeked::broadcast($socketId, $roomId, $status)->toOthers();
 
@@ -118,7 +123,7 @@ class PlayerController extends Controller
         $status->currentTime = $request->input('current_time');
         $status->paused = $request->input('paused');
 
-        Cache::put('room:'.$roomId, $status, now()->addHours(12));
+        $this->statusCache->store($roomId, $status);
 
         return response()->noContent();
     }
@@ -131,7 +136,7 @@ class PlayerController extends Controller
 
         $roomId = $request->input('room_id');
 
-        Cache::delete('room:'.$roomId);
+        $this->statusCache->delete($roomId);
 
         return response()->noContent();
     }
