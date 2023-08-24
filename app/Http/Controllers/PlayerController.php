@@ -2,50 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\PlayerType;
 use App\Events\PlayerPaused;
 use App\Events\PlayerPlayed;
 use App\Events\PlayerSeeked;
 use App\Player\PlayStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Validation\Rules\Enum;
 
 class PlayerController extends Controller
 {
     public function play(Request $request)
     {
         $request->validate([
-            'player_type' => ['required', new Enum(PlayerType::class)],
-            'timestamp' => ['nullable', 'numeric'],
-            'is_started' => ['nullable', 'boolean'],
+            'room_id' => ['required'],
+            'timestamp' => ['required', 'numeric'],
             'current_time' => ['nullable', 'numeric'],
+            'is_clicked_big_button' => ['required', 'boolean'],
         ]);
 
-        $type = PlayerType::from($request->input('player_type'));
+        $socketId = $request->header('X-Socket-Id');
+
+        $roomId = $request->input('room_id');
 
         /** @var PlayStatus */
-        $status = Cache::get('room:'.$type->value, new PlayStatus());
+        $status = Cache::get('room:'.$roomId);
+        $isFirst = false;
 
-        if (is_bool($isStarted = $request->input('is_started'))) {
-            $status->isStarted = $isStarted;
+        if (! $status) {
+            $status = new PlayStatus();
+            $isFirst = true;
         }
 
-        // 如果觸發的當前播放器，正在點擊 bigPlayButton，
-        // 就要校正播放時間。
-        $timestamp = $request->input('timestamp');
-        $currentTime = $request->input('current_time');
-        if (! $isStarted &&
-            is_numeric($timestamp) &&
-            is_numeric($currentTime)
-        ) {
-            $status->timestamp = $timestamp;
-            $status->currentTime = $currentTime;
-        } else {
-            Cache::put('room:'.$type->value, $status, now()->addHours(12));
+        $status->isClickedBigButton = $request->input('is_clicked_big_button');
+        $status->paused = false;
+
+        if (is_null($status->currentTime)) {
+            $status->currentTime = 0.0;
         }
 
-        PlayerPlayed::broadcast($type, $status);
+        if (is_numeric($request->input('current_time'))) {
+            $status->currentTime = $request->input('current_time');
+        }
+
+        if ($status->isClickedBigButton || $isFirst) {
+            $status->timestamp = $request->input('timestamp');
+
+            Cache::put('room:'.$roomId, $status, now()->addHours(12));
+        }
+
+        PlayerPlayed::broadcast($socketId, $roomId, $status, $isFirst);
 
         return response()->noContent();
     }
@@ -53,19 +58,21 @@ class PlayerController extends Controller
     public function pause(Request $request)
     {
         $request->validate([
-            'player_type' => ['required', new Enum(PlayerType::class)],
-            'timestamp' => ['required', 'numeric'],
+            'room_id' => ['required'],
             'current_time' => ['required', 'numeric'],
         ]);
 
-        $type = PlayerType::from($request->input('player_type'));
+        $socketId = $request->header('X-Socket-Id');
+
+        $roomId = $request->input('room_id');
 
         $status = new PlayStatus();
         $status->currentTime = $request->input('current_time');
+        $status->paused = true;
 
-        Cache::put('room:'.$type->value, $status, now()->addHours(12));
+        Cache::put('room:'.$roomId, $status, now()->addHours(12));
 
-        PlayerPaused::broadcast($type, $status);
+        PlayerPaused::broadcast($socketId, $roomId, $status);
 
         return response()->noContent();
     }
@@ -73,22 +80,24 @@ class PlayerController extends Controller
     public function seeked(Request $request)
     {
         $request->validate([
-            'player_type' => ['required', new Enum(PlayerType::class)],
+            'room_id' => ['required'],
             'timestamp' => ['required', 'numeric'],
             'current_time' => ['required', 'numeric'],
             'paused' => ['required', 'boolean'],
         ]);
 
-        $type = PlayerType::from($request->input('player_type'));
+        $socketId = $request->header('X-Socket-Id');
+
+        $roomId = $request->input('room_id');
 
         $status = new PlayStatus();
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
         $status->paused = $request->input('paused');
 
-        Cache::put('room:'.$type->value, $status, now()->addHours(12));
+        Cache::put('room:'.$roomId, $status, now()->addHours(12));
 
-        PlayerSeeked::broadcast($type, $status)->toOthers();
+        PlayerSeeked::broadcast($socketId, $roomId, $status)->toOthers();
 
         return response()->noContent();
     }
@@ -96,20 +105,20 @@ class PlayerController extends Controller
     public function timeUpdate(Request $request)
     {
         $request->validate([
-            'player_type' => ['required', new Enum(PlayerType::class)],
+            'room_id' => ['required'],
             'timestamp' => ['required', 'numeric'],
             'current_time' => ['required', 'numeric'],
             'paused' => ['required', 'boolean'],
         ]);
 
-        $type = PlayerType::from($request->input('player_type'));
+        $roomId = $request->input('room_id');
 
         $status = new PlayStatus();
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
         $status->paused = $request->input('paused');
 
-        Cache::put('room:'.$type->value, $status, now()->addHours(12));
+        Cache::put('room:'.$roomId, $status, now()->addHours(12));
 
         return response()->noContent();
     }
@@ -117,12 +126,12 @@ class PlayerController extends Controller
     public function end(Request $request)
     {
         $request->validate([
-            'player_type' => ['required', new Enum(PlayerType::class)],
+            'room_id' => ['required'],
         ]);
 
-        $type = PlayerType::from($request->input('player_type'));
+        $roomId = $request->input('room_id');
 
-        Cache::delete('room:'.$type->value);
+        Cache::delete('room:'.$roomId);
 
         return response()->noContent();
     }

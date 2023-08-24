@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->char('type', 10);
             $table->string('title', 20);
+            $table->unsignedBigInteger('current_playing_id')->nullable();
             $table->boolean('auto_play')->default(false);
             $table->boolean('auto_remove')->default(false);
             $table->text('note')->nullable();

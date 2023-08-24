@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Broadcasting\Events\PusherChannelVacated;
 use App\Enums\PlayerType;
+use App\Models\Room;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Cache;
@@ -25,12 +26,12 @@ class PlayerAllConnectionClosed
     {
         $channelNamespace = 'presence-player.';
 
-        $channels = array_map(fn (PlayerType $type) => $channelNamespace.$type->value, PlayerType::cases());
+        if (str_starts_with($event->channel, $channelNamespace)) {
+            $roomId = substr($event->channel, strlen($channelNamespace));
 
-        if (in_array($event->channel, $channels)) {
-            $type = PlayerType::from(substr($event->channel, strlen($channelNamespace)));
-
-            Cache::delete('room:'.$type->value);
+            if (Room::find($roomId, ['id'])) {
+                Cache::delete('room:'.$roomId);
+            }
         }
     }
 }

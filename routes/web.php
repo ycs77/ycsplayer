@@ -14,7 +14,9 @@ if (app()->environment('local') && ! app()->runningInConsole()) {
 Route::redirect('/', '/rooms');
 
 Route::get('/rooms', [RoomController::class, 'index']);
-Route::get('/rooms/{playerType}', [RoomController::class, 'show']);
+Route::get('/rooms/{room}', [RoomController::class, 'show']);
+Route::post('/rooms/{room}/play/{item}', [RoomController::class, 'clickMedia']);
+Route::post('/rooms/{room}/next', [RoomController::class, 'nextMedia']);
 
 Route::post('/player/play', [PlayerController::class, 'play']);
 Route::post('/player/pause', [PlayerController::class, 'pause']);

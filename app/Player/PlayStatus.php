@@ -11,10 +11,10 @@ class PlayStatus implements JsonSerializable, Arrayable
     public int $timestamp = 0;
 
     /** 當前影片播放秒數 */
-    public float $currentTime = 0.0;
+    public ?float $currentTime = null;
 
-    /** 影片狀態為已開始 */
-    public bool $isStarted = true;
+    /** 影片已點擊過大按鈕 */
+    public bool $isClickedBigButton = true;
 
     /** 當前影片暫停狀態 */
     public bool $paused = true;
@@ -23,7 +23,7 @@ class PlayStatus implements JsonSerializable, Arrayable
     {
         $this->timestamp = $data['timestamp'] ?? $this->timestamp;
         $this->currentTime = $data['current_time'] ?? $this->currentTime;
-        $this->isStarted = $data['is_started'] ?? $this->isStarted;
+        $this->isClickedBigButton = $data['is_clicked_big_button'] ?? $this->isClickedBigButton;
         $this->paused = $data['paused'] ?? $this->paused;
     }
 
@@ -36,7 +36,7 @@ class PlayStatus implements JsonSerializable, Arrayable
         return [
             'timestamp' => $this->timestamp,
             'current_time' => $this->currentTime,
-            'is_started' => $this->isStarted,
+            'is_clicked_big_button' => $this->isClickedBigButton,
             'paused' => $this->paused,
         ];
     }

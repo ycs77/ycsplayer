@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Player\PlayStatus;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,15 +10,12 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PlayerPlayed implements ShouldBroadcast
+class PlayerlistItemClicked implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public function __construct(
-        public string $socketId,
         public int $roomId,
-        public PlayStatus $status,
-        public bool $isFirst = false,
     ) {}
 
     /**

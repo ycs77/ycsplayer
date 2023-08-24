@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Enums\PlayerType;
 use App\Player\PlayStatus;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -17,7 +16,8 @@ class PlayerSeeked implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public function __construct(
-        public PlayerType $type,
+        public string $socketId,
+        public int $roomId,
         public PlayStatus $status,
     ) {}
 
@@ -29,7 +29,7 @@ class PlayerSeeked implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PresenceChannel('player.'.$this->type->value),
+            new PresenceChannel('player.'.$this->roomId),
         ];
     }
 }

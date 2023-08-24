@@ -1,3 +1,26 @@
+export interface Room {
+  id: number
+  type: RoomType
+  title: string
+  auto_play: boolean
+  auto_remove: boolean
+  current_playing_id?: number | null
+  note?: string | null
+}
+
+export interface PlaylistItem {
+  id: number
+  type: PlayerType
+  title: string
+  url: string
+  thumbnail: string | null
+}
+
+export enum RoomType {
+  Video = 'video',
+  Audio = 'audio',
+}
+
 export enum PlayerType {
   Video = 'video',
   Audio = 'audio',
@@ -5,17 +28,32 @@ export enum PlayerType {
 }
 
 export interface PlayStatus {
+  current_playing_id: number | null
   timestamp: number
-  current_time: number
-  is_started: boolean
+  current_time: number | null
+  is_clicked_big_button: boolean
   paused: boolean
 }
 
-export interface PlayerOperationEvent {
-  type: PlayerType
+export interface PlayerPlayedEvent {
+  socketId: string
+  roomId: number
+  status: PlayStatus
+  isFirst: boolean
+}
+
+export interface PlayerPausedEvent {
+  socketId: string
+  roomId: number
   status: PlayStatus
 }
 
-export interface PlayerPlayedEvent extends PlayerOperationEvent {}
-export interface PlayerPausedEvent extends PlayerOperationEvent {}
-export interface PlayerSeekedEvent extends PlayerOperationEvent {}
+export interface PlayerSeekedEvent {
+  socketId: string
+  roomId: number
+  status: PlayStatus
+}
+
+export interface PlayerlistItemClickedEvent {
+  roomId: number
+}

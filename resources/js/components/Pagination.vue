@@ -1,50 +1,30 @@
 <template>
-  <div class="font-medium">
+  <div v-if="((props.collection.links?.length ?? 0) - 2) > 1" class="font-medium">
     <div class="flex justify-between md:hidden">
-      <template v-for="link in simpleLinks">
-        <Component
-          :is="link.url ? 'Link' : 'div'"
-          :href="link.url"
-          class="pagination-item"
-          :class="link.url ? 'pagination-link' : 'pagination-disabled'"
-        >
-          {{ link.label }}
-        </Component>
+      <template v-for="link in [previous, next]" :key="link.label">
+        <template v-if="link">
+          <Link v-if="link.isActive && link.url" class="pagination-item pagination-link" :href="link.url">{{ link.label }}</Link>
+          <div v-else class="pagination-item pagination-disabled">{{ link.label }}</div>
+        </template>
       </template>
     </div>
 
-    <div class="hidden md:flex md:flex-wrap">
-      <template v-for="link in links">
-        <Component
-          :is="!link.active && link.url ? 'Link' : 'div'"
-          :href="link.url"
-          class="pagination-item mr-2 mt-2"
-          :class="
-            link.active
-              ? 'pagination-active'
-              : (link.url ? 'pagination-link' : 'pagination-disabled')
-          "
-        >
-          {{ link.label }}
-        </Component>
+    <div class="hidden md:flex md:flex-wrap md:justify-center">
+      <template v-for="link in items" :key="link.label">
+        <div v-if="link.isCurrent" class="pagination-item pagination-active mr-2 mt-2">{{ link.label }}</div>
+        <Link v-else-if="link.isActive && link.url" class="pagination-item pagination-link mr-2 mt-2" :href="link.url">{{ link.label }}</Link>
+        <div v-else class="pagination-item pagination-disabled mr-2 mt-2">{{ link.label }}</div>
       </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { usePaginator } from 'momentum-paginator'
 
 const props = defineProps<{
-  links: {
-    url: string
-    label: string
-    active: boolean
-  }[]
+  collection: Paginator<Record<string, any>>
 }>()
 
-const simpleLinks = computed(() => [
-  props.links.slice(0).shift()!,
-  props.links.slice(-1).pop()!,
-])
+const { items, previous, next } = usePaginator(props.collection)
 </script>
