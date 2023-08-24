@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { Echo } from '@/echo'
+import { Echo, safeListenFn } from '@/echo'
 import Player from '@/components/Player.vue'
 import type { Room, PlaylistItem } from '@/types'
 
@@ -92,12 +92,14 @@ watch(() => props.playlist_items, () => {
 })
 
 watch(player, (v, ov, invalidate) => {
-  if (!player.value) return
+  // 如果當前有播放影片，就要擋掉第一次監聽，因為 `player` 還沒載入。
+  // 但如果是沒有播放，就可以註冊，因為要監聽其他人切換影片時的事件。
+  if (current_playing.value && !player.value) return
 
   Echo.join(`player.${props.room.id}`)
-    .listen('PlayerPlayed', player.value?.onPlayerPlayed)
-    .listen('PlayerPaused', player.value?.onPlayerPaused)
-    .listen('PlayerSeeked', player.value?.onPlayerSeeked)
+    .listen('PlayerPlayed', safeListenFn(player.value?.onPlayerPlayed))
+    .listen('PlayerPaused', safeListenFn(player.value?.onPlayerPaused))
+    .listen('PlayerSeeked', safeListenFn(player.value?.onPlayerSeeked))
     .listen('PlayerlistItemClicked', onPlayerlistItemClicked)
 
   invalidate(() => {

@@ -17,4 +17,8 @@ axios.interceptors.request.use((config) => {
   return config
 })
 
-export { Echo, Pusher }
+function safeListenFn(fn: Function | undefined): Function {
+  return fn ?? (() => {})
+}
+
+export { Echo, Pusher, safeListenFn }
