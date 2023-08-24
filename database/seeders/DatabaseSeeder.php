@@ -60,13 +60,25 @@ class DatabaseSeeder extends Seeder
 
         if (! $videoRoom->playlist_items()
             ->where('type', PlayerType::YouTube)
-            ->where('title', '詩超絆')
+            ->where('title', '星座になれたら')
             ->exists()
         ) {
             $videoRoom->playlist_items()->create([
                 'type' => PlayerType::YouTube,
-                'title' => '詩超絆',
-                'url' => 'https://www.youtube.com/watch?v=wWf9k4e2xEo',
+                'title' => '星座になれたら',
+                'url' => 'https://www.youtube.com/watch?v=fJh5UeiULZs',
+            ]);
+        }
+
+        if (! $videoRoom->playlist_items()
+            ->where('type', PlayerType::YouTube)
+            ->where('title', 'spiral')
+            ->exists()
+        ) {
+            $videoRoom->playlist_items()->create([
+                'type' => PlayerType::YouTube,
+                'title' => 'spiral',
+                'url' => 'https://www.youtube.com/watch?v=fE9trKOuT3Q',
             ]);
         }
 
