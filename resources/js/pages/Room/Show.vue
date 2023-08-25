@@ -6,26 +6,7 @@
       <!-- 導覽列 -->
       <RoomNavbar class="col-span-12" :room-id="room.id" />
 
-      <div class="col-span-12 order-last xl:col-span-2 xl:order-none">
-        <div class="grid gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
-          <div>
-            <!-- 房間資訊卡 -->
-            <div class="bg-blue-950/50 p-4 rounded-lg">
-              <h1 class="text-xl">{{ room.title }}</h1>
-              <div class="mt-2 text-blue-300">
-                <div>成員數：0人</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="hidden xl:block">
-            <!-- 房間成員卡 -->
-            <RoomMembers />
-          </div>
-        </div>
-      </div>
-
-      <div class="col-span-12 md:col-span-9 xl:col-span-8">
+      <div class="col-span-12 md:col-span-8 lg:col-span-9">
         <div>
           <!-- 播放器 -->
           <div v-if="currentPlaying" class="rounded-lg overflow-hidden">
@@ -49,14 +30,33 @@
         </div>
       </div>
 
-      <div class="col-span-12 hidden md:block md:col-span-3 xl:col-span-2">
-        <!-- 播放清單卡 -->
-        <Playlist
-          class="rounded-lg overflow-hidden"
-          :current-playing="currentPlaying"
-          :playlist-items="playlistItems"
-          @select-item="selectedPlaylistItem"
-        />
+      <div class="col-span-12 md:col-span-4 lg:col-span-3">
+        <div class="grid gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
+          <div>
+            <!-- 房間資訊卡 -->
+            <div class="bg-blue-950/50 p-4 rounded-lg">
+              <h1 class="text-xl">{{ room.title }}</h1>
+              <div class="mt-2 text-blue-300">
+                <div>成員數：0人</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hidden md:block">
+            <!-- 播放清單卡 -->
+            <Playlist
+              class="rounded-lg overflow-hidden"
+              :current-playing="currentPlaying"
+              :playlist-items="playlistItems"
+              @select-item="selectedPlaylistItem"
+            />
+          </div>
+
+          <div class="hidden xl:block">
+            <!-- 房間成員卡 -->
+            <RoomMembers />
+          </div>
+        </div>
       </div>
 
     </div>
