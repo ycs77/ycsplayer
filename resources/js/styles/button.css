@@ -1,11 +1,10 @@
 @layer components {
   .btn {
     @apply inline-flex justify-center items-center;
-    @apply px-5 py-1.5 border rounded-md;
+    @apply px-6 py-2 rounded-full;
     @apply text-sm text-center font-normal tracking-wider;
     @apply transition-colors duration-100;
-    @apply shadow-sm select-none;
-    @apply focus:ring-2 focus:ring-offset-2 focus:outline-none;
+    @apply shadow-sm select-none focus:outline-none;
   }
 
   .btn-base {
@@ -15,37 +14,25 @@
     @apply px-4 py-1.5 text-xs;
   }
   .btn-lg {
-    @apply px-6 py-2 text-base;
+    @apply px-8 py-2.5 text-base;
   }
 
   .btn-primary {
-    @apply bg-blue-400 enabled:hover:bg-blue-500 text-white;
-    @apply border-blue-400 enabled:hover:border-blue-500;
-    @apply focus:ring-blue-500;
-    @apply disabled:bg-blue-300 disabled:border-blue-300;
-  }
-  .btn-outline-primary {
-    @apply bg-white text-blue-500;
-    @apply border-blue-200 enabled:hover:border-blue-400;
-    @apply focus:ring-blue-200;
-    @apply disabled:text-blue-300 disabled:border-blue-100;
+    @apply bg-blue-800/50 enabled:hover:bg-blue-700/50 text-white;
+    @apply disabled:bg-blue-900/50;
   }
 
   .btn-secondary {
     @apply bg-white enabled:hover:bg-gray-50 text-gray-700;
-    @apply border-gray-200 focus:ring-blue-500;
     @apply disabled:text-gray-300;
   }
 
   .btn-danger {
     @apply bg-red-500 enabled:hover:bg-red-600 text-white;
-    @apply border-red-500 enabled:hover:border-red-600;
-    @apply focus:ring-red-500;
-    @apply disabled:bg-red-300 disabled:border-red-300;
+    @apply disabled:bg-red-300;
   }
   .btn-outline-danger {
     @apply bg-white enabled:hover:bg-red-500 text-red-500 enabled:hover:text-white;
-    @apply border-gray-200 enabled:hover:border-red-500 focus:ring-red-500;
     @apply disabled:text-gray-300;
   }
 }

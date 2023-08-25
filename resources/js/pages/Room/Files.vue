@@ -7,7 +7,7 @@
       <RoomNavbar class="col-span-12" :room-id="room.id" />
 
       <div class="col-span-12">
-        <div class="max-w-screen-lg mx-auto bg-blue-950/50 p-4 rounded-lg lg:p-6">
+        <div class="max-w-screen-md mx-auto bg-blue-950/50 p-4 rounded-lg lg:p-6">
           <h1 class="text-2xl">媒體檔案</h1>
           <div class="mt-2">
             content

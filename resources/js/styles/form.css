@@ -3,7 +3,7 @@
   .form-textarea,
   .form-select,
   .form-multiselect {
-    @apply w-full sm:text-sm border-gray-200 focus:border-blue-500 focus:ring-blue-500 rounded-md placeholder:text-gray-400 placeholder:font-light;
+    @apply w-full sm:text-sm bg-blue-950/50 border-gray-600 focus:border-blue-300 focus:ring-blue-300 rounded-md placeholder:text-gray-400 placeholder:font-light;
   }
   .form-input-sm,
   .form-textarea-sm,
@@ -15,10 +15,10 @@
     @apply resize-none;
   }
   .form-checkbox {
-    @apply text-blue-500 border-gray-400 focus:ring-blue-500 rounded;
+    @apply bg-blue-950/50 text-blue-500 border-gray-600 focus:ring-blue-500 rounded;
   }
   .form-radio {
-    @apply text-blue-500 border-gray-400 focus:ring-blue-500;
+    @apply bg-blue-950/50 text-blue-500 border-gray-600 focus:ring-blue-500;
   }
 
   .input-group {
