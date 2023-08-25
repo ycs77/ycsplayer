@@ -22,6 +22,9 @@ class MediaPresenter extends FlexiblePresenter
     {
         return $this->with(fn (Media $media) => [
             'src' => $media->getUrl(),
+            'preview' => $this->hasGeneratedConversion('preview')
+                ? $this->getUrl('preview')
+                : null,
         ]);
     }
 }

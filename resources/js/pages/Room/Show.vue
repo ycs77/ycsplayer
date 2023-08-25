@@ -16,7 +16,7 @@
               :room-id="room.id"
               :src="currentPlaying.url"
               :type="currentPlaying.type"
-              :poster="currentPlaying.thumbnail ?? undefined"
+              :poster="currentPlaying.preview ?? undefined"
               :autoplay="room.auto_play"
               @ended="ended"
             />

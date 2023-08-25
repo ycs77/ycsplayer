@@ -21,6 +21,7 @@ class PlaylistItemPresenter extends FlexiblePresenter
         return $this->with(fn (PlaylistItem $item) => [
             'type' => $item->type->value,
             'url' => $item->url,
+            'preview' => $this->preview,
         ]);
     }
 }

@@ -64,8 +64,14 @@ class Room extends Model implements HasMedia
     public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-            ->width(200)
-            ->height(113)
+            ->width(120)
+            ->height(68)
+            ->extractVideoFrameAtSecond(30)
+            ->nonQueued();
+
+        $this->addMediaConversion('preview')
+            ->width(1280)
+            ->height(720)
             ->extractVideoFrameAtSecond(30)
             ->nonQueued();
     }

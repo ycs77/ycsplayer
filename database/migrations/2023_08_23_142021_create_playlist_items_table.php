@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title', 20);
             $table->string('url');
             $table->string('thumbnail')->nullable();
+            $table->string('preview')->nullable();
             $table->foreignId('room_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

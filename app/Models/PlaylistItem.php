@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $title
  * @property string $url
  * @property string|null $thumbnail
+ * @property string|null $preview
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
  * @property \App\Models\Room $room
@@ -26,6 +27,7 @@ class PlaylistItem extends Model
         'title',
         'url',
         'thumbnail',
+        'preview',
         'room_id',
     ];
 

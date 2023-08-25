@@ -14,13 +14,15 @@ export interface PlaylistItem {
   title: string
   url: string
   thumbnail: string | null
+  preview: string | null
 }
 
 export interface Media {
   id: number
   name: string
-  src?: string
+  src: string
   thumbnail: string | null
+  preview: string | null
 }
 
 export enum RoomType {
