@@ -9,7 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    Button: typeof import('./../components/Button.vue')['default']
+    Button: typeof import('./../components/generic/Button.vue')['default']
     HeroiconsChevronUp: typeof import('~icons/heroicons/chevron-up')['default']
     HeroiconsCog6Tooth: typeof import('~icons/heroicons/cog6-tooth')['default']
     HeroiconsDocumentText: typeof import('~icons/heroicons/document-text')['default']
@@ -19,10 +19,10 @@ declare module '@vue/runtime-core' {
     HeroiconsUserGroup: typeof import('~icons/heroicons/user-group')['default']
     Layout: typeof import('./../layouts/Layout.vue')['default']
     Link: typeof import('@inertiajs/vue3')['Link']
-    Pagination: typeof import('./../components/Pagination.vue')['default']
-    Player: typeof import('./../components/Player.vue')['default']
-    Playlist: typeof import('./../components/Playlist.vue')['default']
-    RoomMembers: typeof import('./../components/RoomMembers.vue')['default']
-    RoomNavbar: typeof import('./../components/RoomNavbar.vue')['default']
+    Pagination: typeof import('./../components/generic/Pagination.vue')['default']
+    Player: typeof import('./../components/player/Player.vue')['default']
+    Playlist: typeof import('./../components/player/Playlist.vue')['default']
+    RoomMembers: typeof import('./../components/room/RoomMembers.vue')['default']
+    RoomNavbar: typeof import('./../components/room/RoomNavbar.vue')['default']
   }
 }
