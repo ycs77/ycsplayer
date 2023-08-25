@@ -23,8 +23,8 @@
     </RoomNavbarButton>
 
     <RoomNavbarButton
-      :href="`/rooms/${roomId}/files`"
-      :active="$page.url === `/rooms/${roomId}/files`"
+      :href="`/rooms/${roomId}/medias`"
+      :active="$page.url === `/rooms/${roomId}/medias`"
     >
       <template #icon><HeroiconsDocumentText class="w-4 h-4" /></template>
       檔案

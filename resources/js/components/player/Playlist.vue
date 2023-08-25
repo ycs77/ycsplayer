@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <li v-for="item in playlistItems">
+    <li v-for="item in playlistItems" :key="item.id">
       <div
         v-if="item.id === currentPlaying?.id"
         class="block px-4 py-2 w-full bg-blue-800/50 border-l-4 border-blue-500 text-left select-none"

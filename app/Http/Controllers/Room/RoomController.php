@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Room;
 
-use App\Enums\RoomType;
 use App\Events\PlayerlistItemClicked;
+use App\Http\Controllers\Controller;
 use App\Models\PlaylistItem;
 use App\Models\Room;
 use App\Player\PlayStatusCacheRepository;
@@ -11,7 +11,6 @@ use App\Presenters\PlaylistItemPresenter;
 use App\Presenters\RoomPresenter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rules\Enum;
 use Inertia\Inertia;
 
 class RoomController extends Controller
@@ -49,40 +48,11 @@ class RoomController extends Controller
         ]);
     }
 
-    public function files(Room $room)
-    {
-        return Inertia::render('Room/Files', [
-            'room' => fn () => RoomPresenter::make($room)->preset('show'),
-        ]);
-    }
-
-    public function settings(Room $room)
-    {
-        return Inertia::render('Room/Settings', [
-            'room' => fn () => RoomPresenter::make($room)->preset('show'),
-        ]);
-    }
-
-    public function storeSettings(Request $request, Room $room)
-    {
-        $request->validate([
-            'type' => ['required', new Enum(RoomType::class)],
-            'auto_play' => ['required', 'boolean'],
-            'auto_remove' => ['required', 'boolean'],
-        ]);
-
-        $room->update($request->only('type', 'auto_play', 'auto_remove'));
-
-        return back();
-    }
-
     public function clickMedia(Room $room, PlaylistItem $item)
     {
         $this->playItem($room, $item);
 
         PlayerlistItemClicked::broadcast($room->id)->toOthers();
-
-        return back();
     }
 
     public function nextMedia(Request $request, Room $room)

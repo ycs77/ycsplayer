@@ -16,6 +16,13 @@ export interface PlaylistItem {
   thumbnail: string | null
 }
 
+export interface Media {
+  id: number
+  name: string
+  src?: string
+  thumbnail: string | null
+}
+
 export enum RoomType {
   Video = 'video',
   Audio = 'audio',

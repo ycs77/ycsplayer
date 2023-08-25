@@ -2,7 +2,10 @@
 
 use App\Broadcasting\Http\Controllers\PusherWebhookController;
 use App\Http\Controllers\PlayerController;
-use App\Http\Controllers\RoomController;
+use App\Http\Controllers\Room\RoomController;
+use App\Http\Controllers\Room\RoomMediaController;
+use App\Http\Controllers\Room\RoomSettingController;
+use App\Http\Controllers\Room\RoomUploadMediaController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -16,11 +19,17 @@ Route::redirect('/', '/rooms');
 Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms/{room}', [RoomController::class, 'show']);
 Route::get('/rooms/{room}/members', [RoomController::class, 'members']);
-Route::get('/rooms/{room}/files', [RoomController::class, 'files']);
-Route::get('/rooms/{room}/settings', [RoomController::class, 'settings']);
-Route::post('/rooms/{room}/settings', [RoomController::class, 'storeSettings']);
+
+Route::get('/rooms/{room}/medias', [RoomMediaController::class, 'index']);
+Route::delete('/rooms/{room}/medias/{media}', [RoomMediaController::class, 'delete']);
+
+Route::get('/rooms/{room}/settings', [RoomSettingController::class, 'show']);
+Route::post('/rooms/{room}/settings', [RoomSettingController::class, 'store']);
+
 Route::post('/rooms/{room}/play/{item}', [RoomController::class, 'clickMedia']);
 Route::post('/rooms/{room}/next', [RoomController::class, 'nextMedia']);
+
+Route::post('/rooms/{room}/upload', RoomUploadMediaController::class);
 
 Route::post('/player/play', [PlayerController::class, 'play']);
 Route::post('/player/pause', [PlayerController::class, 'pause']);

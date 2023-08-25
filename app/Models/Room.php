@@ -6,6 +6,9 @@ use App\Enums\RoomType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property int $id
@@ -20,9 +23,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \App\Models\PlaylistItem|null $current_playing
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaylistItem> $playlist_items
  */
-class Room extends Model
+class Room extends Model implements HasMedia
 {
     use HasFactory;
+    use InteractsWithMedia;
 
     protected $fillable = [
         'type',
@@ -55,5 +59,14 @@ class Room extends Model
         if ($this->auto_remove) {
             $currentItem->delete();
         }
+    }
+
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(200)
+            ->height(113)
+            ->extractVideoFrameAtSecond(30)
+            ->nonQueued();
     }
 }

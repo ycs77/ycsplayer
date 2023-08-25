@@ -105,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { Echo, safeListenFn } from '@/echo'
 import Player from '@/components/player/Player.vue'
 import type { Room, PlaylistItem } from '@/types'
@@ -169,4 +169,8 @@ watch(player, (v, ov, invalidate) => {
     Echo.leave(`player.${props.room.id}`)
   })
 }, { immediate: true })
+
+onBeforeUnmount(() => {
+  clearAllBodyScrollLocks()
+})
 </script>

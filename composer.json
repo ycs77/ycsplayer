@@ -13,6 +13,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
+        "php-ffmpeg/php-ffmpeg": "^1.1",
         "pion/laravel-chunk-upload": "^1.5",
         "predis/predis": "^1.1",
         "pusher/pusher-php-server": "^7.0",
