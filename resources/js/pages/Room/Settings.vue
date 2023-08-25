@@ -1,5 +1,5 @@
 <template>
-  <div class="px-[--layout-gap] pb-[calc(var(--layout-gap)+3rem)] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg]">
+  <div class="px-[--layout-gap] pb-[--layout-gap] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg]">
 
     <div class="grid grid-cols-12 gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
 
