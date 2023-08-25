@@ -37,7 +37,6 @@ declare module '@vue/runtime-core' {
     ListboxOptions: typeof import('@headlessui/vue')['ListboxOptions']
     MdiClose: typeof import('~icons/mdi/close')['default']
     MediaPlaceholder: typeof import('./../components/room/MediaPlaceholder.vue')['default']
-    MediaSelectField: typeof import('./../components/room/MediaSelectField.vue')['default']
     MediaTypeSelectField: typeof import('./../components/room/MediaTypeSelectField.vue')['default']
     Modal: typeof import('./../components/modals/Modal.vue')['default']
     Pagination: typeof import('./../components/general/Pagination.vue')['default']
