@@ -70,6 +70,10 @@ export interface PlayerSeekedEvent {
   status: PlayStatus
 }
 
+export interface PlayerlistItemAddedEvent {
+  roomId: number
+}
+
 export interface PlayerlistItemClickedEvent {
   roomId: number
 }

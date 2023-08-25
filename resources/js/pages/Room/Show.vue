@@ -185,9 +185,17 @@ function submitPlaylistItemForm(form: PlaylistItemForm) {
   playlistItemForm.media_id = form.media_id
 
   playlistItemForm.post(`/rooms/${props.room.id}/playlist`, {
+    only: ['playlist_items'],
     onSuccess() {
       showAddPlaylistItemModal.value = false
     },
+  })
+}
+
+// 監聽當有其他人新增播放項目時的事件
+function onPlayerlistItemAdded() {
+  router.reload({
+    only: ['playlist_items'],
   })
 }
 
@@ -222,6 +230,7 @@ watch(player, (v, ov, invalidate) => {
     .listen('PlayerPlayed', safeListenFn(player.value?.onPlayerPlayed))
     .listen('PlayerPaused', safeListenFn(player.value?.onPlayerPaused))
     .listen('PlayerSeeked', safeListenFn(player.value?.onPlayerSeeked))
+    .listen('PlayerlistItemAdded', onPlayerlistItemAdded)
     .listen('PlayerlistItemClicked', onPlayerlistItemClicked)
     .listen('PlayerlistItemRemoved', onPlayerlistItemRemoved)
 

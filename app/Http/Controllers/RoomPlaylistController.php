@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PlayerType;
+use App\Events\PlayerlistItemAdded;
 use App\Events\PlayerlistItemClicked;
 use App\Events\PlayerlistItemRemoved;
 use App\Models\PlaylistItem;
@@ -84,6 +85,8 @@ class RoomPlaylistController extends Controller
                 'thumbnail' => "https://img.youtube.com/vi/{$youtubeId}/default.jpg",
             ]);
         }
+
+        PlayerlistItemAdded::broadcast($room->id)->toOthers();
     }
 
     public function click(Room $room, PlaylistItem $item)
