@@ -62,7 +62,7 @@
     </div>
 
     <!-- 手機底部播放清單按鈕層 -->
-    <div class="fixed z-10 inset-x-0 bottom-0 backdrop-blur-lg md:hidden">
+    <div class="fixed z-10 inset-x-0 bottom-0 max-h-screen flex flex-col backdrop-blur-lg md:hidden">
       <!-- 播放清單卡 -->
       <Transition
         enter-active-class="duration-300 ease-out"
@@ -74,7 +74,7 @@
       >
         <Playlist
           v-if="isOpenMobilePlaylist"
-          class="border-t border-blue-900/50"
+          class="border-t border-blue-900/50 overflow-y-auto"
           :current-playing="currentPlaying"
           :playlist-items="playlistItems"
           @select-item="selectedPlaylistItem"
@@ -82,7 +82,7 @@
       </Transition>
 
       <!-- 手機底部播放清單按鈕 -->
-      <div class="bg-gray-950">
+      <div class="bg-gray-950 grow-0">
         <button
           type="button"
           class="w-full p-2 flex justify-between items-center bg-blue-950/50 border-t border-blue-900/50"
@@ -105,6 +105,7 @@
 </template>
 
 <script setup lang="ts">
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { Echo, safeListenFn } from '@/echo'
 import Player from '@/components/Player.vue'
 import type { Room, PlaylistItem } from '@/types'
@@ -143,6 +144,14 @@ watch(() => props.current_playing, () => {
 
 watch(() => props.playlist_items, () => {
   playlistItems.value = props.playlist_items
+})
+
+watch(isOpenMobilePlaylist, isOpenMobilePlaylist => {
+  if (isOpenMobilePlaylist) {
+    disableBodyScroll(document.body)
+  } else {
+    enableBodyScroll(document.body)
+  }
 })
 
 watch(player, (v, ov, invalidate) => {
