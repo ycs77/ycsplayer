@@ -16,6 +16,7 @@
     "lodash-es": "^4.17.21",
     "momentum-paginator": "^1.0.6",
     "pusher-js": "^8.0.0",
+    "resumablejs": "^1.1.0",
     "video.js": "^8.3.0",
     "videojs-youtube": "^3.0.1",
     "vue": "^3.3.0",
