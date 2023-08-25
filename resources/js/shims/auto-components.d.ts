@@ -23,7 +23,7 @@ declare module '@vue/runtime-core' {
     ImageUpload: typeof import('./../components/form/ImageUpload.vue')['default']
     Layout: typeof import('./../layouts/Layout.vue')['default']
     Link: typeof import('@inertiajs/vue3')['Link']
-    Pagination: typeof import('./../components/generic/Pagination.vue')['default']
+    Pagination: typeof import('./../components/general/Pagination.vue')['default']
     Player: typeof import('./../components/player/Player.vue')['default']
     Playlist: typeof import('./../components/player/Playlist.vue')['default']
     RadioGroup: typeof import('@headlessui/vue')['RadioGroup']

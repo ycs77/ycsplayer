@@ -1,14 +1,14 @@
 @layer components {
   .pagination-item {
-    @apply px-3 py-1 text-sm font-light border rounded select-none;
+    @apply px-3 py-1 text-sm font-light rounded select-none;
   }
   .pagination-link {
-    @apply text-gray-500 hover:text-indigo-500 border-gray-300 hover:border-indigo-500;
+    @apply bg-blue-950/50 hover:bg-blue-900/50;
   }
   .pagination-active {
-    @apply bg-indigo-500 text-white border-indigo-500;
+    @apply bg-blue-800/50 text-white;
   }
   .pagination-disabled {
-    @apply text-gray-300 border-gray-200;
+    @apply bg-blue-950/50 text-blue-950;
   }
 }
