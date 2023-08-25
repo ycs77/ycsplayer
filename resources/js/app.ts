@@ -1,6 +1,7 @@
 import { createApp, h } from 'vue'
 import { createInertiaApp, Link } from '@inertiajs/vue3'
 import InertiaTitle from 'inertia-title/vue3'
+import { vfmPlugin as VueFinalModal } from 'vue-final-modal'
 import Layout from '@/layouts/Layout.vue'
 import '@/styles/index.css'
 
@@ -30,6 +31,7 @@ createInertiaApp({
     createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(InertiaTitle)
+      .use(VueFinalModal())
       .component('Link', Link)
       .mount(el)
   },
