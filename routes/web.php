@@ -18,6 +18,7 @@ Route::get('/rooms/{room}', [RoomController::class, 'show']);
 Route::get('/rooms/{room}/members', [RoomController::class, 'members']);
 Route::get('/rooms/{room}/files', [RoomController::class, 'files']);
 Route::get('/rooms/{room}/settings', [RoomController::class, 'settings']);
+Route::post('/rooms/{room}/settings', [RoomController::class, 'storeSettings']);
 Route::post('/rooms/{room}/play/{item}', [RoomController::class, 'clickMedia']);
 Route::post('/rooms/{room}/next', [RoomController::class, 'nextMedia']);
 
