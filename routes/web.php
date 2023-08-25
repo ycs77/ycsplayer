@@ -4,6 +4,7 @@ use App\Broadcasting\Http\Controllers\PusherWebhookController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomMediaController;
+use App\Http\Controllers\RoomPlaylistController;
 use App\Http\Controllers\RoomSettingController;
 use App\Http\Controllers\RoomUploadMediaController;
 use App\Models\User;
@@ -26,8 +27,9 @@ Route::delete('/rooms/{room}/medias/{media}', [RoomMediaController::class, 'dele
 Route::get('/rooms/{room}/settings', [RoomSettingController::class, 'show']);
 Route::post('/rooms/{room}/settings', [RoomSettingController::class, 'store']);
 
-Route::post('/rooms/{room}/play/{item}', [RoomController::class, 'clickMedia']);
-Route::post('/rooms/{room}/next', [RoomController::class, 'nextMedia']);
+Route::post('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'click']);
+Route::delete('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'remove']);
+Route::post('/rooms/{room}/next', [RoomPlaylistController::class, 'next']);
 
 Route::post('/rooms/{room}/upload', RoomUploadMediaController::class);
 

@@ -9,6 +9,7 @@
       <div class="col-span-12">
         <div class="max-w-screen-md mx-auto bg-blue-950/50 p-4 rounded-lg lg:p-6">
           <h1 class="text-2xl">房間設定</h1>
+
           <div class="mt-6">
             <form @submit.prevent="form.post(`/rooms/${room.id}/settings`)">
               <div class="space-y-6">

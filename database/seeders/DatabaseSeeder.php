@@ -55,6 +55,7 @@ class DatabaseSeeder extends Seeder
                 'type' => PlayerType::YouTube,
                 'title' => '春日影',
                 'url' => 'https://www.youtube.com/watch?v=W8DCWI_Gc9c',
+                'thumbnail' => 'https://img.youtube.com/vi/W8DCWI_Gc9c/default.jpg',
             ]);
         }
 
@@ -67,6 +68,7 @@ class DatabaseSeeder extends Seeder
                 'type' => PlayerType::YouTube,
                 'title' => '星座になれたら',
                 'url' => 'https://www.youtube.com/watch?v=fJh5UeiULZs',
+                'thumbnail' => 'https://img.youtube.com/vi/fJh5UeiULZs/default.jpg',
             ]);
         }
 
@@ -79,6 +81,7 @@ class DatabaseSeeder extends Seeder
                 'type' => PlayerType::YouTube,
                 'title' => 'spiral',
                 'url' => 'https://www.youtube.com/watch?v=fE9trKOuT3Q',
+                'thumbnail' => 'https://img.youtube.com/vi/fE9trKOuT3Q/default.jpg',
             ]);
         }
 
@@ -112,6 +115,7 @@ class DatabaseSeeder extends Seeder
                 'type' => PlayerType::YouTube,
                 'title' => '色違いの翼',
                 'url' => 'https://www.youtube.com/watch?v=Melo0YFiDSY',
+                'thumbnail' => 'https://img.youtube.com/vi/Melo0YFiDSY/default.jpg',
             ]);
         }
 
@@ -124,6 +128,7 @@ class DatabaseSeeder extends Seeder
                 'type' => PlayerType::YouTube,
                 'title' => '詩超絆',
                 'url' => 'https://www.youtube.com/watch?v=wWf9k4e2xEo',
+                'thumbnail' => 'https://img.youtube.com/vi/wWf9k4e2xEo/default.jpg',
             ]);
         }
     }

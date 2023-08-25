@@ -3,6 +3,7 @@
 namespace App\Presenters;
 
 use AdditionApps\FlexiblePresenter\FlexiblePresenter;
+use App\Models\PlaylistItem;
 
 class PlaylistItemPresenter extends FlexiblePresenter
 {
@@ -10,10 +11,16 @@ class PlaylistItemPresenter extends FlexiblePresenter
     {
         return [
             'id' => $this->id,
-            'type' => $this->type->value,
             'title' => $this->title,
-            'url' => $this->url,
             'thumbnail' => $this->thumbnail,
         ];
+    }
+
+    public function presetPlay()
+    {
+        return $this->with(fn (PlaylistItem $item) => [
+            'type' => $item->type->value,
+            'url' => $item->url,
+        ]);
     }
 }

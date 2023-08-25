@@ -49,7 +49,8 @@
               class="rounded-lg overflow-hidden"
               :current-playing="currentPlaying"
               :playlist-items="playlistItems"
-              @select-item="selectedPlaylistItem"
+              @select-item="selectPlaylistItem"
+              @remove-item="removePlaylistItem"
             />
           </div>
 
@@ -78,7 +79,8 @@
           class="max-h-[50vh] border-t border-blue-900/50 overflow-y-auto"
           :current-playing="currentPlaying"
           :playlist-items="playlistItems"
-          @select-item="selectedPlaylistItem"
+          @select-item="selectPlaylistItem"
+          @remove-item="removePlaylistItem"
         />
       </Transition>
 
@@ -117,8 +119,8 @@ const props = defineProps<{
   playlist_items: PlaylistItem[]
 }>()
 
-const currentPlaying = ref(props.current_playing) as Ref<PlaylistItem | null>
-const playlistItems = ref(props.playlist_items) as Ref<PlaylistItem[]>
+const currentPlaying = toRef(props, 'current_playing')
+const playlistItems = toRef(props, 'playlist_items')
 
 const player = ref(null) as Ref<InstanceType<typeof Player> | null>
 
@@ -126,27 +128,41 @@ const isOpenMobilePlaylist = ref(false)
 
 function ended() {
   router.post(`/rooms/${props.room.id}/next`, {
-    current_playing_id: props.current_playing?.id,
+    current_playing_id: currentPlaying.value?.id,
   })
 }
 
-function selectedPlaylistItem(item: PlaylistItem) {
+function selectPlaylistItem(item: PlaylistItem) {
   isOpenMobilePlaylist.value = false
-  router.post(`/rooms/${props.room.id}/play/${item.id}`)
+  router.post(`/rooms/${props.room.id}/playlist/${item.id}`, {}, {
+    only: ['current_playing', 'playlist_items'],
+  })
 }
 
-// 監聽當有其他人切換影片時的事件
+function removePlaylistItem(item: PlaylistItem) {
+  router.delete(`/rooms/${props.room.id}/playlist/${item.id}`, {
+    only: [
+      ...(item.id === currentPlaying.value?.id
+        ? ['current_playing']
+        : []),
+      'playlist_items',
+    ],
+  })
+}
+
+// 監聽當有其他人切換播放影片時的事件
 function onPlayerlistItemClicked() {
-  router.reload()
+  router.reload({
+    only: ['current_playing', 'playlist_items'],
+  })
 }
 
-watch(() => props.current_playing, () => {
-  currentPlaying.value = props.current_playing
-})
-
-watch(() => props.playlist_items, () => {
-  playlistItems.value = props.playlist_items
-})
+// 監聽當有其他人刪除待播影片(不是當前播放)時的事件
+function onPlayerlistItemRemoved() {
+  router.reload({
+    only: ['playlist_items'],
+  })
+}
 
 watch(isOpenMobilePlaylist, isOpenMobilePlaylist => {
   if (isOpenMobilePlaylist) {
@@ -166,6 +182,7 @@ watch(player, (v, ov, invalidate) => {
     .listen('PlayerPaused', safeListenFn(player.value?.onPlayerPaused))
     .listen('PlayerSeeked', safeListenFn(player.value?.onPlayerSeeked))
     .listen('PlayerlistItemClicked', onPlayerlistItemClicked)
+    .listen('PlayerlistItemRemoved', onPlayerlistItemRemoved)
 
   invalidate(() => {
     Echo.leave(`player.${props.room.id}`)

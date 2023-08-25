@@ -64,3 +64,7 @@ export interface PlayerSeekedEvent {
 export interface PlayerlistItemClickedEvent {
   roomId: number
 }
+
+export interface PlayerlistItemRemovedEvent {
+  roomId: number
+}

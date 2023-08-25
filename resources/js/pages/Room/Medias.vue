@@ -15,21 +15,21 @@
               上傳檔案
             </button>
           </div>
+
           <div class="mt-6">
             <ul v-if="medias.length" class="space-y-6">
               <li v-for="media in medias" :key="media.id">
-                <div class="flex justify-between items-center">
-                  <div class="flex items-center">
-                    <img
-                      v-if="media.thumbnail"
-                      :src="media.thumbnail"
-                      class="w-28 shrink-0 rounded-lg aspect-video object-cover mr-2 sm:w-32"
-                    />
-                    <MediaPlaceholder v-else class="w-28 shrink-0 mr-2 sm:w-32" />
-                    <div class="break-all">{{ media.name }}</div>
-                  </div>
+                <div class="flex items-center">
+                  <img
+                    v-if="media.thumbnail"
+                    :src="media.thumbnail"
+                    class="w-28 shrink-0 rounded-lg aspect-video object-cover mr-2 sm:w-32"
+                  />
+                  <MediaPlaceholder v-else class="w-28 shrink-0 mr-2 sm:w-32" />
 
-                  <div class="whitespace-nowrap">
+                  <div class="grow break-all">{{ media.name }}</div>
+
+                  <div class="shrink-0 whitespace-nowrap">
                     <Link
                       :href="`/rooms/${room.id}/medias/${media.id}`"
                       as="button"

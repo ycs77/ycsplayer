@@ -11,7 +11,7 @@
     @apply px-5 py-1.5 text-sm;
   }
   .btn-sm {
-    @apply px-4 py-1.5 text-xs;
+    @apply px-3.5 py-1.5 text-xs;
   }
   .btn-lg {
     @apply px-8 py-2.5 text-base;

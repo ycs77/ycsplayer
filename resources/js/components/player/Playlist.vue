@@ -1,32 +1,28 @@
 <template>
   <ul>
     <li v-for="item in playlistItems" :key="item.id">
-      <div
+      <PlaylistItem
         v-if="item.id === currentPlaying?.id"
-        class="flex items-center p-2 w-full bg-blue-800/50 border-l-4 border-blue-500 text-left select-none"
-      >
-        <img
-          v-if="item.thumbnail"
-          :src="item.thumbnail"
-          class="w-28 max-w-[40%] shrink-0 rounded-lg aspect-video object-cover mr-2"
-        />
-        <MediaPlaceholder v-else class="w-28 max-w-[40%] shrink-0 mr-2" />
-        <div class="break-all">{{ item.title }}</div>
-      </div>
+        is="div"
+        active
+        :item="item"
+        @remove="$emit('removeItem', item)"
+      />
 
-      <button
+      <PlaylistItem
         v-else
+        is="button"
         type="button"
-        class="flex items-center p-2 w-full bg-blue-950/50 hover:bg-blue-900/50 border-l-4 border-transparent text-left transition-colors select-none"
+        :item="item"
         @click="$emit('selectItem', item)"
-      >
-        <img
-          v-if="item.thumbnail"
-          :src="item.thumbnail"
-          class="w-28 max-w-[40%] shrink-0 rounded-lg aspect-video object-cover mr-2"
-        />
-        <MediaPlaceholder v-else class="w-28 max-w-[40%] shrink-0 mr-2" />
-        <div class="break-all">{{ item.title }}</div>
+        @remove="$emit('removeItem', item)"
+      />
+    </li>
+
+    <li>
+      <button type="button" class="flex justify-center items-center p-2 w-full bg-blue-950/50 hover:bg-blue-900/50 text-center transition-colors select-none">
+        <HeroiconsPlus class="w-4 h-4 mr-2" />
+        新增播放項目
       </button>
     </li>
   </ul>
@@ -42,5 +38,6 @@ defineProps<{
 
 defineEmits<{
   selectItem: [PlaylistItem]
+  removeItem: [PlaylistItem]
 }>()
 </script>
