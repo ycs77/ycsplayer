@@ -44,6 +44,13 @@ export interface PlayStatus {
   paused: boolean
 }
 
+export interface PlaylistItemForm extends Record<string, any> {
+  type: PlayerType
+  title: string
+  url: string
+  media_id: number | null
+}
+
 export interface PlayerPlayedEvent {
   socketId: string
   roomId: number

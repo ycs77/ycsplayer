@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Presenters\MediaPresenter;
 use App\Presenters\PlaylistItemPresenter;
 use App\Presenters\RoomPresenter;
 use Inertia\Inertia;
@@ -26,6 +27,7 @@ class RoomController extends Controller
             'room' => fn () => RoomPresenter::make($room)->preset('show'),
             'current_playing' => fn () => PlaylistItemPresenter::make($room->current_playing)->preset('play'),
             'playlist_items' => fn () => PlaylistItemPresenter::collection($room->playlist_items),
+            'medias' => fn () => MediaPresenter::collection($room->getMedia()),
         ]);
     }
 

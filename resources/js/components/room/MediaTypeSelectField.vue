@@ -1,17 +1,17 @@
 <template>
   <Field
-    label="房間類型"
+    label="媒體類型"
     :error="error || (id ? $page.props.errors[id] : undefined)"
     :tip="tip"
     :class="wrapperClass"
   >
-    <RadioGroup v-model="selectedRoomType">
-      <div class="grid grid-cols-2 gap-2">
+    <RadioGroup v-model="selectedPlayerType">
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
         <RadioGroupOption
           as="template"
-          v-for="roomType in roomTypes"
-          :key="roomType.value"
-          :value="roomType"
+          v-for="playerType in playerTypes"
+          :key="playerType.value"
+          :value="playerType"
           v-slot="{ checked }"
         >
           <div
@@ -24,18 +24,23 @@
             <div class="flex w-full justify-between">
               <div>
                 <HeroiconsPlayCircle
-                  v-if="roomType.value === RoomType.Video"
+                  v-if="playerType.value === PlayerType.Video"
                   class="w-9 h-9 mb-2"
                   :class="checked ? 'text-white' : 'text-blue-500/50'"
                 />
                 <HeroiconsMusicalNote
-                  v-else-if="roomType.value === RoomType.Audio"
+                  v-else-if="playerType.value === PlayerType.Audio"
+                  class="w-9 h-9 mb-2"
+                  :class="checked ? 'text-white' : 'text-blue-500/50'"
+                />
+                <TablerBrandYoutubeFilled
+                  v-else-if="playerType.value === PlayerType.YouTube"
                   class="w-9 h-9 mb-2"
                   :class="checked ? 'text-white' : 'text-blue-500/50'"
                 />
 
                 <RadioGroupLabel as="p" class="text-white font-medium">
-                  {{ roomType.name }}
+                  {{ playerType.name }}
                 </RadioGroupLabel>
               </div>
               <div v-show="checked" class="shrink-0 text-white">
@@ -53,12 +58,12 @@
 </template>
 
 <script setup lang="ts">
-import { RoomType } from '@/types'
+import { PlayerType } from '@/types'
 
 defineOptions({ inheritAttrs: false })
 
 const props = defineProps<{
-  modelValue: RoomType
+  modelValue: PlayerType
   id?: string
   error?: string
   tip?: string
@@ -66,29 +71,33 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: RoomType): void
+  (e: 'update:modelValue', value: PlayerType): void
 }>()
 
-const roomTypes = [
+const playerTypes = [
   {
     name: '影片',
-    value: RoomType.Video,
+    value: PlayerType.Video,
   },
   {
     name: '音樂',
-    value: RoomType.Audio,
+    value: PlayerType.Audio,
+  },
+  {
+    name: 'YouTube',
+    value: PlayerType.YouTube,
   },
 ]
 
-const selectedRoomType = computed<{
+const selectedPlayerType = computed<{
   name: string
-  value: RoomType
+  value: PlayerType
 }>({
   get() {
-    return roomTypes.find(roomType => roomType.value === props.modelValue)!
+    return playerTypes.find(playerType => playerType.value === props.modelValue)!
   },
-  set(roomType) {
-    emit('update:modelValue', roomType.value)
+  set(playerType) {
+    emit('update:modelValue', playerType.value)
   },
 })
 </script>

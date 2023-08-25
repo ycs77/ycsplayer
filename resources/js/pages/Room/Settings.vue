@@ -13,21 +13,9 @@
           <div class="mt-6">
             <form @submit.prevent="form.post(`/rooms/${room.id}/settings`)">
               <div class="space-y-6">
-
                 <RoomTypeSelectField id="type" v-model="form.type" />
-
-                <SwitchField
-                  label="自動播放"
-                  id="auto_play"
-                  v-model="form.auto_play"
-                />
-
-                <SwitchField
-                  label="播放完畢自動刪除"
-                  id="auto_remove"
-                  v-model="form.auto_remove"
-                />
-
+                <SwitchField label="自動播放" id="auto_play" v-model="form.auto_play" />
+                <SwitchField label="播放完畢自動刪除" id="auto_remove" v-model="form.auto_remove" />
               </div>
 
               <div class="mt-6">

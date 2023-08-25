@@ -21,7 +21,7 @@ class RoomSettingController extends Controller
     public function store(Request $request, Room $room)
     {
         $request->validate([
-            'type' => ['required', new Enum(RoomType::class)],
+            'type' => [new Enum(RoomType::class)],
             'auto_play' => ['required', 'boolean'],
             'auto_remove' => ['required', 'boolean'],
         ]);

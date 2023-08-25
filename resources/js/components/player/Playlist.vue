@@ -20,7 +20,11 @@
     </li>
 
     <li>
-      <button type="button" class="flex justify-center items-center p-2 w-full bg-blue-950/50 hover:bg-blue-900/50 text-center transition-colors select-none">
+      <button
+        type="button"
+        class="flex justify-center items-center p-2 w-full bg-blue-950/50 hover:bg-blue-900/50 text-center transition-colors select-none"
+        @click="$emit('openAddItem')"
+      >
         <HeroiconsPlus class="w-4 h-4 mr-2" />
         新增播放項目
       </button>
@@ -37,6 +41,7 @@ defineProps<{
 }>()
 
 defineEmits<{
+  openAddItem: []
   selectItem: [PlaylistItem]
   removeItem: [PlaylistItem]
 }>()

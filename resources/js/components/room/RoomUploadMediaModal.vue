@@ -1,7 +1,7 @@
 <template>
   <Modal
     title="上傳檔案"
-    max-width-class="max-w-[560px]  w-full"
+    max-width-class="max-w-[560px] w-full"
     v-model="show"
   >
     <template #icon>

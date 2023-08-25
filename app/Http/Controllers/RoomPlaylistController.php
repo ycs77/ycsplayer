@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PlayerType;
 use App\Events\PlayerlistItemClicked;
 use App\Events\PlayerlistItemRemoved;
 use App\Models\PlaylistItem;
@@ -9,6 +10,10 @@ use App\Models\Room;
 use App\Player\PlayStatusCacheRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\ValidationException;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class RoomPlaylistController extends Controller
 {
@@ -18,6 +23,69 @@ class RoomPlaylistController extends Controller
         //
     }
 
+    public function store(Request $request, Room $room)
+    {
+        $request->validate([
+            'type' => [new Enum(PlayerType::class)],
+            'title' => ['required', 'string', 'max:20'],
+            'url' => [
+                'required_if:type,youtube',
+                'nullable',
+                'string',
+                'max:100',
+            ],
+            'media_id' => [
+                'required_if:type,video,audio',
+                'nullable',
+                Rule::exists(Media::class, 'id'),
+            ],
+        ]);
+
+        $type = PlayerType::from($request->input('type'));
+
+        if ($type === PlayerType::Video || $type === PlayerType::Audio) {
+            /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media */
+            $media = $room->media()->find($request->input('media_id'));
+
+            if (! $media) {
+                throw ValidationException::withMessages([
+                    'media_id' => '無法加入此媒體',
+                ]);
+            }
+
+            $room->playlist_items()->create([
+                'type' => $type,
+                'title' => $request->input('title'),
+                'url' => $media->getUrl(),
+                'thumbnail' => $media->hasGeneratedConversion('thumb')
+                    ? $media->getUrl('thumb')
+                    : null,
+                'preview' => $media->hasGeneratedConversion('preview')
+                    ? $media->getUrl('preview')
+                    : null,
+            ]);
+        } elseif ($type === PlayerType::YouTube) {
+            if (preg_match('/^https?:\/\/www\.youtube\.com\/watch\?v\=([\w-]+)$/', $request->input('url'), $m)) {
+                $youtubeId = $m[1];
+            } elseif (preg_match('/^https?:\/\/www\.youtube\.com\/embed\/([\w-]+)$/', $request->input('url'), $m)) {
+                $youtubeId = $m[1];
+            }
+
+            if (! isset($youtubeId)) {
+                throw ValidationException::withMessages([
+                    'url' => 'YouTube 的網址請輸入 https://www.youtube.com/watch?v=<id> 或 https://www.youtube.com/embed/<id> 格式',
+                ]);
+            }
+
+            $room->playlist_items()->create([
+                'type' => $type,
+                'title' => $request->input('title'),
+                'url' => $request->input('url'),
+                'thumbnail' => "https://img.youtube.com/vi/{$youtubeId}/default.jpg",
+            ]);
+        }
+    }
+
     public function click(Room $room, PlaylistItem $item)
     {
         $this->playItem($room, $item);
@@ -25,20 +93,18 @@ class RoomPlaylistController extends Controller
         PlayerlistItemClicked::broadcast($room->id)->toOthers();
     }
 
-    public function remove(Room $room, PlaylistItem $item)
+    public function destroy(Room $room, PlaylistItem $item)
     {
-        if ($room->current_playing_id) {
-            if ($item->id === $room->current_playing_id) {
-                $this->changeToNextPlaylistItem(
-                    $room, $room->current_playing_id, true
-                );
+        if ($item->id === $room->current_playing_id) {
+            $this->changeToNextPlaylistItem(
+                $room, $room->current_playing_id, true
+            );
 
-                PlayerlistItemClicked::broadcast($room->id)->toOthers();
-            } else {
-                $item->delete();
+            PlayerlistItemClicked::broadcast($room->id)->toOthers();
+        } else {
+            $item->delete();
 
-                PlayerlistItemRemoved::broadcast($room->id)->toOthers();
-            }
+            PlayerlistItemRemoved::broadcast($room->id)->toOthers();
         }
     }
 

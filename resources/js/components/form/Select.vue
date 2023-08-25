@@ -4,13 +4,14 @@
       flex justify-between items-center
       w-full
       px-3 py-2
-      hover:bg-gray-50
-      border border-gray-200 rounded
-      group-focus-within:border-blue-500 group-focus-within:ring-1 group-focus-within:ring-blue-500
+      bg-blue-950/50
+      hover:bg-blue-900/50
+      border border-gray-600 rounded
+      group-focus-within:border-blue-300 group-focus-within:ring-1 group-focus-within:ring-blue-300
       transition-colors
     ">
-      <div v-if="selected" class="flex items-center select-none">
-        {{ selected.label }}
+      <div class="flex items-center select-none">
+        {{ selected?.label ?? selectMessage }}
       </div>
       <SelectButtonIcon chevron-down />
     </ListboxButton>
@@ -20,8 +21,8 @@
       z-[1]
       mt-1.5
       w-full max-h-[200px]
-      bg-white
-      border border-gray-200 rounded
+      bg-blue-950
+      border border-gray-600 rounded
       overflow-y-auto
       shadow-lg
       focus:outline-none
@@ -35,7 +36,7 @@
       >
         <li
           class="relative flex items-center px-3 py-2 border border-transparent transition-colors cursor-pointer"
-          :class="{ 'bg-blue-500': active }"
+          :class="{ 'bg-blue-900/50': active }"
         >
           <span class="truncate select-none" :class="{ 'text-white': active }">
             {{ option.label }}
@@ -55,10 +56,13 @@ interface Option {
   value: any
 }
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   modelValue: Option | null
   options: Option[]
-}>()
+  selectMessage?: string
+}>(), {
+  selectMessage: '請選擇...',
+})
 
 const selected = useVModel(props) as Ref<Option>
 </script>

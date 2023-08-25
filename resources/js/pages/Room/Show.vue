@@ -49,6 +49,7 @@
               class="rounded-lg overflow-hidden"
               :current-playing="currentPlaying"
               :playlist-items="playlistItems"
+              @open-add-item="openAddPlaylistItemModal"
               @select-item="selectPlaylistItem"
               @remove-item="removePlaylistItem"
             />
@@ -75,10 +76,11 @@
         leave-to-class="opacity-0 translate-y-2"
       >
         <Playlist
-          v-if="isOpenMobilePlaylist"
+          v-if="showMobilePlaylist"
           class="max-h-[50vh] border-t border-blue-900/50 overflow-y-auto"
           :current-playing="currentPlaying"
           :playlist-items="playlistItems"
+          @open-add-item="openAddPlaylistItemModal"
           @select-item="selectPlaylistItem"
           @remove-item="removePlaylistItem"
         />
@@ -89,7 +91,7 @@
         <button
           type="button"
           class="w-full p-2 flex justify-between items-center bg-blue-950/50 border-t border-blue-900/50"
-          @click="isOpenMobilePlaylist = !isOpenMobilePlaylist"
+          @click="showMobilePlaylist = !showMobilePlaylist"
         >
           <div class="flex items-center">
             <HeroiconsPlayCircle class="w-8 h-8 mr-1" />
@@ -98,25 +100,34 @@
 
           <HeroiconsChevronUp
             class="w-6 h-6 transition-transform"
-            :class="{ 'rotate-180': !isOpenMobilePlaylist }"
+            :class="{ 'rotate-180': !showMobilePlaylist }"
           />
         </button>
       </div>
     </div>
 
+    <RoomAddPlaylistItemModal
+      v-model="showAddPlaylistItemModal"
+      :form="playlistItemForm"
+      :medias="medias"
+      @submit="submitPlaylistItemForm"
+    />
+
   </div>
 </template>
 
 <script setup lang="ts">
+import type { InertiaForm } from '@inertiajs/vue3'
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { Echo, safeListenFn } from '@/echo'
 import Player from '@/components/player/Player.vue'
-import type { Room, PlaylistItem } from '@/types'
+import { PlayerType, type Room, type PlaylistItem, type PlaylistItemForm, Media } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>
   current_playing: PlaylistItem | null
   playlist_items: PlaylistItem[]
+  medias: Media[]
 }>()
 
 const currentPlaying = toRef(props, 'current_playing')
@@ -124,7 +135,15 @@ const playlistItems = toRef(props, 'playlist_items')
 
 const player = ref(null) as Ref<InstanceType<typeof Player> | null>
 
-const isOpenMobilePlaylist = ref(false)
+const showAddPlaylistItemModal = ref(false)
+const showMobilePlaylist = ref(false)
+
+const playlistItemForm = useForm({
+  type: PlayerType.Video,
+  title: '',
+  url: '',
+  media_id: null,
+}) as InertiaForm<PlaylistItemForm>
 
 function ended() {
   router.post(`/rooms/${props.room.id}/next`, {
@@ -133,7 +152,7 @@ function ended() {
 }
 
 function selectPlaylistItem(item: PlaylistItem) {
-  isOpenMobilePlaylist.value = false
+  showMobilePlaylist.value = false
   router.post(`/rooms/${props.room.id}/playlist/${item.id}`, {}, {
     only: ['current_playing', 'playlist_items'],
   })
@@ -147,6 +166,28 @@ function removePlaylistItem(item: PlaylistItem) {
         : []),
       'playlist_items',
     ],
+  })
+}
+
+function openAddPlaylistItemModal() {
+  playlistItemForm.type = PlayerType.Video
+  playlistItemForm.title = ''
+  playlistItemForm.url = ''
+  playlistItemForm.media_id = null
+
+  showAddPlaylistItemModal.value = true
+}
+
+function submitPlaylistItemForm(form: PlaylistItemForm) {
+  playlistItemForm.type = form.type
+  playlistItemForm.title = form.title
+  playlistItemForm.url = form.url
+  playlistItemForm.media_id = form.media_id
+
+  playlistItemForm.post(`/rooms/${props.room.id}/playlist`, {
+    onSuccess() {
+      showAddPlaylistItemModal.value = false
+    },
   })
 }
 
@@ -164,8 +205,8 @@ function onPlayerlistItemRemoved() {
   })
 }
 
-watch(isOpenMobilePlaylist, isOpenMobilePlaylist => {
-  if (isOpenMobilePlaylist) {
+watch(showMobilePlaylist, showMobilePlaylist => {
+  if (showMobilePlaylist) {
     disableBodyScroll(document.body)
   } else {
     enableBodyScroll(document.body)

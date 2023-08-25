@@ -27,8 +27,9 @@ Route::delete('/rooms/{room}/medias/{media}', [RoomMediaController::class, 'dele
 Route::get('/rooms/{room}/settings', [RoomSettingController::class, 'show']);
 Route::post('/rooms/{room}/settings', [RoomSettingController::class, 'store']);
 
+Route::post('/rooms/{room}/playlist', [RoomPlaylistController::class, 'store']);
 Route::post('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'click']);
-Route::delete('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'remove']);
+Route::delete('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'destroy']);
 Route::post('/rooms/{room}/next', [RoomPlaylistController::class, 'next']);
 
 Route::post('/rooms/{room}/upload', RoomUploadMediaController::class);
