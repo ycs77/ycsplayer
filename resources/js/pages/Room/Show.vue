@@ -74,7 +74,7 @@
       >
         <Playlist
           v-if="isOpenMobilePlaylist"
-          class="border-t border-blue-900/50 overflow-y-auto"
+          class="max-h-[50vh] border-t border-blue-900/50 overflow-y-auto"
           :current-playing="currentPlaying"
           :playlist-items="playlistItems"
           @select-item="selectedPlaylistItem"
@@ -130,6 +130,7 @@ function ended() {
 }
 
 function selectedPlaylistItem(item: PlaylistItem) {
+  isOpenMobilePlaylist.value = false
   router.post(`/rooms/${props.room.id}/play/${item.id}`)
 }
 

@@ -137,7 +137,7 @@ onMounted(() => {
     }],
   } as Record<string, any>
 
-  if (props.poster) {
+  if (props.poster && props.type === PlayerType.Video) {
     videojsOptions.poster = props.poster
   }
 

@@ -3,17 +3,30 @@
     <li v-for="item in playlistItems" :key="item.id">
       <div
         v-if="item.id === currentPlaying?.id"
-        class="block px-4 py-2 w-full bg-blue-800/50 border-l-4 border-blue-500 text-left select-none"
+        class="flex items-center p-2 w-full bg-blue-800/50 border-l-4 border-blue-500 text-left select-none"
       >
-        {{ item.title }}
+        <img
+          v-if="item.thumbnail"
+          :src="item.thumbnail"
+          class="w-28 max-w-[40%] shrink-0 rounded-lg aspect-video object-cover mr-2"
+        />
+        <MediaPlaceholder v-else class="w-28 max-w-[40%] shrink-0 mr-2" />
+        <div class="break-all">{{ item.title }}</div>
       </div>
+
       <button
         v-else
         type="button"
-        class="px-4 py-2 w-full bg-blue-950/50 hover:bg-blue-900/50 border-l-4 border-transparent text-left transition-colors select-none"
+        class="flex items-center p-2 w-full bg-blue-950/50 hover:bg-blue-900/50 border-l-4 border-transparent text-left transition-colors select-none"
         @click="$emit('selectItem', item)"
       >
-        {{ item.title }}
+        <img
+          v-if="item.thumbnail"
+          :src="item.thumbnail"
+          class="w-28 max-w-[40%] shrink-0 rounded-lg aspect-video object-cover mr-2"
+        />
+        <MediaPlaceholder v-else class="w-28 max-w-[40%] shrink-0 mr-2" />
+        <div class="break-all">{{ item.title }}</div>
       </button>
     </li>
   </ul>
