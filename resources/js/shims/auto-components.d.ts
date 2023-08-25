@@ -39,6 +39,7 @@ declare module '@vue/runtime-core' {
     RoomMembers: typeof import('./../components/room/RoomMembers.vue')['default']
     RoomNavbar: typeof import('./../components/room/RoomNavbar.vue')['default']
     RoomNavbarButton: typeof import('./../components/room/RoomNavbarButton.vue')['default']
+    RoomTypeSelectField: typeof import('./../components/room/RoomTypeSelectField.vue')['default']
     RoomUploadMediaModal: typeof import('./../components/room/RoomUploadMediaModal.vue')['default']
     Select: typeof import('./../components/form/Select.vue')['default']
     SelectModel: typeof import('./../components/form/SelectModel.vue')['default']
