@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Room;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Room;
 use App\Presenters\MediaPresenter;
 use App\Presenters\RoomPresenter;

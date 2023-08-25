@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Room;
+namespace App\Http\Controllers;
 
 use App\Events\PlayerlistItemClicked;
-use App\Http\Controllers\Controller;
 use App\Models\PlaylistItem;
 use App\Models\Room;
 use App\Player\PlayStatusCacheRepository;

@@ -2,10 +2,10 @@
 
 use App\Broadcasting\Http\Controllers\PusherWebhookController;
 use App\Http\Controllers\PlayerController;
-use App\Http\Controllers\Room\RoomController;
-use App\Http\Controllers\Room\RoomMediaController;
-use App\Http\Controllers\Room\RoomSettingController;
-use App\Http\Controllers\Room\RoomUploadMediaController;
+use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomMediaController;
+use App\Http\Controllers\RoomSettingController;
+use App\Http\Controllers\RoomUploadMediaController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
