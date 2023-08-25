@@ -7,7 +7,7 @@
       <RoomNavbar class="col-span-12" :room-id="room.id" />
 
       <div class="col-span-12 order-last xl:col-span-2 xl:order-none">
-        <div class="grid gap-[--layout-gap] sm:grid-cols-2 lg:gap-[--layout-gap-lg] xl:grid-cols-1">
+        <div class="grid gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
           <div>
             <!-- 房間資訊卡 -->
             <div class="bg-blue-950/50 p-4 rounded-lg">
@@ -18,48 +18,9 @@
             </div>
           </div>
 
-          <div>
+          <div class="hidden xl:block">
             <!-- 房間成員卡 -->
-            <Disclosure
-              as="div"
-              class="bg-blue-950/50 p-4 rounded-lg"
-              v-slot="{ open }"
-            >
-              <div class="flex justify-between items-center">
-                <h5 class="font-semibold">房間成員</h5>
-                <DisclosureButton class="xl:hidden">
-                  <HeroiconsChevronUp
-                    class="w-6 h-6 transition-transform"
-                    :class="{ 'rotate-180': !open }"
-                  />
-                </DisclosureButton>
-              </div>
-              <DisclosurePanel
-                static
-                class="xl:block"
-                :class="open ? '' : 'hidden'"
-              >
-                <ul class="mt-2 space-y-1 -mx-2 -mb-2">
-                  <li v-for="user in 4">
-                    <button type="button" class="p-2 w-full flex items-center hover:bg-blue-900/50 rounded-lg transition-colors">
-                      <img
-                        class="w-8 h-8 rounded-full mr-2"
-                        src="/images/user.svg"
-                        alt=""
-                      />
-                      <div class="flex items-center h-10">
-                        <div>
-                          <div class="font-normal tracking-wide">Lucas Yang</div>
-                          <div v-if="user <= 3" class="flex items-center text-xs">
-                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-1" />上線
-                          </div>
-                        </div>
-                      </div>
-                    </button>
-                  </li>
-                </ul>
-              </DisclosurePanel>
-            </Disclosure>
+            <RoomMembers />
           </div>
         </div>
       </div>

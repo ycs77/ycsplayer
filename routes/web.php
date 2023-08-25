@@ -15,6 +15,7 @@ Route::redirect('/', '/rooms');
 
 Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms/{room}', [RoomController::class, 'show']);
+Route::get('/rooms/{room}/members', [RoomController::class, 'members']);
 Route::post('/rooms/{room}/play/{item}', [RoomController::class, 'clickMedia']);
 Route::post('/rooms/{room}/next', [RoomController::class, 'nextMedia']);
 

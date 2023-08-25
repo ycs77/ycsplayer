@@ -17,12 +17,8 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      @apply bg-blue-400 hover:bg-blue-500 bg-clip-padding;
+      @apply bg-blue-800/50 hover:bg-blue-700/50 bg-clip-padding;
       @apply border-[4px] border-solid border-transparent rounded-full;
-    }
-
-    ::-webkit-scrollbar-track {
-      @apply bg-blue-100/50;
     }
   }
 }

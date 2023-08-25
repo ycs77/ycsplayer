@@ -40,6 +40,13 @@ class RoomController extends Controller
         ]);
     }
 
+    public function members(Room $room)
+    {
+        return Inertia::render('Room/Members', [
+            'room' => fn () => RoomPresenter::make($room)->preset('show'),
+        ]);
+    }
+
     public function clickMedia(Room $room, PlaylistItem $item)
     {
         $this->playItem($room, $item);
