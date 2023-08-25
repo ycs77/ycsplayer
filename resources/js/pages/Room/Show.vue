@@ -17,6 +17,7 @@
               :src="currentPlaying.url"
               :type="currentPlaying.type"
               :poster="currentPlaying.thumbnail ?? undefined"
+              :autoplay="room.auto_play"
               @ended="ended"
             />
           </div>
