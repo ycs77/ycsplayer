@@ -3,6 +3,7 @@
 @import 'tailwindcss/utilities';
 
 @import 'vars';
+@import 'fonts';
 @import 'base';
 @import 'components';
 @import 'button';

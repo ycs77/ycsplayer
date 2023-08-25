@@ -8,7 +8,7 @@
 
       <div class="col-span-12">
         <div class="max-w-screen-lg mx-auto bg-blue-950/50 p-4 rounded-lg lg:p-6">
-          <h1 class="text-xl font-semibold">房間設定</h1>
+          <h1 class="text-2xl">房間設定</h1>
           <div class="mt-2">
             content
           </div>

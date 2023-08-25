@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import defaultTheme from 'tailwindcss/defaultTheme'
 import { tailwindcssOriginSafelist } from '@headlessui-float/vue'
 import Forms from '@tailwindcss/forms'
 
@@ -18,7 +19,11 @@ export default {
       xl: '1280px',
       '2xl': '1536px',
     },
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['"jf open 粉圓"', ...defaultTheme.fontFamily.sans],
+      },
+    },
   },
   plugins: [
     Forms({

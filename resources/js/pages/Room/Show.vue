@@ -11,7 +11,7 @@
           <div>
             <!-- 房間資訊卡 -->
             <div class="bg-blue-950/50 p-4 rounded-lg">
-              <h1 class="text-xl font-semibold">{{ room.title }}</h1>
+              <h1 class="text-xl">{{ room.title }}</h1>
               <div class="mt-2 text-blue-300">
                 <div>成員數：0人</div>
               </div>
