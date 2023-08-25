@@ -37,7 +37,7 @@ const videoRef = ref() as Ref<HTMLVideoElement>
 
 let player: Player | undefined
 let playCallback = null as (() => void) | null
-let is_ended = false
+let isEnded = false
 
 function isClickedBigButton() {
   return player?.hasStarted_
@@ -98,7 +98,7 @@ function seeked() {
 
 const timeUpdate = throttle(() => {
   if (!player) return
-  if (is_ended) return
+  if (isEnded) return
 
   axios.post('/player/time-update', {
     room_id: props.roomId,
@@ -111,7 +111,7 @@ const timeUpdate = throttle(() => {
 function end() {
   if (!player) return
 
-  is_ended = true
+  isEnded = true
 
   axios.post('/player/end', {
     room_id: props.roomId,
@@ -282,7 +282,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
       e.socketId !== Echo.socketId()
   ) return
 
-  is_ended = false
+  isEnded = false
 
   let currentTime = e.status.current_time ?? 0
 
