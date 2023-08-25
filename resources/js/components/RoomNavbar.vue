@@ -22,12 +22,18 @@
       成員
     </Button>
 
-    <Button :href="`/rooms/${roomId}`">
+    <Button
+      :href="`/rooms/${roomId}/files`"
+      :active="$page.url === `/rooms/${roomId}/files`"
+    >
       <template #icon><HeroiconsDocumentText class="w-4 h-4" /></template>
       檔案
     </Button>
 
-    <Button :href="`/rooms/${roomId}`">
+    <Button
+      :href="`/rooms/${roomId}/settings`"
+      :active="$page.url === `/rooms/${roomId}/settings`"
+    >
       <template #icon><HeroiconsCog6Tooth class="w-4 h-4" /></template>
       設定
     </Button>
