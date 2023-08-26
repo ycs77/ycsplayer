@@ -16,7 +16,7 @@
 
     <div class="grow break-all">{{ item.title }}</div>
 
-    <div class="shrink-0 whitespace-nowrap">
+    <div v-if="canRemove" class="shrink-0 whitespace-nowrap">
       <button
         type="button"
         class="btn btn-sm btn-danger"
@@ -31,11 +31,14 @@
 <script setup lang="ts">
 import type { PlaylistItem } from '@/types'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   is: string
   item: PlaylistItem
   active?: boolean
-}>()
+  canRemove?: boolean
+}>(), {
+  canRemove: true,
+})
 
 const emit = defineEmits<{
   remove: []

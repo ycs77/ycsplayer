@@ -27,6 +27,8 @@ class RoomPlaylistController extends Controller
 
     public function store(Request $request, Room $room)
     {
+        $this->authorize('operatePlaylistItem', $room);
+
         $request->validate([
             'type' => [new Enum(PlayerType::class)],
             'title' => ['required', 'string', 'max:20'],
@@ -94,6 +96,8 @@ class RoomPlaylistController extends Controller
 
     public function click(Room $room, PlaylistItem $item)
     {
+        $this->authorize('view', $room);
+
         $this->playItem($room, $item);
 
         PlayerlistItemClicked::broadcast($room->hash_id)->toOthers();
@@ -101,6 +105,8 @@ class RoomPlaylistController extends Controller
 
     public function destroy(Room $room, PlaylistItem $item)
     {
+        $this->authorize('operatePlaylistItem', $room);
+
         if ($item->id === $room->current_playing_id) {
             $this->changeToNextPlaylistItem(
                 $room, $room->current_playing_id, true
@@ -116,6 +122,8 @@ class RoomPlaylistController extends Controller
 
     public function next(Request $request, Room $room)
     {
+        $this->authorize('view', $room);
+
         if ($room->current_playing_id) {
             // 解碼 Hash ID
             $requestedCurrentPlayingId = current(Hashids::connection('playlist_items')->decode(

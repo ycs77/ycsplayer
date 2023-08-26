@@ -4,7 +4,12 @@
     <div class="grid grid-cols-12 gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
 
       <!-- 導覽列 -->
-      <RoomNavbar class="col-span-12" :room-id="room.id" />
+      <RoomNavbar
+        class="col-span-12"
+        :room-id="room.id"
+        :can-uplaod-files="can.uplaodFiles"
+        :can-settings="can.settings"
+      />
 
       <div class="col-span-12 md:col-span-8 lg:col-span-9">
         <div>
@@ -49,6 +54,8 @@
               class="rounded-lg overflow-hidden"
               :current-playing="currentPlaying"
               :playlist-items="playlistItems"
+              :can-add="can.operatePlaylistItem"
+              :can-remove="can.operatePlaylistItem"
               @open-add-item="openAddPlaylistItemModal"
               @select-item="selectPlaylistItem"
               @remove-item="removePlaylistItem"
@@ -80,6 +87,8 @@
           class="max-h-[50vh] border-t border-blue-900/50 overflow-y-auto"
           :current-playing="currentPlaying"
           :playlist-items="playlistItems"
+          :can-add="can.operatePlaylistItem"
+          :can-remove="can.operatePlaylistItem"
           @open-add-item="openAddPlaylistItemModal"
           @select-item="selectPlaylistItem"
           @remove-item="removePlaylistItem"
@@ -128,6 +137,13 @@ const props = defineProps<{
   current_playing: PlaylistItem | null
   playlist_items: PlaylistItem[]
   medias: Media[]
+  can: {
+    operatePlaylistItem: boolean
+    inviteMember: boolean
+    removeMember: boolean
+    uplaodFiles: boolean
+    settings: boolean
+  }
 }>()
 
 const currentPlaying = toRef(props, 'current_playing')

@@ -23,6 +23,7 @@
     </RoomNavbarButton>
 
     <RoomNavbarButton
+      v-if="canUplaodFiles"
       :href="`/rooms/${roomId}/medias`"
       :active="$page.url === `/rooms/${roomId}/medias`"
     >
@@ -31,6 +32,7 @@
     </RoomNavbarButton>
 
     <RoomNavbarButton
+      v-if="canSettings"
       :href="`/rooms/${roomId}/settings`"
       :active="$page.url === `/rooms/${roomId}/settings`"
     >
@@ -41,7 +43,12 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+withDefaults(defineProps<{
   roomId: string
-}>()
+  canUplaodFiles?: boolean
+  canSettings?: boolean
+}>(), {
+  canUplaodFiles: true,
+  canSettings: true,
+})
 </script>

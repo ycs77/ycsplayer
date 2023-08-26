@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\Events\PlayerPaused;
 use App\Events\PlayerPlayed;
 use App\Events\PlayerSeeked;
+use App\Models\Room;
+use App\Player\PlayerGuard;
 use App\Player\PlayStatus;
 use App\Player\PlayStatusCacheRepository;
 use Illuminate\Http\Request;
+use Vinkla\Hashids\Facades\Hashids;
 
 class PlayerController extends Controller
 {
     public function __construct(
+        protected PlayerGuard $playerGuard,
         protected PlayStatusCacheRepository $statusCache,
     ) {
         //
@@ -26,9 +30,9 @@ class PlayerController extends Controller
             'is_clicked_big_button' => ['required', 'boolean'],
         ]);
 
-        $socketId = $request->header('X-Socket-Id');
+        $roomId = $this->getRoomId($request);
 
-        $roomId = $request->input('room_id');
+        $socketId = $request->header('X-Socket-Id');
 
         $status = $this->statusCache->get($roomId);
         $isFirst = false;
@@ -67,9 +71,9 @@ class PlayerController extends Controller
             'current_time' => ['required', 'numeric'],
         ]);
 
-        $socketId = $request->header('X-Socket-Id');
+        $roomId = $this->getRoomId($request);
 
-        $roomId = $request->input('room_id');
+        $socketId = $request->header('X-Socket-Id');
 
         $status = new PlayStatus();
         $status->currentTime = $request->input('current_time');
@@ -91,9 +95,9 @@ class PlayerController extends Controller
             'paused' => ['required', 'boolean'],
         ]);
 
-        $socketId = $request->header('X-Socket-Id');
+        $roomId = $this->getRoomId($request);
 
-        $roomId = $request->input('room_id');
+        $socketId = $request->header('X-Socket-Id');
 
         $status = new PlayStatus();
         $status->timestamp = $request->input('timestamp');
@@ -116,7 +120,7 @@ class PlayerController extends Controller
             'paused' => ['required', 'boolean'],
         ]);
 
-        $roomId = $request->input('room_id');
+        $roomId = $this->getRoomId($request);
 
         $status = new PlayStatus();
         $status->timestamp = $request->input('timestamp');
@@ -134,10 +138,38 @@ class PlayerController extends Controller
             'room_id' => ['required', 'string', 'max:12'],
         ]);
 
-        $roomId = $request->input('room_id');
+        $roomId = $this->getRoomId($request);
 
         $this->statusCache->delete($roomId);
 
         return response()->noContent();
+    }
+
+    protected function getRoomId(Request $request)
+    {
+        $roomId = $request->input('room_id');
+
+        if ($this->playerGuard->check($roomId)) {
+            return $roomId;
+        }
+
+        if (! $intRoomId = current(Hashids::connection('rooms')->decode($roomId))) {
+            abort(403);
+        }
+
+        if (! $room = Room::findOrFail($intRoomId, ['id'])) {
+            abort(403);
+        }
+
+        /** @var \App\Models\User */
+        $user = $request->user();
+
+        if ($user->can('view', $room)) {
+            $this->playerGuard->authorized($roomId);
+
+            return $roomId;
+        }
+
+        abort(403);
     }
 }

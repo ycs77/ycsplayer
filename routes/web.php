@@ -21,18 +21,18 @@ Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms/{room}', [RoomController::class, 'show']);
 Route::get('/rooms/{room}/members', [RoomController::class, 'members']);
 
-Route::get('/rooms/{room}/medias', [RoomMediaController::class, 'index']);
-Route::delete('/rooms/{room}/medias/{media:uuid}', [RoomMediaController::class, 'delete']);
-
-Route::get('/rooms/{room}/settings', [RoomSettingController::class, 'show']);
-Route::post('/rooms/{room}/settings', [RoomSettingController::class, 'store']);
-
 Route::post('/rooms/{room}/playlist', [RoomPlaylistController::class, 'store']);
 Route::post('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'click']);
 Route::delete('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'destroy']);
 Route::post('/rooms/{room}/next', [RoomPlaylistController::class, 'next']);
 
+Route::get('/rooms/{room}/medias', [RoomMediaController::class, 'index']);
+Route::delete('/rooms/{room}/medias/{media:uuid}', [RoomMediaController::class, 'delete']);
+
 Route::post('/rooms/{room}/upload', RoomUploadMediaController::class);
+
+Route::get('/rooms/{room}/settings', [RoomSettingController::class, 'show']);
+Route::post('/rooms/{room}/settings', [RoomSettingController::class, 'store']);
 
 Route::post('/player/play', [PlayerController::class, 'play']);
 Route::post('/player/pause', [PlayerController::class, 'pause']);

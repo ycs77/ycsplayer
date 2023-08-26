@@ -16,6 +16,8 @@ class RoomUploadMediaController extends Controller
 {
     public function __invoke(Request $request, Room $room)
     {
+        $this->authorize('uplaodFiles', $room);
+
         $receiver = new FileReceiver(
             'file', $request, HandlerFactory::classFromRequest($request)
         );

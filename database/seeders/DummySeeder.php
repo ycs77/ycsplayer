@@ -26,6 +26,17 @@ class DummySeeder extends Seeder
             $user = User::where('email', 'yangchenshin77@gmail.com')->first();
         }
 
+        if (! User::where('email', 'soyo@example.com')->exists()) {
+            /** @var \App\Models\User */
+            $soyo = User::factory()->create([
+                'name' => 'Soyo',
+                'email' => 'soyo@example.com',
+            ]);
+        } else {
+            /** @var \App\Models\User */
+            $soyo = User::where('email', 'soyo@example.com')->first();
+        }
+
         /** @var \App\Models\Room */
         $videoRoom = Room::firstOrCreate([
             'title' => '動漫觀影室',
@@ -38,6 +49,9 @@ class DummySeeder extends Seeder
         if ($videoRoom->doesntMember($user)) {
             $videoRoom->join($user, 'admin');
         }
+        if ($videoRoom->doesntMember($soyo)) {
+            $videoRoom->join($soyo);
+        }
 
         if (! $videoRoom->playlist_items()
             ->where('type', PlayerType::Video)
@@ -48,6 +62,7 @@ class DummySeeder extends Seeder
                 'title' => '色違いの翼',
                 'url' => '/media/色違いの翼.mp4',
                 'thumbnail' => '/media/色違いの翼.jpg',
+                'preview' => '/media/色違いの翼.jpg',
             ]);
         }
 

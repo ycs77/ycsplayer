@@ -4,7 +4,12 @@
     <div class="grid grid-cols-12 gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
 
       <!-- 導覽列 -->
-      <RoomNavbar class="col-span-12" :room-id="room.id" />
+      <RoomNavbar
+        class="col-span-12"
+        :room-id="room.id"
+        :can-uplaod-files="can.uplaodFiles"
+        :can-settings="can.settings"
+      />
 
       <div class="col-span-12">
         <div class="max-w-screen-md mx-auto bg-blue-950/50 p-4 rounded-lg lg:p-6">
@@ -67,6 +72,10 @@ defineProps<{
   room: Required<Room>
   csrf_token: string
   medias: Media[]
+  can: {
+    uplaodFiles: boolean
+    settings: boolean
+  }
 }>()
 
 const showRoomUploadMediaModal = ref(false)

@@ -6,6 +6,7 @@
         is="div"
         active
         :item="item"
+        :can-remove="canRemove"
         @remove="$emit('removeItem', item)"
       />
 
@@ -14,12 +15,13 @@
         is="button"
         type="button"
         :item="item"
+        :can-remove="canRemove"
         @click="$emit('selectItem', item)"
         @remove="$emit('removeItem', item)"
       />
     </li>
 
-    <li>
+    <li v-if="canAdd">
       <button
         type="button"
         class="flex justify-center items-center p-2 w-full bg-blue-950/50 hover:bg-blue-900/50 text-center transition-colors select-none"
@@ -35,10 +37,15 @@
 <script setup lang="ts">
 import type { PlaylistItem } from '@/types'
 
-defineProps<{
+withDefaults(defineProps<{
   currentPlaying: PlaylistItem | null
   playlistItems: PlaylistItem[]
-}>()
+  canAdd?: boolean
+  canRemove?: boolean
+}>(), {
+  canAdd: true,
+  canRemove: true,
+})
 
 defineEmits<{
   openAddItem: []

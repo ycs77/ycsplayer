@@ -55,11 +55,10 @@ class Room extends Model implements HasMedia
     public function roomPermissions(): array
     {
         return [
-            "rooms.{$this->id}.view",
-            "rooms.{$this->id}.add-playlist-item",
-            "rooms.{$this->id}.remove-playlist-item",
+            "rooms.{$this->id}.operate-playlist-item",
             "rooms.{$this->id}.invite-member",
             "rooms.{$this->id}.remove-member",
+            "rooms.{$this->id}.uplaod-files",
             "rooms.{$this->id}.settings",
         ];
     }
@@ -68,16 +67,13 @@ class Room extends Model implements HasMedia
     {
         return [
             "rooms.{$this->id}.user" => [
-                "rooms.{$this->id}.view",
-                "rooms.{$this->id}.add-playlist-item",
-                "rooms.{$this->id}.remove-playlist-item",
+                "rooms.{$this->id}.operate-playlist-item",
             ],
             "rooms.{$this->id}.admin" => [
-                "rooms.{$this->id}.view",
-                "rooms.{$this->id}.add-playlist-item",
-                "rooms.{$this->id}.remove-playlist-item",
+                "rooms.{$this->id}.operate-playlist-item",
                 "rooms.{$this->id}.invite-member",
                 "rooms.{$this->id}.remove-member",
+                "rooms.{$this->id}.uplaod-files",
                 "rooms.{$this->id}.settings",
             ],
         ];
