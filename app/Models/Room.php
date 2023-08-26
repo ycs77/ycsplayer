@@ -6,6 +6,8 @@ use App\Enums\RoomType;
 use App\Models\Concerns\HasHashId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -23,6 +25,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  * @property \Illuminate\Support\Carbon $updated_at
  * @property \App\Models\PlaylistItem|null $current_playing
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaylistItem> $playlist_items
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $members
  */
 class Room extends Model implements HasMedia
 {
@@ -46,7 +49,7 @@ class Room extends Model implements HasMedia
         'auto_remove' => 'boolean',
     ];
 
-    public function current_playing()
+    public function current_playing(): BelongsTo
     {
         return $this->belongsTo(PlaylistItem::class);
     }
@@ -61,6 +64,37 @@ class Room extends Model implements HasMedia
         if ($this->auto_remove) {
             $currentItem->delete();
         }
+    }
+
+    public function members(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'room_member', 'room_id', 'member_id');
+    }
+
+    public function join(User $user, string $role = 'user'): void
+    {
+        $this->members()->attach($user);
+
+        $user->assignRole('rooms.'.$this->id.'.'.$role);
+    }
+
+    public function leave(User $user): void
+    {
+        $user->removeRole($user->getRoleNames());
+
+        $this->members()->detach($user);
+    }
+
+    public function isMember(User $user): bool
+    {
+        return $this->members()
+            ->where('id', $user->id)
+            ->exists();
+    }
+
+    public function doesntMember(User $user): bool
+    {
+        return ! $this->isMember($user);
     }
 
     public function registerMediaConversions(Media $media = null): void

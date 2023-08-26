@@ -6,23 +6,24 @@ use App\Enums\PlayerType;
 use App\Enums\RoomType;
 use App\Models\Room;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DummySeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
         if (! User::where('email', 'yangchenshin77@gmail.com')->exists()) {
-            User::factory()->create([
+            /** @var \App\Models\User */
+            $user = User::factory()->create([
                 'name' => 'Lucas Yang',
                 'email' => 'yangchenshin77@gmail.com',
             ]);
+        } else {
+            /** @var \App\Models\User */
+            $user = User::where('email', 'yangchenshin77@gmail.com')->first();
         }
 
         /** @var \App\Models\Room */
@@ -34,6 +35,9 @@ class DummySeeder extends Seeder
             'auto_remove' => false,
             'note' => '備註文字欄...',
         ]);
+        if ($videoRoom->doesntMember($user)) {
+            $videoRoom->join($user, 'admin');
+        }
 
         if (! $videoRoom->playlist_items()
             ->where('type', PlayerType::Video)
@@ -95,6 +99,9 @@ class DummySeeder extends Seeder
             'auto_remove' => false,
             'note' => '備註文字欄...',
         ]);
+        if ($audioRoom->doesntMember($user)) {
+            $audioRoom->join($user, 'admin');
+        }
 
         if (! $audioRoom->playlist_items()
             ->where('type', PlayerType::Audio)
