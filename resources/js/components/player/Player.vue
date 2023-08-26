@@ -30,7 +30,11 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  ended: []
+  play: [currentTime: number]
+  pause: [currentTime: number]
+  seek: [currentTime: number]
+  timeupdate: [currentTime: number]
+  end: []
 }>()
 
 const videoRef = ref() as Ref<HTMLVideoElement>
@@ -41,6 +45,12 @@ let isEnded = false
 
 function isClickedBigButton() {
   return player?.hasStarted_
+}
+
+function currentTime() {
+  return player
+    ? Math.round(player.currentTime() * 100) / 100
+    : 0
 }
 
 function play(handler?: () => void, checkPaused = true) {
@@ -57,7 +67,7 @@ function play(handler?: () => void, checkPaused = true) {
     room_id: props.roomId,
     timestamp: Date.now(),
     current_time: clickedBigButton
-      ? Math.round(player.currentTime() * 100) / 100
+      ? currentTime()
       : null,
     is_clicked_big_button: clickedBigButton,
   }).then(() => {
@@ -81,17 +91,19 @@ function pause(handler?: () => void) {
 
   axios.post('/player/pause', {
     room_id: props.roomId,
-    current_time: Math.round(player.currentTime() * 100) / 100,
+    current_time: currentTime(),
   }).then()
 }
 
 function seeked() {
   if (!player) return
 
+  emit('seek', currentTime())
+
   axios.post('/player/seeked', {
     room_id: props.roomId,
     timestamp: Date.now(),
-    current_time: Math.round(player.currentTime() * 100) / 100,
+    current_time: currentTime(),
     paused: player.paused(),
   }).then()
 }
@@ -100,10 +112,12 @@ const timeUpdate = throttle(() => {
   if (!player) return
   if (isEnded) return
 
+  emit('timeupdate', currentTime())
+
   axios.post('/player/time-update', {
     room_id: props.roomId,
     timestamp: Date.now(),
-    current_time: Math.round(player.currentTime() * 100) / 100,
+    current_time: currentTime(),
     paused: player.paused(),
   }).then()
 }, 1000 * 5)
@@ -116,7 +130,7 @@ function end() {
   axios.post('/player/end', {
     room_id: props.roomId,
   }).then(() => {
-    emit('ended')
+    emit('end')
   })
 }
 
@@ -161,6 +175,7 @@ onMounted(() => {
     if (props.autoplay) {
       play(() => {
         silencePromise(player?.play())
+        emit('play', currentTime())
       })
     }
   })
@@ -183,8 +198,10 @@ onMounted(() => {
         play(() => {
           this.player_?.play()
         }, false)
+        emit('play', currentTime())
       } else {
         this.player_.pause()
+        emit('pause', currentTime())
       }
     }
   }
@@ -198,6 +215,7 @@ onMounted(() => {
       play(() => {
         if (this.player_)
           super.handleClick(event)
+          emit('play', currentTime())
       }, false)
     }
   }
@@ -210,10 +228,12 @@ onMounted(() => {
         this.player_.handleTechWaiting_()
         play(() => {
           this.player_?.play()
+          emit('play', currentTime())
         })
       } else {
         pause(() => {
           this.player_?.pause()
+          emit('pause', currentTime())
         })
       }
     }
@@ -293,7 +313,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
 
   isEnded = false
 
-  let currentTime = e.status.current_time ?? 0
+  let newCurrentTime = e.status.current_time ?? 0
 
   // 如果現在觸發的不是第一個開始播放的，就要校正播放時間。(觸發的當前播放器，正在點擊 bigPlayButton)
   //
@@ -307,15 +327,15 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
       e.socketId === Echo.socketId()
   ) {
     const seconds = (Date.now() - e.status.timestamp) / 1000
-    currentTime = Math.round((e.status.current_time + seconds) * 100) / 100
+    newCurrentTime = Math.round((e.status.current_time + seconds) * 100) / 100
   }
 
-  if (currentTime < player.duration()) {
-    player.currentTime(currentTime)
+  if (newCurrentTime < player.duration()) {
+    player.currentTime(newCurrentTime)
   }
 
   if (import.meta.env.DEV) {
-    console.log('PlayerPlayed', currentTime)
+    console.log('PlayerPlayed', newCurrentTime)
   }
 
   if (typeof playCallback === 'function') {
@@ -323,6 +343,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
     playCallback = null
   } else {
     silencePromise(player.play())
+    emit('play', currentTime())
   }
 }
 
@@ -340,6 +361,7 @@ function onPlayerPaused(e: PlayerPausedEvent) {
 
   if (!player.paused()) {
     player.pause()
+    emit('pause', currentTime())
   }
 }
 
@@ -357,6 +379,8 @@ function onPlayerSeeked(e: PlayerSeekedEvent) {
     const seconds = (Date.now() - e.status.timestamp) / 1000
     player.currentTime(Math.round((e.status.current_time + seconds) * 100) / 100)
   }
+
+  emit('seek', currentTime())
 
   // 如果是[播放]但當前使用者是[暫停]，就要執行[播放]
   if (!e.status.paused && player.paused()) {

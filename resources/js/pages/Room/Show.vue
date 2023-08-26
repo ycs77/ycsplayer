@@ -23,7 +23,7 @@
               :type="currentPlaying.type"
               :poster="currentPlaying.preview ?? undefined"
               :autoplay="room.auto_play"
-              @ended="ended"
+              @end="ended"
             />
           </div>
 
