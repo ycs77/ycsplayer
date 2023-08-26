@@ -1,4 +1,10 @@
-# ycsPlayer 線上影音點播包廂
+<br />
+<h1 align="center">ycsPlayer</h1>
+<p align="center">線上影音點播包廂</p>
+<p align="center">
+<img src="screenshot.png" width="600" />
+</p>
+<br />
 
 ## 本地安裝
 
