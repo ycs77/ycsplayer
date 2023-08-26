@@ -22,7 +22,7 @@ import { Echo } from '@/echo'
 import { PlayerType, type PlayerPlayedEvent, type PlayerPausedEvent, type PlayerSeekedEvent } from '@/types'
 
 const props = defineProps<{
-  roomId: number
+  roomId: string
   src: string
   type: PlayerType
   poster?: string

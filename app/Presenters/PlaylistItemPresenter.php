@@ -10,7 +10,7 @@ class PlaylistItemPresenter extends FlexiblePresenter
     public function values(): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->hash_id,
             'title' => $this->title,
             'thumbnail' => $this->thumbnail,
         ];

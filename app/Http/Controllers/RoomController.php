@@ -34,7 +34,7 @@ class RoomController extends Controller
     public function members(Room $room)
     {
         return Inertia::render('Room/Members', [
-            'room' => fn () => RoomPresenter::make($room)->preset('show'),
+            'room' => fn () => RoomPresenter::make($room),
         ]);
     }
 }

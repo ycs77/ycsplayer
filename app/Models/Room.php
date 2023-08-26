@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\RoomType;
+use App\Models\Concerns\HasHashId;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -26,6 +27,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Room extends Model implements HasMedia
 {
     use HasFactory;
+    use HasHashId;
     use InteractsWithMedia;
 
     protected $fillable = [

@@ -121,7 +121,7 @@ import type { InertiaForm } from '@inertiajs/vue3'
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { Echo, safeListenFn } from '@/echo'
 import Player from '@/components/player/Player.vue'
-import { PlayerType, type Room, type PlaylistItem, type PlaylistItemForm, Media } from '@/types'
+import { RoomType, PlayerType, type Room, type PlaylistItem, type PlaylistItemForm, type Media } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>
@@ -170,7 +170,9 @@ function removePlaylistItem(item: PlaylistItem) {
 }
 
 function openAddPlaylistItemModal() {
-  playlistItemForm.type = PlayerType.Video
+  playlistItemForm.type = props.room.type === RoomType.Audio
+    ? PlayerType.Audio
+    : PlayerType.Video
   playlistItemForm.title = ''
   playlistItemForm.url = ''
   playlistItemForm.media_id = null
@@ -185,7 +187,8 @@ function submitPlaylistItemForm(form: PlaylistItemForm) {
   playlistItemForm.media_id = form.media_id
 
   playlistItemForm.post(`/rooms/${props.room.id}/playlist`, {
-    only: ['playlist_items'],
+    only: ['errors', 'playlist_items'],
+    preserveScroll: true,
     onSuccess() {
       showAddPlaylistItemModal.value = false
     },

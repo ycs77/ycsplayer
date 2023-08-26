@@ -42,6 +42,6 @@
 
 <script setup lang="ts">
 defineProps<{
-  roomId: number
+  roomId: string
 }>()
 </script>

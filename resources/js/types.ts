@@ -1,15 +1,14 @@
 export interface Room {
-  id: number
+  id: string
   type: RoomType
   title: string
   auto_play: boolean
   auto_remove: boolean
-  current_playing_id?: number | null
   note?: string | null
 }
 
 export interface PlaylistItem {
-  id: number
+  id: string
   type: PlayerType
   title: string
   url: string
@@ -18,7 +17,7 @@ export interface PlaylistItem {
 }
 
 export interface Media {
-  id: number
+  id: string
   name: string
   src: string
   thumbnail: string | null
@@ -37,7 +36,6 @@ export enum PlayerType {
 }
 
 export interface PlayStatus {
-  current_playing_id: number | null
   timestamp: number
   current_time: number | null
   is_clicked_big_button: boolean
@@ -48,36 +46,36 @@ export interface PlaylistItemForm extends Record<string, any> {
   type: PlayerType
   title: string
   url: string
-  media_id: number | null
+  media_id: string | null
 }
 
 export interface PlayerPlayedEvent {
   socketId: string
-  roomId: number
+  roomId: string
   status: PlayStatus
   isFirst: boolean
 }
 
 export interface PlayerPausedEvent {
   socketId: string
-  roomId: number
+  roomId: string
   status: PlayStatus
 }
 
 export interface PlayerSeekedEvent {
   socketId: string
-  roomId: number
+  roomId: string
   status: PlayStatus
 }
 
 export interface PlayerlistItemAddedEvent {
-  roomId: number
+  roomId: string
 }
 
 export interface PlayerlistItemClickedEvent {
-  roomId: number
+  roomId: string
 }
 
 export interface PlayerlistItemRemovedEvent {
-  roomId: number
+  roomId: string
 }

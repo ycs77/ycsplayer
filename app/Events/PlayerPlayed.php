@@ -18,7 +18,7 @@ class PlayerPlayed implements ShouldBroadcast
      */
     public function __construct(
         public string $socketId,
-        public int $roomId,
+        public string $roomId,
         public PlayStatus $status,
         public bool $isFirst = false,
     ) {

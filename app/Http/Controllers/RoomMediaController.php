@@ -13,7 +13,7 @@ class RoomMediaController extends Controller
     public function index(Room $room)
     {
         return Inertia::render('Room/Medias', [
-            'room' => fn () => RoomPresenter::make($room)->preset('show'),
+            'room' => fn () => RoomPresenter::make($room),
             'csrf_token' => fn () => csrf_token(),
             'medias' => fn () => MediaPresenter::collection($room->getMedia()),
         ]);

@@ -15,6 +15,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Vinkla\Hashids\Facades\Hashids;
 
 class RoomPlaylistController extends Controller
 {
@@ -38,15 +39,17 @@ class RoomPlaylistController extends Controller
             'media_id' => [
                 'required_if:type,video,audio',
                 'nullable',
-                Rule::exists(Media::class, 'id'),
+                Rule::exists(Media::class, 'uuid'),
             ],
         ]);
 
         $type = PlayerType::from($request->input('type'));
 
         if ($type === PlayerType::Video || $type === PlayerType::Audio) {
-            /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media */
-            $media = $room->media()->find($request->input('media_id'));
+            /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media|null */
+            $media = $room->media()
+                ->where('uuid', $request->input('media_id'))
+                ->first();
 
             if (! $media) {
                 throw ValidationException::withMessages([
@@ -86,14 +89,14 @@ class RoomPlaylistController extends Controller
             ]);
         }
 
-        PlayerlistItemAdded::broadcast($room->id)->toOthers();
+        PlayerlistItemAdded::broadcast($room->hash_id)->toOthers();
     }
 
     public function click(Room $room, PlaylistItem $item)
     {
         $this->playItem($room, $item);
 
-        PlayerlistItemClicked::broadcast($room->id)->toOthers();
+        PlayerlistItemClicked::broadcast($room->hash_id)->toOthers();
     }
 
     public function destroy(Room $room, PlaylistItem $item)
@@ -103,18 +106,21 @@ class RoomPlaylistController extends Controller
                 $room, $room->current_playing_id, true
             );
 
-            PlayerlistItemClicked::broadcast($room->id)->toOthers();
+            PlayerlistItemClicked::broadcast($room->hash_id)->toOthers();
         } else {
             $item->delete();
 
-            PlayerlistItemRemoved::broadcast($room->id)->toOthers();
+            PlayerlistItemRemoved::broadcast($room->hash_id)->toOthers();
         }
     }
 
     public function next(Request $request, Room $room)
     {
         if ($room->current_playing_id) {
-            $requestedCurrentPlayingId = $request->input('current_playing_id');
+            // 解碼 Hash ID
+            $requestedCurrentPlayingId = current(Hashids::connection('playlist_items')->decode(
+                $request->input('current_playing_id')
+            ));
 
             if ($room->current_playing_id === $requestedCurrentPlayingId) {
                 $this->changeToNextPlaylistItem(

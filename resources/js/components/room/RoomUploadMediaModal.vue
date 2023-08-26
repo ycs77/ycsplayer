@@ -23,7 +23,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   modelValue: boolean
-  roomId: number
+  roomId: string
   csrfToken: string
 }>()
 

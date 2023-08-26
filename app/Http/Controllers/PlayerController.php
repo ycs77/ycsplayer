@@ -20,7 +20,7 @@ class PlayerController extends Controller
     public function play(Request $request)
     {
         $request->validate([
-            'room_id' => ['required'],
+            'room_id' => ['required', 'string', 'max:12'],
             'timestamp' => ['required', 'numeric'],
             'current_time' => ['nullable', 'numeric'],
             'is_clicked_big_button' => ['required', 'boolean'],
@@ -63,7 +63,7 @@ class PlayerController extends Controller
     public function pause(Request $request)
     {
         $request->validate([
-            'room_id' => ['required'],
+            'room_id' => ['required', 'string', 'max:12'],
             'current_time' => ['required', 'numeric'],
         ]);
 
@@ -85,7 +85,7 @@ class PlayerController extends Controller
     public function seeked(Request $request)
     {
         $request->validate([
-            'room_id' => ['required'],
+            'room_id' => ['required', 'string', 'max:12'],
             'timestamp' => ['required', 'numeric'],
             'current_time' => ['required', 'numeric'],
             'paused' => ['required', 'boolean'],
@@ -110,7 +110,7 @@ class PlayerController extends Controller
     public function timeUpdate(Request $request)
     {
         $request->validate([
-            'room_id' => ['required'],
+            'room_id' => ['required', 'string', 'max:12'],
             'timestamp' => ['required', 'numeric'],
             'current_time' => ['required', 'numeric'],
             'paused' => ['required', 'boolean'],
@@ -131,7 +131,7 @@ class PlayerController extends Controller
     public function end(Request $request)
     {
         $request->validate([
-            'room_id' => ['required'],
+            'room_id' => ['required', 'string', 'max:12'],
         ]);
 
         $roomId = $request->input('room_id');

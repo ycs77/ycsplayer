@@ -10,7 +10,7 @@ class MediaPresenter extends FlexiblePresenter
     public function values(): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->uuid,
             'name' => $this->name.'.'.$this->extension,
             'thumbnail' => $this->hasGeneratedConversion('thumb')
                 ? $this->getUrl('thumb')

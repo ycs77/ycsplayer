@@ -43,6 +43,24 @@ return [
             // 'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
         ],
 
+        'users' => [
+            'salt' => '9mNutVwvviH6',
+            'length' => 6,
+            'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
+        ],
+
+        'rooms' => [
+            'salt' => 'YzrdUoBFuGAG',
+            'length' => 6,
+            'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
+        ],
+
+        'playlist_items' => [
+            'salt' => 'EUgryxnffLqM',
+            'length' => 6,
+            'alphabet' => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
+        ],
+
     ],
 
 ];

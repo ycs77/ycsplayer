@@ -14,7 +14,7 @@ class RoomSettingController extends Controller
     public function show(Room $room)
     {
         return Inertia::render('Room/Settings', [
-            'room' => fn () => RoomPresenter::make($room)->preset('show'),
+            'room' => fn () => RoomPresenter::make($room),
         ]);
     }
 

@@ -16,18 +16,20 @@ class MediaObserver
     {
         /** @var \App\Models\PlaylistItem */
         $item = PlaylistItem::where('url', $media->getUrl())->first();
-        $itemId = $item->id;
 
-        $room = $item->room;
+        if ($item) {
+            $itemId = $item->id;
+            $room = $item->room;
 
-        $item->delete();
+            $item->delete();
 
-        if ($itemId === $room->current_playing_id) {
-            $room->update(['current_playing_id' => null]);
+            if ($itemId === $room->current_playing_id) {
+                $room->update(['current_playing_id' => null]);
 
-            PlayerlistItemClicked::broadcast($room->id)->toOthers();
-        } else {
-            PlayerlistItemRemoved::broadcast($room->id)->toOthers();
+                PlayerlistItemClicked::broadcast($room->hash_id)->toOthers();
+            } else {
+                PlayerlistItemRemoved::broadcast($room->hash_id)->toOthers();
+            }
         }
     }
 }

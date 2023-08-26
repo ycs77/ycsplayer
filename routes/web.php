@@ -22,7 +22,7 @@ Route::get('/rooms/{room}', [RoomController::class, 'show']);
 Route::get('/rooms/{room}/members', [RoomController::class, 'members']);
 
 Route::get('/rooms/{room}/medias', [RoomMediaController::class, 'index']);
-Route::delete('/rooms/{room}/medias/{media}', [RoomMediaController::class, 'delete']);
+Route::delete('/rooms/{room}/medias/{media:uuid}', [RoomMediaController::class, 'delete']);
 
 Route::get('/rooms/{room}/settings', [RoomSettingController::class, 'show']);
 Route::post('/rooms/{room}/settings', [RoomSettingController::class, 'store']);

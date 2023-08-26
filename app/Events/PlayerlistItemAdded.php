@@ -16,7 +16,7 @@ class PlayerlistItemAdded implements ShouldBroadcast
      * Create a new event instance.
      */
     public function __construct(
-        public int $roomId,
+        public string $roomId,
     ) {
         //
     }

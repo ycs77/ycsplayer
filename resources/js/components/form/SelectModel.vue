@@ -76,7 +76,7 @@
 import type { Ref } from 'vue'
 
 export interface Model extends Record<string, any> {
-  id: number
+  id: number | string
   title: string
   thumbnail: string | null
 }
