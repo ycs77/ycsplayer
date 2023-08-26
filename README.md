@@ -69,3 +69,11 @@ yarn dev
 ```bash
 php artisan queue:work
 ```
+
+## 同步權限
+
+如果有新增或刪除權限時，可以執行當前指令來同步：
+
+```
+php artisan room:sync-permissions
+```

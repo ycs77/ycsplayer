@@ -12,6 +12,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 /**
  * @property int $id
@@ -48,6 +51,52 @@ class Room extends Model implements HasMedia
         'auto_play' => 'boolean',
         'auto_remove' => 'boolean',
     ];
+
+    public function roomPermissions(): array
+    {
+        return [
+            "rooms.{$this->id}.view",
+            "rooms.{$this->id}.add-playlist-item",
+            "rooms.{$this->id}.remove-playlist-item",
+            "rooms.{$this->id}.invite-member",
+            "rooms.{$this->id}.remove-member",
+            "rooms.{$this->id}.settings",
+        ];
+    }
+
+    public function roomRoles(): array
+    {
+        return [
+            "rooms.{$this->id}.user" => [
+                "rooms.{$this->id}.view",
+                "rooms.{$this->id}.add-playlist-item",
+                "rooms.{$this->id}.remove-playlist-item",
+            ],
+            "rooms.{$this->id}.admin" => [
+                "rooms.{$this->id}.view",
+                "rooms.{$this->id}.add-playlist-item",
+                "rooms.{$this->id}.remove-playlist-item",
+                "rooms.{$this->id}.invite-member",
+                "rooms.{$this->id}.remove-member",
+                "rooms.{$this->id}.settings",
+            ],
+        ];
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (Room $room) {
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
+
+            $room->attachRoomPermissions();
+        });
+
+        static::deleting(function (Room $room) {
+            $room->detachRoomPermissions();
+
+            app(PermissionRegistrar::class)->forgetCachedPermissions();
+        });
+    }
 
     public function current_playing(): BelongsTo
     {
@@ -95,6 +144,37 @@ class Room extends Model implements HasMedia
     public function doesntMember(User $user): bool
     {
         return ! $this->isMember($user);
+    }
+
+    public function attachRoomPermissions(): void
+    {
+        Permission::insert(
+            collect($this->roomPermissions())
+                ->map(fn (string $permissionName) => [
+                    'name' => $permissionName,
+                    'guard_name' => 'web',
+                ])
+                ->toArray()
+        );
+
+        foreach ($this->roomRoles() as $roleName => $permissionsName) {
+            Role::create(['name' => $roleName])
+                ->givePermissionTo($permissionsName);
+        }
+    }
+
+    public function detachRoomPermissions(): void
+    {
+        Role::where('name', 'like', 'rooms.'.$this->id.'.%')->delete();
+
+        Permission::where('name', 'like', 'rooms.'.$this->id.'.%')->delete();
+    }
+
+    public function syncRoomPermissions(): void
+    {
+        $this->detachRoomPermissions();
+
+        $this->attachRoomPermissions();
     }
 
     public function registerMediaConversions(Media $media = null): void
