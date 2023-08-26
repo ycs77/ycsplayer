@@ -267,6 +267,15 @@ onMounted(() => {
   player.addChild('BigPlayButton', {}, 2)
   controlBar.addChild('PlayToggle', {}, 0)
   progressControl.addChild('SeekBar', {}, 0)
+
+  player.ready(() => {
+    if (!player) return
+
+    const posterImage = player.getChild('posterImage')!
+    if (posterImage.hasClass('vjs-hidden')) {
+      posterImage.removeClass('vjs-hidden')
+    }
+  })
 })
 
 // 監聽播放事件
