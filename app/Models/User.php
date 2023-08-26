@@ -4,10 +4,12 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Concerns\HasHashId;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -17,6 +19,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property string $email
  * @property \Illuminate\Support\Carbon $email_verified_at
  * @property string $password
+ * @property string|null $avatar
+ * @property-read string|null $avatar_url
  * @property string $remember_token
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -39,6 +43,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
     ];
 
     /**
@@ -60,6 +65,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function avatarUrl(): Attribute
+    {
+        return Attribute::make(fn () => $this->avatar
+                ? Storage::url($this->avatar)
+                : null
+        );
+    }
 
     public function rooms(): BelongsToMany
     {

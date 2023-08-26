@@ -2,19 +2,18 @@
 
 namespace App\Listeners;
 
-use App\Broadcasting\Events\PusherChannelVacated;
+use App\Broadcasting\Events\PusherMemberRemoved;
+use App\Events\RoomOnlineMembersUpdated;
 use App\Models\Room;
-use App\Player\PlayStatusCacheRepository;
 use App\Room\RoomOnlineMembersRepository;
 use Vinkla\Hashids\Facades\Hashids;
 
-class PlayerAllConnectionClosed
+class PlayerMemberOffline
 {
     /**
      * Create the event listener.
      */
     public function __construct(
-        protected PlayStatusCacheRepository $statusCache,
         protected RoomOnlineMembersRepository $onlineMembers,
     ) {
         //
@@ -23,15 +22,18 @@ class PlayerAllConnectionClosed
     /**
      * Handle the event.
      */
-    public function handle(PusherChannelVacated $event): void
+    public function handle(PusherMemberRemoved $event): void
     {
         if (str_starts_with($event->channel, $channelNamespace = 'presence-player.')) {
             $roomHashId = substr($event->channel, strlen($channelNamespace));
             $roomId = current(Hashids::connection('rooms')->decode($roomHashId));
 
             if (Room::find($roomId, ['id'])) {
-                $this->statusCache->delete($roomHashId);
-                $this->onlineMembers->clear($roomHashId);
+                $userHashId = Hashids::connection('users')->encode($event->user_id);
+
+                $this->onlineMembers->offline($roomHashId, $userHashId);
+
+                RoomOnlineMembersUpdated::broadcast($roomHashId);
             }
         }
     }

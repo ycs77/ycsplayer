@@ -7,6 +7,14 @@ export interface Room {
   note?: string | null
 }
 
+export interface RoomMember {
+  id: string
+  name: string
+  email: string
+  avatar: string | null
+  online: boolean
+}
+
 export interface PlaylistItem {
   id: string
   type: PlayerType
@@ -47,6 +55,10 @@ export interface PlaylistItemForm extends Record<string, any> {
   title: string
   url: string
   media_id: string | null
+}
+
+export interface RoomOnlineMembersUpdated {
+  roomId: string
 }
 
 export interface PlayerPlayedEvent {

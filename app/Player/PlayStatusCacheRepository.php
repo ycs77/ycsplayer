@@ -31,7 +31,7 @@ class PlayStatusCacheRepository
 
     protected function key(string $roomId): string
     {
-        return 'room:'.$roomId;
+        return 'play-status:'.$roomId;
     }
 
     /**
@@ -39,6 +39,6 @@ class PlayStatusCacheRepository
      */
     protected function ttl()
     {
-        return now()->addHours(12);
+        return now()->addHours(3);
     }
 }

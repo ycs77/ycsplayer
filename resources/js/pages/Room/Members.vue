@@ -13,7 +13,7 @@
 
       <div class="col-span-12">
         <!-- 房間成員卡 -->
-        <RoomMembers />
+        <RoomMembers :members="members" />
       </div>
 
     </div>
@@ -22,13 +22,23 @@
 </template>
 
 <script setup lang="ts">
-import type { Room } from '@/types'
+import { Echo } from '@/echo'
+import type { Room, RoomMember } from '@/types'
 
-defineProps<{
+const props = defineProps<{
   room: Required<Room>
+  members: RoomMember[]
   can: {
     uplaodFiles: boolean
     settings: boolean
   }
 }>()
+
+onMounted(() => {
+  Echo.join(`player.${props.room.id}`)
+})
+
+onMounted(() => {
+  Echo.join(`player.${props.room.id}`)
+})
 </script>

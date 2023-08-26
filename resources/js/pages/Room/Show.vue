@@ -64,7 +64,7 @@
 
           <div class="hidden xl:block">
             <!-- 房間成員卡 -->
-            <RoomMembers />
+            <RoomMembers :members="members" />
           </div>
         </div>
       </div>
@@ -130,13 +130,14 @@ import type { InertiaForm } from '@inertiajs/vue3'
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { Echo, safeListenFn } from '@/echo'
 import Player from '@/components/player/Player.vue'
-import { RoomType, PlayerType, type Room, type PlaylistItem, type PlaylistItemForm, type Media } from '@/types'
+import { RoomType, PlayerType, type Room, type RoomMember, type PlaylistItem, type PlaylistItemForm, type Media } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>
   current_playing: PlaylistItem | null
   playlist_items: PlaylistItem[]
   medias: Media[]
+  members: RoomMember[]
   can: {
     operatePlaylistItem: boolean
     inviteMember: boolean
@@ -146,10 +147,10 @@ const props = defineProps<{
   }
 }>()
 
+const player = ref(null) as Ref<InstanceType<typeof Player> | null>
+
 const currentPlaying = toRef(props, 'current_playing')
 const playlistItems = toRef(props, 'playlist_items')
-
-const player = ref(null) as Ref<InstanceType<typeof Player> | null>
 
 const showAddPlaylistItemModal = ref(false)
 const showMobilePlaylist = ref(false)
@@ -232,6 +233,12 @@ function onPlayerlistItemRemoved() {
   })
 }
 
+function onOnlineMembersUpdated() {
+  router.reload({
+    only: ['members'],
+  })
+}
+
 watch(showMobilePlaylist, showMobilePlaylist => {
   if (showMobilePlaylist) {
     disableBodyScroll(document.body)
@@ -252,6 +259,7 @@ watch(player, (v, ov, invalidate) => {
     .listen('PlayerlistItemAdded', onPlayerlistItemAdded)
     .listen('PlayerlistItemClicked', onPlayerlistItemClicked)
     .listen('PlayerlistItemRemoved', onPlayerlistItemRemoved)
+    .listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)
 
   invalidate(() => {
     Echo.leave(`player.${props.room.id}`)

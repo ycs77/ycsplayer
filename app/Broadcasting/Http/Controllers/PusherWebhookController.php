@@ -4,6 +4,8 @@ namespace App\Broadcasting\Http\Controllers;
 
 use App\Broadcasting\Events\PusherChannelOccupied;
 use App\Broadcasting\Events\PusherChannelVacated;
+use App\Broadcasting\Events\PusherMemberAdded;
+use App\Broadcasting\Events\PusherMemberRemoved;
 use App\Broadcasting\Events\PusherWebhookReceived;
 use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
 use Illuminate\Http\Request;
@@ -25,6 +27,18 @@ class PusherWebhookController
                 event(new PusherChannelVacated(
                     $event->channel,
                     $webhook->get_time_ms()
+                ));
+            } elseif ($event->name === 'member_added') {
+                event(new PusherMemberAdded(
+                    $event->channel,
+                    $webhook->get_time_ms(),
+                    $event->user_id
+                ));
+            } elseif ($event->name === 'member_removed') {
+                event(new PusherMemberRemoved(
+                    $event->channel,
+                    $webhook->get_time_ms(),
+                    $event->user_id
                 ));
             }
         }

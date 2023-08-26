@@ -4,11 +4,13 @@ namespace App\Models;
 
 use App\Enums\RoomType;
 use App\Models\Concerns\HasHashId;
+use App\Room\RoomOnlineMembersRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -114,6 +116,20 @@ class Room extends Model implements HasMedia
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'room_member', 'room_id', 'member_id');
+    }
+
+    public function membersForPresent()
+    {
+        $user = Auth::user();
+
+        return $this->members
+            ->filter(fn (User $member) => $member->id !== $user->id)
+            ->map(function (User $member) {
+                $member->online = app(RoomOnlineMembersRepository::class)->has($this->hash_id, $member->hash_id);
+
+                return $member;
+            })
+            ->prepend(tap($user, fn () => $user->online = true));
     }
 
     public function join(User $user, string $role = 'user'): void

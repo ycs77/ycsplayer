@@ -3,9 +3,13 @@
 namespace App\Providers;
 
 use App\Broadcasting\Events\PusherChannelVacated;
+use App\Broadcasting\Events\PusherMemberAdded;
+use App\Broadcasting\Events\PusherMemberRemoved;
 use App\Events\PlayerPaused;
 use App\Events\PlayerPlayed;
 use App\Listeners\PlayerAllConnectionClosed;
+use App\Listeners\PlayerMemberOffline;
+use App\Listeners\PlayerMemberOnline;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,6 +30,12 @@ class EventServiceProvider extends ServiceProvider
         PlayerPaused::class => [],
         PusherChannelVacated::class => [
             PlayerAllConnectionClosed::class,
+        ],
+        PusherMemberAdded::class => [
+            PlayerMemberOnline::class,
+        ],
+        PusherMemberRemoved::class => [
+            PlayerMemberOffline::class,
         ],
     ];
 
