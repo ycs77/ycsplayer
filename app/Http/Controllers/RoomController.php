@@ -36,13 +36,15 @@ class RoomController extends Controller
             'room' => fn () => RoomPresenter::make($room)->preset('show'),
             'current_playing' => fn () => PlaylistItemPresenter::make($room->current_playing)->preset('play'),
             'playlist_items' => fn () => PlaylistItemPresenter::collection($room->playlist_items),
-            'medias' => fn () => MediaPresenter::collection($room->getMedia()),
+            'medias' => fn () => $user->can('operatePlaylistItem', $room)
+                ? MediaPresenter::collection($room->getMedia())
+                : [],
             'members' => fn () => RoomMemberPresenter::collection($room->membersForPresent()),
             'can' => fn () => [
                 'operatePlaylistItem' => $user->can('operatePlaylistItem', $room),
                 'inviteMember' => $user->can('inviteMember', $room),
                 'removeMember' => $user->can('removeMember', $room),
-                'uplaodFiles' => $user->can('uplaodFiles', $room),
+                'uploadMedias' => $user->can('uploadMedias', $room),
                 'settings' => $user->can('settings', $room),
             ],
         ]);
@@ -61,7 +63,7 @@ class RoomController extends Controller
             'can' => fn () => [
                 'inviteMember' => $user->can('inviteMember', $room),
                 'removeMember' => $user->can('removeMember', $room),
-                'uplaodFiles' => $user->can('uplaodFiles', $room),
+                'uploadMedias' => $user->can('uploadMedias', $room),
                 'settings' => $user->can('settings', $room),
             ],
         ]);

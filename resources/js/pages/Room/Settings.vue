@@ -7,7 +7,7 @@
       <RoomNavbar
         class="col-span-12"
         :room-id="room.id"
-        :can-uplaod-files="can.uplaodFiles"
+        :can-upload-medias="can.uploadMedias"
         :can-settings="can.settings"
       />
 
@@ -44,7 +44,7 @@ import { type Room } from '@/types'
 const props = defineProps<{
   room: Required<Room>
   can: {
-    uplaodFiles: boolean
+    uploadMedias: boolean
     settings: boolean
   }
 }>()

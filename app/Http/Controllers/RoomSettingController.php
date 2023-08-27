@@ -22,7 +22,7 @@ class RoomSettingController extends Controller
         return Inertia::render('Room/Settings', [
             'room' => fn () => RoomPresenter::make($room),
             'can' => fn () => [
-                'uplaodFiles' => $user->can('uplaodFiles', $room),
+                'uploadMedias' => $user->can('uploadMedias', $room),
                 'settings' => $user->can('settings', $room),
             ],
         ]);

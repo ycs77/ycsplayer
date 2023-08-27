@@ -7,7 +7,7 @@
       <RoomNavbar
         class="col-span-12"
         :room-id="room.id"
-        :can-uplaod-files="can.uplaodFiles"
+        :can-upload-medias="can.uploadMedias"
         :can-settings="can.settings"
       />
 
@@ -73,7 +73,7 @@ defineProps<{
   csrf_token: string
   medias: Media[]
   can: {
-    uplaodFiles: boolean
+    uploadMedias: boolean
     settings: boolean
   }
 }>()

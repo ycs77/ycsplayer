@@ -13,7 +13,7 @@ class RoomMediaController extends Controller
 {
     public function index(Room $room)
     {
-        $this->authorize('uplaodFiles', $room);
+        $this->authorize('uploadMedias', $room);
 
         /** @var \App\Models\User */
         $user = Auth::user();
@@ -23,7 +23,7 @@ class RoomMediaController extends Controller
             'csrf_token' => fn () => csrf_token(),
             'medias' => fn () => MediaPresenter::collection($room->getMedia()),
             'can' => fn () => [
-                'uplaodFiles' => $user->can('uplaodFiles', $room),
+                'uploadMedias' => $user->can('uploadMedias', $room),
                 'settings' => $user->can('settings', $room),
             ],
         ]);
@@ -31,7 +31,7 @@ class RoomMediaController extends Controller
 
     public function delete(Room $room, Media $media)
     {
-        $this->authorize('uplaodFiles', $room);
+        $this->authorize('uploadMedias', $room);
 
         $media->delete();
     }

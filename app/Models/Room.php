@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
+use PHPUnit\Framework\Attributes\After;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -60,7 +61,7 @@ class Room extends Model implements HasMedia
             "rooms.{$this->id}.operate-playlist-item",
             "rooms.{$this->id}.invite-member",
             "rooms.{$this->id}.remove-member",
-            "rooms.{$this->id}.uplaod-files",
+            "rooms.{$this->id}.upload-medias",
             "rooms.{$this->id}.settings",
         ];
     }
@@ -75,7 +76,7 @@ class Room extends Model implements HasMedia
                 "rooms.{$this->id}.operate-playlist-item",
                 "rooms.{$this->id}.invite-member",
                 "rooms.{$this->id}.remove-member",
-                "rooms.{$this->id}.uplaod-files",
+                "rooms.{$this->id}.upload-medias",
                 "rooms.{$this->id}.settings",
             ],
         ];
@@ -148,9 +149,7 @@ class Room extends Model implements HasMedia
 
     public function leave(User $user): void
     {
-        $user->getRoleNames()->each(function (string $role) use ($user) {
-            $user->removeRole($role);
-        });
+        $user->getRoleNames()->each(fn (string $role) => $user->removeRole($role));
 
         $this->members()->detach($user);
     }
@@ -193,9 +192,18 @@ class Room extends Model implements HasMedia
 
     public function syncRoomPermissions(): void
     {
+        $usersRoles = $this->members->map(fn (User $member) => [
+            'member' => $member,
+            'roles' => $member->getRoleNames(),
+        ]);
+
         $this->detachRoomPermissions();
 
         $this->attachRoomPermissions();
+
+        $usersRoles->each(function (array $item) {
+            $item['roles']->each(fn (string $role) => $item['member']->assignRole($role));
+        });
     }
 
     public function registerMediaConversions(Media $media = null): void

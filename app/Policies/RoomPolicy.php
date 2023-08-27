@@ -32,9 +32,9 @@ class RoomPolicy
         return $user->can("rooms.{$room->id}.remove-member");
     }
 
-    public function uplaodFiles(User $user, Room $room): bool
+    public function uploadMedias(User $user, Room $room): bool
     {
-        return $user->can("rooms.{$room->id}.uplaod-files");
+        return $user->can("rooms.{$room->id}.upload-medias");
     }
 
     public function settings(User $user, Room $room): bool

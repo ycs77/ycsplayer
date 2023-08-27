@@ -7,7 +7,7 @@
       <RoomNavbar
         class="col-span-12"
         :room-id="room.id"
-        :can-uplaod-files="can.uplaodFiles"
+        :can-upload-medias="can.uploadMedias"
         :can-settings="can.settings"
       />
 
@@ -148,7 +148,7 @@ const props = defineProps<{
     operatePlaylistItem: boolean
     inviteMember: boolean
     removeMember: boolean
-    uplaodFiles: boolean
+    uploadMedias: boolean
     settings: boolean
   }
 }>()
