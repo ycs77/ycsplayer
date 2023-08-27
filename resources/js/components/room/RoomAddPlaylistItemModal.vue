@@ -53,17 +53,15 @@ import type { InertiaForm } from '@inertiajs/vue3'
 import { PlayerType, type Media, type PlaylistItemForm } from '@/types'
 
 const props = defineProps<{
-  modelValue: boolean
   form: InertiaForm<PlaylistItemForm>
   medias: Media[]
 }>()
 
 const emit = defineEmits<{
-  'update:modelValue': [show: boolean]
   'submit': [form: InertiaForm<PlaylistItemForm>]
 }>()
 
-const show = useVModel(props)
+const show = defineModel<boolean>({ required: true })
 
 const form = reactive(toRaw(props.form)) as InertiaForm<PlaylistItemForm>
 

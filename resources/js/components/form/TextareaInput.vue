@@ -11,8 +11,7 @@
       :name="id"
       ref="el"
       class="form-textarea"
-      :value="modelValue"
-      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      v-model="modelValue"
       v-bind="$attrs"
     ></textarea>
   </Field>
@@ -22,7 +21,6 @@
 defineOptions({ inheritAttrs: false })
 
 const props = withDefaults(defineProps<{
-  modelValue?: string
   id?: string
   label?: string
   horizontal?: boolean
@@ -34,9 +32,7 @@ const props = withDefaults(defineProps<{
   horizontal: false,
 })
 
-defineEmits<{
-  (e: 'update:modelValue', value?: string): void
-}>()
+const modelValue = defineModel<string>()
 
 const el = ref<HTMLElement>(null!)
 

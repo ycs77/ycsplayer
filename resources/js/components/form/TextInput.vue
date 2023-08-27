@@ -12,8 +12,7 @@
       :name="id"
       ref="el"
       class="form-input"
-      :value="modelValue"
-      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      v-model="modelValue"
       v-bind="$attrs"
     />
   </Field>
@@ -23,7 +22,6 @@
 defineOptions({ inheritAttrs: false })
 
 const props = withDefaults(defineProps<{
-  modelValue?: string | number
   id?: string
   type?: string
   label?: string
@@ -37,9 +35,7 @@ const props = withDefaults(defineProps<{
   horizontal: false,
 })
 
-defineEmits<{
-  (e: 'update:modelValue', value?: string | number): void
-}>()
+const modelValue = defineModel<string | number>()
 
 const el = ref<HTMLElement>(null!)
 

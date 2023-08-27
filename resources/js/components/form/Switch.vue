@@ -15,15 +15,5 @@
 <script setup lang="ts">
 import { Switch } from '@headlessui/vue'
 
-const props = withDefaults(defineProps<{
-  modelValue: boolean
-}>(), {
-  modelValue: false,
-})
-
-defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-}>()
-
-const enabled = useVModel(props)
+const enabled = defineModel<boolean>({ required: true })
 </script>

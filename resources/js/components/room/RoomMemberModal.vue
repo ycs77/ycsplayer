@@ -36,7 +36,6 @@
 import type { RoomMember } from '@/types'
 
 const props = withDefaults(defineProps<{
-  modelValue: boolean
   roomId: string
   member: RoomMember | undefined
   canRemove?: boolean
@@ -45,11 +44,10 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{
-  'update:modelValue': [show: boolean]
   remove: [member: RoomMember]
 }>()
 
-const show = useVModel(props)
+const show = defineModel<boolean>({ required: true })
 
 const { user } = useAuth()
 

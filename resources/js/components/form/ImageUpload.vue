@@ -71,8 +71,7 @@
 <script setup lang="ts">
 defineOptions({ inheritAttrs: false })
 
-const props = withDefaults(defineProps<{
-  modelValue?: File | null
+withDefaults(defineProps<{
   id?: string
   defaultImage?: string | null
   label?: string
@@ -92,12 +91,11 @@ const props = withDefaults(defineProps<{
   imageClass: 'aspect-square',
 })
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value?: File | null): void
+defineEmits<{
   (e: 'remove'): void
 }>()
 
-const modelFile = useVModel(props)
+const modelFile = defineModel<File | null>()
 const fileEl = ref<HTMLInputElement>(null!)
 const previewImageSrc = ref<string | null>(null)
 
@@ -121,12 +119,12 @@ const onChangeFile = () => {
     reader.onload = () => {
       const dataUrl = reader.result as string
       previewImageSrc.value = dataUrl
-      emit('update:modelValue', file)
+      modelFile.value = file
     }
   }
 }
 
 const removeSelectedFile = () => {
-  emit('update:modelValue', null)
+  modelFile.value = null
 }
 </script>

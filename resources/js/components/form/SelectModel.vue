@@ -73,16 +73,13 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from 'vue'
-
 export interface Model extends Record<string, any> {
   id: number | string
   title: string
   thumbnail: string | null
 }
 
-const props = withDefaults(defineProps<{
-  modelValue: Model | null
+withDefaults(defineProps<{
   models: Model[]
   selectMessage?: string
   thumbnailWidthClass?: string
@@ -93,5 +90,5 @@ const props = withDefaults(defineProps<{
   thumbnailHeightClass: 'h-10',
 })
 
-const selected = useVModel(props) as Ref<Model>
+const selected = defineModel<Model | null>({ required: true })
 </script>

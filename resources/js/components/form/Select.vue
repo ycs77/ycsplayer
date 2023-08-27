@@ -49,20 +49,17 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from 'vue'
-
 interface Option {
   label: string
   value: any
 }
 
-const props = withDefaults(defineProps<{
-  modelValue: Option | null
+withDefaults(defineProps<{
   options: Option[]
   selectMessage?: string
 }>(), {
   selectMessage: '請選擇...',
 })
 
-const selected = useVModel(props) as Ref<Option>
+const selected = defineModel<Option | null>({ required: true })
 </script>

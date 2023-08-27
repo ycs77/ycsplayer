@@ -21,18 +21,16 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  modelValue: boolean
+defineProps<{
   roomId: string
   csrfToken: string
 }>()
 
 const emit = defineEmits<{
-  'update:modelValue': [show: boolean]
   'uploaded': []
 }>()
 
-const show = useVModel(props)
+const show = defineModel<boolean>({ required: true })
 
 function uploaded() {
   show.value = false

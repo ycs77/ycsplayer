@@ -13,18 +13,11 @@
 <script setup lang="ts">
 import { SwitchLabel, SwitchDescription } from '@headlessui/vue'
 
-const props = withDefaults(defineProps<{
-  modelValue: boolean
+defineProps<{
   label?: string
   error?: string
   tip?: string
-}>(), {
-  modelValue: false,
-})
-
-defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
 }>()
 
-const enabled = useVModel(props, 'modelValue')
+const enabled = defineModel<boolean>({ required: true })
 </script>

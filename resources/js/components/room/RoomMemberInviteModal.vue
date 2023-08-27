@@ -74,16 +74,14 @@ import { debounce } from 'lodash-es'
 import type { RoomMember } from '@/types'
 
 const props = defineProps<{
-  modelValue: boolean
   roomId: string
 }>()
 
 const emit = defineEmits<{
-  'update:modelValue': [show: boolean]
   invite: []
 }>()
 
-const show = useVModel(props)
+const show = defineModel<boolean>({ required: true })
 const inputRef = ref() as Ref<{ $el: HTMLElement }>
 
 const form = useForm({
