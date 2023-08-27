@@ -68,10 +68,17 @@ class User extends Authenticatable
 
     public function avatarUrl(): Attribute
     {
-        return Attribute::make(fn () => $this->avatar
-                ? Storage::url($this->avatar)
-                : null
-        );
+        return Attribute::make(function () {
+            if ($this->avatar) {
+                if (filter_var($this->avatar, FILTER_VALIDATE_URL)) {
+                    return $this->avatar;
+                }
+
+                return Storage::url($this->avatar);
+            }
+
+            return 'https://unavatar.io/'.$this->email.'?fallback=https://source.boringavatars.com/beam/120/Mary%20Baker?colors=dbeafe,60a5fa';
+        });
     }
 
     public function rooms(): BelongsToMany
