@@ -178,6 +178,7 @@ function selectPlaylistItem(item: PlaylistItem) {
   showMobilePlaylist.value = false
   router.post(`/rooms/${props.room.id}/playlist/${item.id}`, {}, {
     only: ['current_playing', 'playlist_items'],
+    preserveScroll: true,
   })
 }
 
@@ -189,6 +190,7 @@ function removePlaylistItem(item: PlaylistItem) {
         : []),
       'playlist_items',
     ],
+    preserveScroll: true,
   })
 }
 
