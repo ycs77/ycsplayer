@@ -71,7 +71,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: PlayerType): void
+  'update:modelValue': [value: PlayerType]
 }>()
 
 const playerTypes = [

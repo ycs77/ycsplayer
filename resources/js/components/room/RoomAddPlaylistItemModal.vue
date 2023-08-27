@@ -58,7 +58,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'submit': [form: InertiaForm<PlaylistItemForm>]
+  submit: [form: InertiaForm<PlaylistItemForm>]
 }>()
 
 const show = defineModel<boolean>({ required: true })

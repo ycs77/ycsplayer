@@ -66,7 +66,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: RoomType): void
+  'update:modelValue': [value: RoomType]
 }>()
 
 const roomTypes = [

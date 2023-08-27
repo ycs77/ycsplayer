@@ -92,7 +92,7 @@ withDefaults(defineProps<{
 })
 
 defineEmits<{
-  (e: 'remove'): void
+  remove: []
 }>()
 
 const modelFile = defineModel<File | null>()

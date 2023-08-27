@@ -27,7 +27,7 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'uploaded': []
+  uploaded: []
 }>()
 
 const show = defineModel<boolean>({ required: true })
