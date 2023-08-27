@@ -22,6 +22,7 @@
             :model-value="url"
             class="font-mono"
             readonly
+            tip="邀請連結有效期限為一天，請盡快使用。"
             @focus="selectUrl"
           />
 
