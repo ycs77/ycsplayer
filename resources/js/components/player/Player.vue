@@ -1,7 +1,7 @@
 <template>
   <video-js
     ref="videoRef"
-    :class="{ 'vjs-youtube-block-touch': type === PlayerType.YouTube }"
+    class="vjs-theme-forest"
   />
 </template>
 
@@ -10,6 +10,7 @@ import axios from 'axios'
 import { throttle, debounce } from 'lodash-es'
 import { promiseTimeout } from '@vueuse/core'
 import 'video.js/dist/video-js.css'
+import '@videojs/themes/dist/forest/index.css'
 import videojs from 'video.js'
 import 'video.js/dist/lang/zh-TW.json'
 import type Player from 'video.js/dist/types/player'
@@ -261,7 +262,7 @@ onMounted(() => {
   const bigPlayButton = player.getChild('bigPlayButton')!
   const controlBar = player.getChild('controlBar')!
   const playToggle = controlBar.getChild('playToggle')!
-  const volumePanel = controlBar.getChild('volumePanel')!
+  // const volumePanel = controlBar.getChild('volumePanel')!
   const pictureInPictureToggle = controlBar.getChild('pictureInPictureToggle')!
   const progressControl = controlBar.getChild('ProgressControl')!
   const seekBar = progressControl.getChild('SeekBar')!
@@ -272,7 +273,7 @@ onMounted(() => {
   player.removeChild(posterImage)
   player.removeChild(bigPlayButton)
   controlBar.removeChild(playToggle)
-  controlBar.removeChild(volumePanel)
+  // controlBar.removeChild(volumePanel)
   controlBar.removeChild(pictureInPictureToggle)
   if (hasTimeTooltip && timeTooltip) {
     playProgressBar.removeChild(timeTooltip)
@@ -414,8 +415,8 @@ defineExpose({
 })
 </script>
 
-<style scoped>
-:deep(.vjs-youtube.vjs-youtube-block-touch iframe) {
+<style>
+.vjs-youtube iframe {
   pointer-events: none !important;
 }
 </style>
