@@ -59,6 +59,8 @@ class RoomController extends Controller
             'room' => fn () => RoomPresenter::make($room),
             'members' => fn () => RoomMemberPresenter::collection($room->membersForPresent()),
             'can' => fn () => [
+                'inviteMember' => $user->can('inviteMember', $room),
+                'removeMember' => $user->can('removeMember', $room),
                 'uplaodFiles' => $user->can('uplaodFiles', $room),
                 'settings' => $user->can('settings', $room),
             ],

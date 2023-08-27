@@ -4,6 +4,7 @@ use App\Broadcasting\Http\Controllers\PusherWebhookController;
 use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomMediaController;
+use App\Http\Controllers\RoomMemberController;
 use App\Http\Controllers\RoomPlaylistController;
 use App\Http\Controllers\RoomSettingController;
 use App\Http\Controllers\RoomUploadMediaController;
@@ -25,6 +26,12 @@ Route::post('/rooms/{room}/playlist', [RoomPlaylistController::class, 'store']);
 Route::post('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'click']);
 Route::delete('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'destroy']);
 Route::post('/rooms/{room}/next', [RoomPlaylistController::class, 'next']);
+
+Route::get('/rooms/{room}/join', [RoomMemberController::class, 'join'])->name('rooms.join');
+Route::post('/rooms/{room}/generate-join-link', [RoomMemberController::class, 'generateJoinLink']);
+Route::post('/rooms/{room}/invite', [RoomMemberController::class, 'invite']);
+Route::post('/rooms/{room}/search-member', [RoomMemberController::class, 'searchMember']);
+Route::delete('/rooms/{room}/members/{member}', [RoomMemberController::class, 'destroy']);
 
 Route::get('/rooms/{room}/medias', [RoomMediaController::class, 'index']);
 Route::delete('/rooms/{room}/medias/{media:uuid}', [RoomMediaController::class, 'delete']);

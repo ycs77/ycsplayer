@@ -65,7 +65,12 @@
 
           <div class="hidden xl:block">
             <!-- 房間成員卡 -->
-            <RoomMembers :members="members" />
+            <RoomMembers
+              :members="members"
+              :room-id="room.id"
+              :can-invite="can.inviteMember"
+              :can-remove="can.removeMember"
+            />
           </div>
         </div>
       </div>
@@ -150,11 +155,11 @@ const props = defineProps<{
 
 const player = ref(null) as Ref<InstanceType<typeof Player> | null>
 
-const currentPlaying = toRef(props, 'current_playing')
-const playlistItems = toRef(props, 'playlist_items')
-
 const showAddPlaylistItemModal = ref(false)
 const showMobilePlaylist = ref(false)
+
+const currentPlaying = toRef(props, 'current_playing')
+const playlistItems = toRef(props, 'playlist_items')
 
 const playlistItemForm = useForm({
   type: PlayerType.Video,

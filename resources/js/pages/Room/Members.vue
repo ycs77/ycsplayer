@@ -13,7 +13,12 @@
 
       <div class="col-span-12">
         <!-- 房間成員卡 -->
-        <RoomMembers :members="members" />
+        <RoomMembers
+          :members="members"
+          :room-id="room.id"
+          :can-invite="can.inviteMember"
+          :can-remove="can.removeMember"
+        />
       </div>
 
     </div>
@@ -29,6 +34,8 @@ const props = defineProps<{
   room: Required<Room>
   members: RoomMember[]
   can: {
+    inviteMember: boolean
+    removeMember: boolean
     uplaodFiles: boolean
     settings: boolean
   }

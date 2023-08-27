@@ -141,7 +141,9 @@ class Room extends Model implements HasMedia
 
     public function leave(User $user): void
     {
-        $user->removeRole($user->getRoleNames());
+        $user->getRoleNames()->each(function (string $role) use ($user) {
+            $user->removeRole($role);
+        });
 
         $this->members()->detach($user);
     }

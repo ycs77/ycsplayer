@@ -19,7 +19,7 @@
 
   .btn-primary {
     @apply bg-blue-800/50 enabled:hover:bg-blue-700/50 text-white;
-    @apply disabled:bg-blue-900/50;
+    @apply disabled:bg-blue-900/50 disabled:text-blue-300/50;
   }
 
   .btn-secondary {
