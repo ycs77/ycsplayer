@@ -12,6 +12,7 @@ export interface RoomMember {
   name: string
   email: string
   avatar: string | null
+  role: string
   online: boolean
 }
 

@@ -16,7 +16,10 @@
 
           <div class="flex items-center h-10">
             <div>
-              <div class="tracking-wide">{{ member.name }}</div>
+              <div class="tracking-wide">
+                {{ member.name }}
+                <RoomRoleBadge v-if="member.role === 'admin'" role="admin" class="ml-1" />
+              </div>
               <div v-if="member.online" class="flex items-center text-xs">
                 <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-1" /><span class="text-blue-300">上線</span>
               </div>

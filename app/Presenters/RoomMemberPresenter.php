@@ -13,7 +13,8 @@ class RoomMemberPresenter extends FlexiblePresenter
             'name' => $this->name,
             'email' => $this->email,
             'avatar' => $this->avatar_url,
-            'online' => $this->online,
+            'role' => $this->role_name, // @see Room@membersForPresent()
+            'online' => $this->online, // @see Room@membersForPresent()
         ];
     }
 }

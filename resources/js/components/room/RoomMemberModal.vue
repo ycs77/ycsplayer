@@ -19,7 +19,7 @@
 
         <h4 class="mt-3 text-2xl text-center">{{ member.name }}</h4>
         <div class="mt-1.5 flex justify-center gap-1">
-          <RoomRoleBadge role="user" />
+          <RoomRoleBadge :role="member.role" />
         </div>
       </div>
 

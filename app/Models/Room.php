@@ -129,7 +129,14 @@ class Room extends Model implements HasMedia
 
                 return $member;
             })
-            ->prepend(tap($user, fn () => $user->online = true));
+            ->prepend(tap($user, fn (user $user) => $user->online = true))
+            ->map(function (User $member) {
+                /** @var array */
+                $roleNames = $member->getRoleNames();
+                $member->role_name = preg_replace('/rooms\.\d+\./', '', $roleNames[0]);
+
+                return $member;
+            });
     }
 
     public function join(User $user, string $role = 'user'): void
