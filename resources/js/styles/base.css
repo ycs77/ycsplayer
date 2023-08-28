@@ -4,7 +4,7 @@
   }
 
   body {
-    @apply bg-gray-950 text-white selection:bg-blue-400 selection:text-white;
+    @apply bg-gray-950 text-white selection:bg-white selection:text-blue-950;
   }
 
   button {
