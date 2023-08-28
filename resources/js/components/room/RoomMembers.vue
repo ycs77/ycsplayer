@@ -83,8 +83,8 @@ function inviteMember() {
 }
 
 function openMemberModal(member: RoomMember) {
-  showMemberModal.value = true
   memberDetail.value = member
+  showMemberModal.value = true
 }
 
 function removeMember() {
