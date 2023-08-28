@@ -90,6 +90,7 @@
       >
         <Playlist
           v-if="showMobilePlaylist"
+          ref="mobilePlaylist"
           class="max-h-[50vh] border-t border-blue-900/50 overflow-y-auto"
           :current-playing="currentPlaying"
           :playlist-items="playlistItems"
@@ -136,6 +137,7 @@ import type { InertiaForm } from '@inertiajs/vue3'
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
 import { Echo, safeListenFn } from '@/echo'
 import Player from '@/components/player/Player.vue'
+import Playlist from '@/components/player/Playlist.vue'
 import { RoomType, PlayerType, type Room, type RoomMember, type PlaylistItem, type PlaylistItemForm, type Media } from '@/types'
 
 const props = defineProps<{
@@ -154,6 +156,7 @@ const props = defineProps<{
 }>()
 
 const player = ref(null) as Ref<InstanceType<typeof Player> | null>
+const mobilePlaylist = ref(null) as Ref<InstanceType<typeof Playlist> | null>
 
 const showAddPlaylistItemModal = ref(false)
 const showMobilePlaylist = ref(false)
@@ -249,6 +252,10 @@ function onOnlineMembersUpdated() {
 
 watch(showMobilePlaylist, showMobilePlaylist => {
   if (showMobilePlaylist) {
+    nextTick(() => {
+      mobilePlaylist.value?.scrollIntoCurrentItem()
+    })
+
     disableBodyScroll(document.body)
   } else {
     enableBodyScroll(document.body)

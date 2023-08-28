@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul>
-      <li v-for="item in playlistItems" :key="item.id">
+      <li v-for="item in playlistItems" :key="item.id" ref="itemRefs">
         <PlaylistItem
           v-if="item.id === currentPlaying?.id"
           is="div"
@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import type { PlaylistItem } from '@/types'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   currentPlaying: PlaylistItem | null
   playlistItems: PlaylistItem[]
   canAdd?: boolean
@@ -54,4 +54,20 @@ defineEmits<{
   selectItem: [PlaylistItem]
   removeItem: [PlaylistItem]
 }>()
+
+const itemRefs = ref<HTMLLIElement[]>([])
+
+function scrollIntoCurrentItem() {
+  if (props.currentPlaying) {
+    for (const li of itemRefs.value) {
+      const child = li.firstChild as Element | null
+      if (child?.nodeName === 'DIV') {
+        child.scrollIntoView()
+        break
+      }
+    }
+  }
+}
+
+defineExpose({ scrollIntoCurrentItem })
 </script>
