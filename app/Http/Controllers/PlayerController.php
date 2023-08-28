@@ -32,6 +32,12 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
+        if (config('player.log_enabled')) {
+            logger('player play: '.$roomId, [
+                'user_id' => auth()->id(),
+            ]);
+        }
+
         $socketId = $request->header('X-Socket-Id');
 
         $status = $this->statusCache->get($roomId);
@@ -73,6 +79,12 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
+        if (config('player.log_enabled')) {
+            logger('player pause: '.$roomId, [
+                'user_id' => auth()->id(),
+            ]);
+        }
+
         $socketId = $request->header('X-Socket-Id');
 
         $status = new PlayStatus();
@@ -96,6 +108,12 @@ class PlayerController extends Controller
         ]);
 
         $roomId = $this->getRoomId($request);
+
+        if (config('player.log_enabled')) {
+            logger('player seek: '.$roomId, [
+                'user_id' => auth()->id(),
+            ]);
+        }
 
         $socketId = $request->header('X-Socket-Id');
 
@@ -122,6 +140,16 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
+        if (! $this->statusCache->get($roomId, false)) {
+            return response()->noContent();
+        }
+
+        if (config('player.log_enabled')) {
+            logger('player time update: '.$roomId, [
+                'user_id' => auth()->id(),
+            ]);
+        }
+
         $status = new PlayStatus();
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
@@ -139,6 +167,12 @@ class PlayerController extends Controller
         ]);
 
         $roomId = $this->getRoomId($request);
+
+        if (config('player.log_enabled')) {
+            logger('player end: '.$roomId, [
+                'user_id' => auth()->id(),
+            ]);
+        }
 
         $this->statusCache->delete($roomId);
 
