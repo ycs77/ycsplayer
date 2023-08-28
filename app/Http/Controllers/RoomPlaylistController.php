@@ -174,9 +174,8 @@ class RoomPlaylistController extends Controller
 
     protected function playItem(Room $room, ?PlaylistItem $item)
     {
-        $room->current_playing_id = $item?->id;
-        $room->save();
+        $room->update(['current_playing_id' => $item?->id]);
 
-        $this->statusCache->delete($room->id);
+        $this->statusCache->delete($room->hash_id);
     }
 }
