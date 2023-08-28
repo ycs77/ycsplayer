@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\ChunkUpload\UploadHandler;
 use App\Models\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\MediaLibrary\Support\File;
@@ -18,9 +18,7 @@ class RoomUploadMediaController extends Controller
     {
         $this->authorize('uploadMedias', $room);
 
-        $receiver = new FileReceiver(
-            'file', $request, HandlerFactory::classFromRequest($request)
-        );
+        $receiver = new FileReceiver('file', $request, UploadHandler::class);
 
         if (! $receiver->isUploaded()) {
             throw ValidationException::withMessages([
@@ -28,7 +26,7 @@ class RoomUploadMediaController extends Controller
             ]);
         }
 
-        /** @var \Pion\Laravel\ChunkUpload\Save\AbstractSave */
+        /** @var \App\ChunkUpload\Save */
         $fileReceived = $receiver->receive();
 
         if ($fileReceived->isFinished()) {
