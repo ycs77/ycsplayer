@@ -1,26 +1,27 @@
 <template>
-  <Field
-    :label="label"
-    :error="error ?? fileError"
-    :tip="tip"
-    :class="wrapperClass"
-  >
-    <div v-if="progress" class="mt-4">
-      <div class="mb-2 text-center">上傳中... </div>
-      <div class="h-2 bg-blue-900/50 rounded-full overflow-hidden">
-        <div class="bg-blue-500/50 h-full transition-[width] duration-500" :style="{ width: `${progressPer}%` }" />
-      </div>
-    </div>
-
-    <button
-      v-else
-      ref="browseFilesBtnRef"
-      type="button"
-      class="btn btn-primary"
+  <div v-if="!progress" class="my-6">
+    <Field
+      :label="label"
+      :error="error ?? fileError"
+      :tip="tip"
+      :class="wrapperClass"
     >
-      <HeroiconsCloudArrowUp class="mr-1" />上傳檔案
-    </button>
-  </Field>
+      <button
+        ref="browseFilesBtnRef"
+        type="button"
+        class="btn btn-primary"
+      >
+        <HeroiconsCloudArrowUp class="mr-1" />上傳檔案
+      </button>
+    </Field>
+  </div>
+
+  <div v-else class="my-16">
+    <div class="text-center">上傳中... </div>
+    <div class="mt-4 h-2 bg-blue-900/50 rounded-full overflow-hidden">
+      <div class="bg-blue-500/50 h-full transition-[width] duration-500" :style="{ width: `${progressPer}%` }" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -57,8 +58,8 @@ onMounted(() => {
     },
     chunkSize: 5 * 1024 * 1024, // 5M
     testChunks: false,
-    simultaneousUploads: 1,
-    permanentErrors: [400, 404, 409, 415, 422, 500, 501], // add 422
+    simultaneousUploads: 1, // 同時上傳數量只能設 1，設 2 以上 PHP 會發生錯誤。
+    permanentErrors: [400, 404, 409, 415, 422, 500, 501], // 增加 422 Code，當驗證錯誤時不需要報錯誤訊息。
   })
 
   resumable.assignBrowse(browseFilesBtnRef.value, false)
@@ -87,10 +88,10 @@ onMounted(() => {
   resumable.on('fileError', (file, response) => {
     progress.value = false
 
-    if (response.startsWith('{"') && response.endsWith('}')) {
+    try {
       const data = JSON.parse(response)
       fileError.value = data.message
-    } else {
+    } catch (e) {
       console.error(response)
     }
   })
