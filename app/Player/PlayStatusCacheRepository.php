@@ -16,7 +16,7 @@ class PlayStatusCacheRepository
     {
         $status = $this->cache->get($this->key($roomId));
 
-        if (config('player.log_enabled') && $log) {
+        if (config('ycsplayer.log_enabled') && $log) {
             logger('play status cache get: '.$roomId, [
                 'status' => $status?->toArray(),
                 'user_id' => auth()->id(),
@@ -32,7 +32,7 @@ class PlayStatusCacheRepository
             $this->key($roomId), $status, $this->ttl()
         );
 
-        if (config('player.log_enabled')) {
+        if (config('ycsplayer.log_enabled')) {
             logger('play status cache set: '.$roomId, [
                 'status' => $status->toArray(),
                 'user_id' => auth()->id(),
@@ -44,7 +44,7 @@ class PlayStatusCacheRepository
     {
         $this->cache->delete($this->key($roomId));
 
-        if (config('player.log_enabled')) {
+        if (config('ycsplayer.log_enabled')) {
             logger('play status cache delete: '.$roomId, [
                 'user_id' => auth()->id(),
             ]);

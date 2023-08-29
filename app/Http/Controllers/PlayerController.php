@@ -32,7 +32,7 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
-        if (config('player.log_enabled')) {
+        if (config('ycsplayer.log_enabled')) {
             logger('player play: '.$roomId, [
                 'user_id' => auth()->id(),
             ]);
@@ -79,7 +79,7 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
-        if (config('player.log_enabled')) {
+        if (config('ycsplayer.log_enabled')) {
             logger('player pause: '.$roomId, [
                 'user_id' => auth()->id(),
             ]);
@@ -109,7 +109,7 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
-        if (config('player.log_enabled')) {
+        if (config('ycsplayer.log_enabled')) {
             logger('player seek: '.$roomId, [
                 'user_id' => auth()->id(),
             ]);
@@ -144,7 +144,7 @@ class PlayerController extends Controller
             return response()->noContent();
         }
 
-        if (config('player.log_enabled')) {
+        if (config('ycsplayer.log_enabled')) {
             logger('player time update: '.$roomId, [
                 'user_id' => auth()->id(),
             ]);
@@ -168,7 +168,7 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
-        if (config('player.log_enabled')) {
+        if (config('ycsplayer.log_enabled')) {
             logger('player end: '.$roomId, [
                 'user_id' => auth()->id(),
             ]);
