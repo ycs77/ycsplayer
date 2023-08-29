@@ -19,7 +19,10 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       Laravel({
-        input: 'resources/js/app.ts',
+        input: [
+          'resources/css/landing-page.css',
+          'resources/js/app.ts',
+        ],
         refresh: true,
       }),
       Vue({

@@ -1,14 +1,11 @@
 import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
-import { tailwindcssOriginSafelist } from '@headlessui-float/vue'
 import Forms from '@tailwindcss/forms'
 
 export default {
   content: [
-    './resources/views/app.blade.php',
-    './resources/js/**/*.vue',
+    './resources/views/landing-page.blade.php',
   ],
-  safelist: [...tailwindcssOriginSafelist],
   theme: {
     screens: {
       sm: '640px',

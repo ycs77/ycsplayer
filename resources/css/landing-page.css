@@ -1,0 +1,12 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import 'vars';
+@import 'fonts';
+@import 'base';
+@import 'components';
+@import 'button';
+@import 'form';
+
+@config '../../tailwind.landing-page.config.ts';

@@ -16,7 +16,7 @@ if (app()->environment('local') && ! app()->runningInConsole()) {
     Auth::login(User::first());
 }
 
-Route::redirect('/', '/rooms');
+Route::view('/', 'landing-page');
 
 Route::get('/rooms', [RoomController::class, 'index']);
 Route::get('/rooms/{room}', [RoomController::class, 'show']);
