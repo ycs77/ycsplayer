@@ -23,7 +23,7 @@
         </div>
       </div>
 
-      <div v-if="canRemove || user?.id === member.id" class="mt-6 text-center">
+      <div v-if="canRemoveMember" class="mt-6 text-center">
         <button type="button" class="btn btn-danger" @click="removeMember">
           {{ user?.id === member.id ? '退出房間' : '退出成員' }}
         </button>
@@ -50,6 +50,18 @@ const emit = defineEmits<{
 const show = defineModel<boolean>({ required: true })
 
 const { user } = useAuth()
+
+const canRemoveMember = computed(() => {
+  if (!props.member) return false
+  if (!user.value) return false
+
+  if (user.value.id === props.member.id) {
+    if (props.member.role === 'admin') return false
+    return true
+  }
+
+  return props.canRemove
+})
 
 function removeMember() {
   if (!props.member) return

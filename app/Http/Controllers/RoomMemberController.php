@@ -81,13 +81,19 @@ class RoomMemberController extends Controller
 
     public function destroy(Room $room, User $member)
     {
+        $this->authorize('view', $room);
+
         /** @var \App\Models\User */
         $user = Auth::user();
 
         if ($user->is($member)) {
-            if ($room->isMember($member)) {
-                $room->leave($member);
+            if ($user->getRoleNames()->contains("rooms.{$room->id}.admin")) {
+                ValidationException::withMessages([
+                    'leave_room' => '管理員不可以離開房間，可以將管理員轉交給其他成員，或者直接刪除房間。',
+                ]);
             }
+
+            $room->leave($member);
 
             return redirect()->route('rooms.index');
         }
