@@ -3,9 +3,12 @@
     <header class="p-[--layout-gap] lg:p-[--layout-gap-lg]">
       <div class="px-4 py-2.5 flex justify-between items-center flex-col bg-blue-950/50 rounded-lg md:flex-row lg:px-6 lg:py-3">
         <div class="w-full flex justify-between items-center md:w-auto">
-          <Link href="/rooms" class="font-bold tracking-wide">
+          <Link v-if="user" href="/rooms" class="font-bold tracking-wide">
             ycsPlayer
           </Link>
+          <a v-else href="/" class="font-bold tracking-wide">
+            ycsPlayer
+          </a>
 
           <button
             type="button"
