@@ -5,6 +5,7 @@
     @apply text-sm text-center font-normal tracking-wider;
     @apply transition-colors duration-100;
     @apply shadow-sm select-none focus:outline-none;
+    @apply whitespace-nowrap
   }
 
   .btn-base {
