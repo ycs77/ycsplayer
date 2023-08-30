@@ -40,19 +40,26 @@ class FortifyServiceProvider extends ServiceProvider
             ]);
         });
 
-        if (config('ycsplayer.password_less')) {
-            Fortify::authenticateThrough(function (Request $request) {
-                return [RedirectToSendPasswordlessLoginEmailRoute::class];
-            });
-        }
-
         Fortify::registerView(function () {
             return Inertia::render('Auth/Register', [
                 'passwordLess' => config('ycsplayer.password_less'),
             ]);
         });
 
+        Fortify::verifyEmailView(function () {
+            return Inertia::render('Auth/VerifyEmail', [
+                'status' => session('status'),
+            ]);
+        });
+
+        if (config('ycsplayer.password_less')) {
+            Fortify::authenticateThrough(function (Request $request) {
+                return [RedirectToSendPasswordlessLoginEmailRoute::class];
+            });
+        }
+
         Fortify::createUsersUsing(CreateNewUser::class);
+
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         RateLimiter::for('login', function (Request $request) {

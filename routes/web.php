@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'landing-page')->middleware('guest');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/rooms', [RoomController::class, 'index']);
     Route::get('/rooms/{room}', [RoomController::class, 'show']);
     Route::get('/rooms/{room}/members', [RoomController::class, 'members']);
