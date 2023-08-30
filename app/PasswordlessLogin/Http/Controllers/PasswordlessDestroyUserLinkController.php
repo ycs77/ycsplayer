@@ -27,7 +27,7 @@ class PasswordlessDestroyUserLinkController extends Controller
             ]);
         }
 
-        return redirect('/user/settings');
+        return redirect()->route('user.settings');
     }
 
     protected function userProviderName(): string

@@ -29,7 +29,7 @@ class RoomMediaController extends Controller
         ]);
     }
 
-    public function delete(Room $room, Media $media)
+    public function destroy(Room $room, Media $media)
     {
         $this->authorize('uploadMedias', $room);
 

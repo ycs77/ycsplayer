@@ -22,12 +22,12 @@ class RoomMemberController extends Controller
         $user = Auth::user();
 
         if ($room->isMember($user)) {
-            return redirect('/rooms/'.$room->hash_id);
+            return redirect()->route('rooms.show', $room);
         }
 
         $room->join($user);
 
-        return redirect('/rooms/'.$room->hash_id);
+        return redirect()->route('rooms.show', $room);
     }
 
     public function generateJoinLink(Room $room)
@@ -35,7 +35,7 @@ class RoomMemberController extends Controller
         $this->authorize('inviteMember', $room);
 
         $joinLink = URL::temporarySignedRoute(
-            'rooms.join', now()->addDay(), ['room' => $room->hash_id]
+            'rooms.join', now()->addDay(), $room
         );
 
         return response()->json([
