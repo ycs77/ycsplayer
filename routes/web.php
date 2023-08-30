@@ -8,6 +8,7 @@ use App\Http\Controllers\RoomMemberController;
 use App\Http\Controllers\RoomPlaylistController;
 use App\Http\Controllers\RoomSettingController;
 use App\Http\Controllers\RoomUploadMediaController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'landing-page')->middleware('guest');
@@ -41,6 +42,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/player/seeked', [PlayerController::class, 'seeked']);
     Route::post('/player/time-update', [PlayerController::class, 'timeUpdate']);
     Route::post('/player/end', [PlayerController::class, 'end']);
+
+    Route::get('/user/settings', [UserController::class, 'show']);
 });
 
 Route::post('/pusher/webhook', PusherWebhookController::class);

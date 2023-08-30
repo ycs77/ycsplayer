@@ -134,6 +134,7 @@ return [
         'city'                  => '城市',
         'content'               => '內容',
         'country'               => '國家',
+        'current_password'      => '舊密碼',
         'date'                  => '日期',
         'day'                   => '天',
         'description'           => '描述',

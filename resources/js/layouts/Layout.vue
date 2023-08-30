@@ -46,7 +46,7 @@
           </template>
 
           <template v-else>
-            <Menu as="div" class="w-full relative">
+            <Menu as="div" class="w-full relative" v-slot="{ close }">
               <Float
                 placement="bottom-end"
                 :offset="8"
@@ -62,15 +62,27 @@
                   </div>
                 </MenuButton>
 
-                <MenuItems class="w-full p-1.5 space-y-1.5 bg-blue-900/50 rounded-md shadow-md shadow-blue-950/50 backdrop-blur-md overflow-hidden focus:outline-none md:w-40">
+                <MenuItems
+                  class="w-full p-1.5 space-y-1.5 bg-blue-900/50 rounded-md shadow-md shadow-blue-950/50 backdrop-blur-md overflow-hidden focus:outline-none md:w-40"
+                  @click="close"
+                >
                   <MenuItem v-slot="{ active }">
-                    <button
-                      type="button"
+                    <Link
+                      href="/rooms"
+                      class="block w-full px-4 py-1.5 text-left text-sm rounded-md transition-colors"
+                      :class="{ 'bg-blue-900 text-white': active }"
+                    >
+                      點播房間
+                    </Link>
+                  </MenuItem>
+                  <MenuItem v-slot="{ active }">
+                    <Link
+                      href="/user/settings"
                       class="block w-full px-4 py-1.5 text-left text-sm rounded-md transition-colors"
                       :class="{ 'bg-blue-900 text-white': active }"
                     >
                       帳號設定
-                    </button>
+                    </Link>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
                     <Link
