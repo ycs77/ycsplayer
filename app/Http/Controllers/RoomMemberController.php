@@ -84,9 +84,15 @@ class RoomMemberController extends Controller
         /** @var \App\Models\User */
         $user = Auth::user();
 
-        if (! $user->is($member)) {
-            $this->authorize('removeMember', $room);
+        if ($user->is($member)) {
+            if ($room->isMember($member)) {
+                $room->leave($member);
+            }
+
+            return redirect()->route('rooms.index');
         }
+
+        $this->authorize('removeMember', $room);
 
         if ($room->isMember($member)) {
             $room->leave($member);
