@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'open_room_creation' => ENV('YCSPLAYER_OPEN_ROOM_CREATION', false),
+    'open_room_creation' => env('YCSPLAYER_OPEN_ROOM_CREATION', false),
 
     /*
     |--------------------------------------------------------------------------
