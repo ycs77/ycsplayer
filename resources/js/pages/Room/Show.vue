@@ -126,6 +126,7 @@
       v-model="showAddPlaylistItemModal"
       :form="playlistItemForm"
       :medias="medias"
+      :submitting="playlistItemForm.processing"
       @submit="submitPlaylistItemForm"
     />
 

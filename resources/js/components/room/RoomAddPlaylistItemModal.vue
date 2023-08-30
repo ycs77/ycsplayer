@@ -39,7 +39,7 @@
         </div>
 
         <div class="mt-6">
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary" :disabled="submitting">
             新增
           </button>
         </div>
@@ -55,6 +55,7 @@ import { PlayerType, type Media, type PlaylistItemForm } from '@/types'
 const props = defineProps<{
   form: InertiaForm<PlaylistItemForm>
   medias: Media[]
+  submitting: boolean
 }>()
 
 const emit = defineEmits<{
