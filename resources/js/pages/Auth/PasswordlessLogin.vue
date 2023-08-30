@@ -29,13 +29,15 @@ const props = defineProps<{
   seconds: number
 }>()
 
+const { currentSeconds, waiting } = useButtonWaiting(() => props.seconds)
+
+const form = useForm({
+  email: props.email,
+})
+
 function submit() {
-  router.post('/login/send', {
-    email: props.email,
-  }, {
+  form.post('/login/send', {
     preserveState: false,
   })
 }
-
-const { currentSeconds, waiting } = useButtonWaiting(() => props.seconds)
 </script>
