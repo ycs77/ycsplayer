@@ -14,7 +14,11 @@ class RoomPolicy
 
     public function create(User $user): bool
     {
-        return false;
+        if (config('ycsplayer.open_room_creation')) {
+            return true;
+        }
+
+        return $user->can('create-room');
     }
 
     public function operatePlaylistItem(User $user, Room $room): bool

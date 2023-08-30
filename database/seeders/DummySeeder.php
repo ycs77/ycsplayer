@@ -21,6 +21,8 @@ class DummySeeder extends Seeder
                 'name' => 'Lucas Yang',
                 'email' => 'yangchenshin77@gmail.com',
             ]);
+
+            $user->assignRole('admin');
         } else {
             /** @var \App\Models\User */
             $user = User::where('email', 'yangchenshin77@gmail.com')->first();

@@ -76,10 +76,24 @@ yarn dev
 php artisan queue:work
 ```
 
+## 管理員角色
+
+如果要讓 User ID 1 有管理員角色，可以執行 `app:admin` 指令來增加：
+
+```bash
+php artisan app:admin 1
+```
+
+反之如果要刪除管理員的權限，要在後面加上 `--remove` 選項：
+
+```bash
+php artisan app:admin 1 --remove
+```
+
 ## 同步權限
 
 如果有新增或刪除權限時，可以執行當前指令來同步：
 
-```
+```bash
 php artisan room:sync-permissions
 ```
