@@ -12,7 +12,7 @@ class RoomPresenter extends FlexiblePresenter
         return [
             'id' => $this->hash_id,
             'type' => $this->type->value,
-            'title' => $this->title,
+            'name' => $this->name,
             'auto_play' => $this->auto_play,
             'auto_remove' => $this->auto_remove,
         ];

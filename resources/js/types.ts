@@ -1,7 +1,7 @@
 export interface Room {
   id: string
   type: RoomType
-  title: string
+  name: string
   auto_play: boolean
   auto_remove: boolean
   note?: string | null

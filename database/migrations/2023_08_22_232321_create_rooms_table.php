@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->char('type', 10);
-            $table->string('title', 20);
+            $table->string('name', 20);
             $table->unsignedBigInteger('current_playing_id')->nullable();
             $table->boolean('auto_play')->default(false);
             $table->boolean('auto_remove')->default(false);

@@ -6,7 +6,6 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomMediaController;
 use App\Http\Controllers\RoomMemberController;
 use App\Http\Controllers\RoomPlaylistController;
-use App\Http\Controllers\RoomSettingController;
 use App\Http\Controllers\RoomUploadMediaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -15,8 +14,11 @@ Route::view('/', 'landing-page')->middleware('guest');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/rooms', [RoomController::class, 'index']);
-    Route::get('/rooms/{room}', [RoomController::class, 'show']);
+    Route::post('/rooms', [RoomController::class, 'store']);
+    Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
     Route::get('/rooms/{room}/members', [RoomController::class, 'members']);
+    Route::get('/rooms/{room}/settings', [RoomController::class, 'edit']);
+    Route::post('/rooms/{room}/settings', [RoomController::class, 'update']);
 
     Route::post('/rooms/{room}/playlist', [RoomPlaylistController::class, 'store']);
     Route::post('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'click']);
@@ -33,9 +35,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/rooms/{room}/medias/{media:uuid}', [RoomMediaController::class, 'delete']);
 
     Route::post('/rooms/{room}/upload', RoomUploadMediaController::class);
-
-    Route::get('/rooms/{room}/settings', [RoomSettingController::class, 'show']);
-    Route::post('/rooms/{room}/settings', [RoomSettingController::class, 'store']);
 
     Route::post('/player/play', [PlayerController::class, 'play']);
     Route::post('/player/pause', [PlayerController::class, 'pause']);

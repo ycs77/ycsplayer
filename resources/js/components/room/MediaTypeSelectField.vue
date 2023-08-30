@@ -39,7 +39,7 @@
                   :class="checked ? 'text-white' : 'text-blue-500/50'"
                 />
 
-                <RadioGroupLabel as="p" class="text-white font-medium">
+                <RadioGroupLabel as="p" class="text-white font-medium select-none">
                   {{ playerType.name }}
                 </RadioGroupLabel>
               </div>

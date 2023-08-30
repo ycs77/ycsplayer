@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { type Room } from '@/types'
+import type { Room } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>

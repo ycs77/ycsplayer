@@ -41,7 +41,7 @@ class DummySeeder extends Seeder
 
         /** @var \App\Models\Room */
         $videoRoom = Room::firstOrCreate([
-            'title' => '動漫觀影室',
+            'name' => '動漫觀影室',
         ], [
             'type' => RoomType::Video,
             'auto_play' => false,
@@ -109,7 +109,7 @@ class DummySeeder extends Seeder
 
         /** @var \App\Models\Room */
         $audioRoom = Room::firstOrCreate([
-            'title' => '動漫音樂廳',
+            'name' => '動漫音樂廳',
         ], [
             'type' => RoomType::Audio,
             'auto_play' => false,

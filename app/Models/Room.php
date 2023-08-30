@@ -21,7 +21,7 @@ use Spatie\Permission\PermissionRegistrar;
 /**
  * @property int $id
  * @property \App\Enums\RoomType $type
- * @property string $title
+ * @property string $name
  * @property int|null $current_playing_id
  * @property bool $auto_play
  * @property bool $auto_remove
@@ -40,7 +40,7 @@ class Room extends Model implements HasMedia
 
     protected $fillable = [
         'type',
-        'title',
+        'name',
         'current_playing_id',
         'auto_play',
         'auto_remove',

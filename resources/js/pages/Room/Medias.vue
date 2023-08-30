@@ -16,7 +16,11 @@
           <template #title>
             <div class="flex justify-between items-center">
               <h1 class="text-2xl">媒體檔案</h1>
-              <button type="button" class="btn btn-primary" @click="showRoomUploadMediaModal = true">
+              <button
+                type="button"
+                class="btn btn-primary"
+                @click="showRoomUploadMediaModal = true"
+              >
                 <HeroiconsCloudArrowUp class="w-4 h-4 mr-1" />
                 上傳檔案
               </button>
