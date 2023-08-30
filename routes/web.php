@@ -44,6 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/player/end', [PlayerController::class, 'end']);
 
     Route::get('/user/settings', [UserController::class, 'show']);
+    Route::delete('/user', [UserController::class, 'destroy']);
 });
 
 Route::post('/pusher/webhook', PusherWebhookController::class);

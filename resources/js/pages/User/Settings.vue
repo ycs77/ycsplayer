@@ -16,11 +16,21 @@
           </div>
 
           <div class="mt-6">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary" :disabled="form.processing">
               保存
             </button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <div class="mt-12 max-w-screen-md mx-auto bg-blue-950/50 p-4 rounded-lg lg:p-6">
+      <h1 class="text-2xl">刪除帳號</h1>
+
+      <div class="mt-6">
+        <button type="button" class="btn btn-danger" @click="deleteAccount">
+          刪除帳號
+        </button>
       </div>
     </div>
   </div>
@@ -46,5 +56,11 @@ function submit() {
     onSuccess: () => form.reset('current_password', 'password', 'password_confirmation'),
     onError: () => form.reset('current_password', 'password', 'password_confirmation'),
   })
+}
+
+function deleteAccount() {
+  if (confirm('確定要刪除此帳號嗎? 此操作將無法恢復')) {
+    router.delete('/user')
+  }
 }
 </script>
