@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
@@ -35,7 +36,9 @@ class CreateNewUser implements CreatesNewUsers
         return User::create(array_merge([
             'name' => $input['name'],
             'email' => $input['email'],
-        ], config('ycsplayer.password_less') ? [] : [
+        ], config('ycsplayer.password_less') ? [
+            'password' => Hash::make(Str::random(16)),
+        ] : [
             'password' => Hash::make($input['password']),
         ]));
     }
