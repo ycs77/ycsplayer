@@ -42,6 +42,10 @@ class HandleInertiaRequests extends Middleware
                     'avatar' => $request->user()->avatar_url,
                 ] : null,
             ],
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error'),
+            ],
         ]);
     }
 }

@@ -119,7 +119,7 @@ function searchMember() {
 
 function inviteMember() {
   form.post(`/rooms/${props.roomId}/invite`, {
-    only: ['errors', 'members'],
+    only: [...globalOnly, 'members'],
     preserveScroll: true,
     onSuccess() {
       emit('invite')

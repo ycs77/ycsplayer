@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Flash;
 use App\PasswordlessLogin\DestroyUserUrl;
 use App\PasswordlessLogin\Notifications\SendPasswordlessDestroyUserLink;
 use Illuminate\Http\Request;
@@ -50,6 +51,8 @@ class UserController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Inertia::location('/');
+        Flash::success('帳號刪除成功');
+
+        return redirect()->route('login');
     }
 }

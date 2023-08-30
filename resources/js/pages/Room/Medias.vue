@@ -41,16 +41,13 @@
                   <div class="grow break-all">{{ media.name }}</div>
 
                   <div class="shrink-0 whitespace-nowrap">
-                    <Link
-                      :href="`/rooms/${room.id}/medias/${media.id}`"
-                      as="button"
-                      method="delete"
-                      :only="['csrf_token', 'medias']"
+                    <button
+                      type="button"
                       class="btn btn-sm btn-danger"
-                      @before="confirmDelete(media)"
+                      @click="deleteMedia(media)"
                     >
                       刪除
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </li>
@@ -72,9 +69,10 @@
 </template>
 
 <script setup lang="ts">
+import { useToast } from 'vue-toastification'
 import type { Room, Media } from '@/types'
 
-defineProps<{
+const props = defineProps<{
   room: Required<Room>
   csrf_token: string
   medias: Media[]
@@ -86,14 +84,24 @@ defineProps<{
 
 const showRoomUploadMediaModal = ref(false)
 
-function uploaded() {
+const toast = useToast()
+
+function uploaded(message: string) {
   router.get(usePage().url, {}, {
-    only: ['csrf_token', 'medias'],
+    only: [...globalOnly, 'csrf_token', 'medias'],
     preserveScroll: true,
+    onSuccess() {
+      toast.success(message)
+    },
   })
 }
 
-function confirmDelete(media: Media) {
-  return confirm(`確定要刪除 ${media.name} 嗎?`)
+function deleteMedia(media: Media) {
+  if (confirm(`確定要刪除 ${media.name} 嗎?`)) {
+    router.delete(`/rooms/${props.room.id}/medias/${media.id}`, {
+      only: [...globalOnly, 'csrf_token', 'medias'],
+      preserveScroll: true,
+    })
+  }
 }
 </script>

@@ -1,0 +1,9 @@
+.Vue-Toastification__toast {
+  backdrop-filter: blur(4px);
+}
+.Vue-Toastification__toast--success {
+  @apply bg-green-500/75;
+}
+.Vue-Toastification__toast--error {
+  @apply bg-red-500/75;
+}

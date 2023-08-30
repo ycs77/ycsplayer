@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RoomType;
+use App\Facades\Flash;
 use App\Models\Room;
 use App\Presenters\MediaPresenter;
 use App\Presenters\PlaylistItemPresenter;
@@ -49,6 +50,8 @@ class RoomController extends Controller
         $room = Room::create($request->only('name', 'type', 'auto_play', 'auto_remove'));
 
         $room->join($user, 'admin');
+
+        Flash::success('房間創建成功');
 
         return redirect()->route('rooms.show', $room);
     }
@@ -124,6 +127,8 @@ class RoomController extends Controller
         ]);
 
         $room->update($request->only('type', 'auto_play', 'auto_remove'));
+
+        Flash::success('房間設定更新成功');
     }
 
     public function destroy(Room $room)
@@ -131,6 +136,8 @@ class RoomController extends Controller
         $this->authorize('delete', $room);
 
         $room->delete();
+
+        Flash::success('房間刪除成功');
 
         return redirect()->route('rooms.index');
     }

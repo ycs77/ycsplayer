@@ -26,7 +26,7 @@ class FortifyServiceProvider extends ServiceProvider
         {
             public function toResponse($request)
             {
-                return Inertia::location('/');
+                return redirect()->route('login');
             }
         });
     }

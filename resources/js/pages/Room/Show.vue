@@ -216,7 +216,7 @@ function submitPlaylistItemForm(form: PlaylistItemForm) {
   playlistItemForm.media_id = form.media_id
 
   playlistItemForm.post(`/rooms/${props.room.id}/playlist`, {
-    only: ['errors', 'playlist_items'],
+    only: [...globalOnly, 'playlist_items'],
     preserveScroll: true,
     onSuccess() {
       showAddPlaylistItemModal.value = false

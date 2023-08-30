@@ -58,7 +58,7 @@ class RoomUploadMediaController extends Controller
                 throw $e;
             }
 
-            return 'uploaded';
+            return ['success' => '檔案上傳成功'];
         }
 
         $handler = $fileReceived->handler();

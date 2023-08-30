@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Facades\Flash;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Hash;
@@ -46,6 +47,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'password' => Hash::make($input['password']),
             ] : []))->save();
         }
+
+        Flash::success('帳號設定更新成功');
     }
 
     /**

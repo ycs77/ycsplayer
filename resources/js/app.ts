@@ -2,6 +2,8 @@ import { createApp, h } from 'vue'
 import { createInertiaApp, Link } from '@inertiajs/vue3'
 import InertiaTitle from 'inertia-title/vue3'
 import { vfmPlugin as VueFinalModal } from 'vue-final-modal'
+import Toast from 'vue-toastification'
+import { Notification } from '@/modules/notification'
 import Layout from './layouts/Layout.vue'
 import '../css/app.css'
 
@@ -32,6 +34,8 @@ createInertiaApp({
       .use(plugin)
       .use(InertiaTitle)
       .use(VueFinalModal())
+      .use(Toast)
+      .use(Notification)
       .component('Link', Link)
       .mount(el)
   },

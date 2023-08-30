@@ -10,6 +10,10 @@ declare module '@inertiajs/core' {
         avatar: string | null
       }
     } | null
+    flash: {
+      success: string | null
+      error: string | null
+    }
   }
 }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Flash;
 use App\Models\Room;
 use App\Models\User;
 use App\Presenters\RoomMemberPresenter;
@@ -26,6 +27,8 @@ class RoomMemberController extends Controller
         }
 
         $room->join($user);
+
+        Flash::success('加入房間成功');
 
         return redirect()->route('rooms.show', $room);
     }
@@ -61,6 +64,8 @@ class RoomMemberController extends Controller
         $member = User::where('email', $request->input('email'))->first();
 
         $room->join($member);
+
+        Flash::success('用戶加入成功');
     }
 
     public function searchMember(Request $request, Room $room)
@@ -95,6 +100,8 @@ class RoomMemberController extends Controller
 
             $room->leave($member);
 
+            Flash::success('離開房間成功');
+
             return redirect()->route('rooms.index');
         }
 
@@ -102,6 +109,8 @@ class RoomMemberController extends Controller
 
         if ($room->isMember($member)) {
             $room->leave($member);
+
+            Flash::success('用戶退出房間成功');
         }
     }
 }

@@ -68,7 +68,7 @@ function removeMember() {
 
   if (confirm(`確定要請 ${props.member.name} 離開房間嗎?`)) {
     router.delete(`/rooms/${props.roomId}/members/${props.member.id}`, {
-      only: ['errors', 'members'],
+      only: [...globalOnly, 'members'],
       preserveScroll: true,
       onSuccess() {
         emit('remove', props.member!)

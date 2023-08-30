@@ -2,6 +2,7 @@
 
 namespace App\PasswordlessLogin\Http\Controllers;
 
+use App\Facades\Flash;
 use Illuminate\Http\Request;
 
 class PasswordlessDestroyUserController extends PasswordlessController
@@ -16,6 +17,8 @@ class PasswordlessDestroyUserController extends PasswordlessController
 
         $user->delete();
 
-        return redirect('/');
+        Flash::success('帳號刪除成功');
+
+        return redirect()->route('login');
     }
 }

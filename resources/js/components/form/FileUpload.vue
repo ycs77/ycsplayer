@@ -40,7 +40,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  success: []
+  success: [message: string]
 }>()
 
 const browseFilesBtnRef = ref(null!) as Ref<HTMLInputElement>
@@ -77,11 +77,13 @@ onMounted(() => {
     progressPer.value = Math.floor(file.progress(false) * 100)
   })
 
-  resumable.on('fileSuccess', (file: any, res: string) => {
+  resumable.on('fileSuccess', (file: any, response: string) => {
     setTimeout(() => {
       progress.value = false
 
-      emit('success')
+      const data = JSON.parse(response) as { success: string }
+
+      emit('success', data.success)
     }, 500)
   })
 
