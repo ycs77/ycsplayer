@@ -15,17 +15,23 @@
       </div>
     </div>
 
-    <div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      <div v-for="room in rooms.data" :key="room.id">
-        <Link :href="`/rooms/${room.id}`" class="block p-4 bg-blue-950/50 hover:bg-blue-900/50 rounded-lg transition-colors lg:p-6">
-          <HeroiconsPlayCircle v-if="room.type === RoomType.Video" class="w-9 h-9 text-blue-500/50 mb-2" />
-          <HeroiconsMusicalNote v-else-if="room.type === RoomType.Audio" class="w-9 h-9 text-blue-500/50 mb-2" />
-          <h5 class="text-xl">{{ room.name }}</h5>
-        </Link>
+    <div class="mt-4">
+      <div v-if="rooms.data.length" class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <div v-for="room in rooms.data" :key="room.id">
+          <Link :href="`/rooms/${room.id}`" class="block p-4 bg-blue-950/50 hover:bg-blue-900/50 rounded-lg transition-colors lg:p-6">
+            <HeroiconsPlayCircle v-if="room.type === RoomType.Video" class="w-9 h-9 text-blue-500/50 mb-2" />
+            <HeroiconsMusicalNote v-else-if="room.type === RoomType.Audio" class="w-9 h-9 text-blue-500/50 mb-2" />
+            <h5 class="text-xl">{{ room.name }}</h5>
+          </Link>
+        </div>
       </div>
-    </div>
 
-    <Pagination :collection="rooms" />
+      <div v-else class="py-32 flex justify-center items-center bg-blue-950/50 text-center text-lg rounded-lg">
+        現在還沒有加入房間喔！<br>趕快加入跟朋友一起看影片、聽音樂吧~
+      </div>
+
+      <Pagination :collection="rooms" />
+    </div>
 
     <RoomFormModal v-if="can.create" v-model="showRoomModal" />
   </div>
