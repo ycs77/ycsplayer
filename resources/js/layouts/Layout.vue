@@ -39,7 +39,7 @@
           }"
         >
           <template v-if="!user">
-            <Link href="/login" class="btn btn-primary btn-sm w-full ee md:w-auto">
+            <Link href="/login" class="btn btn-primary btn-sm w-full sm:btn-base md:w-auto">
               登入
             </Link>
 

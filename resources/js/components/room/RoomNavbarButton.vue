@@ -1,7 +1,7 @@
 <template>
   <component
     :is="is"
-    class="inline-flex justify-center items-center h-8 gap-x-0.5 text-white text-sm rounded-full transition-colors whitespace-nowrap lg:h-10"
+    class="inline-flex justify-center items-center h-8 gap-x-0.5 text-white text-sm rounded-full transition-colors whitespace-nowrap select-none lg:h-10"
     :class="{
       'px-2 lg:px-3': onlyIcon,
       'px-3.5 lg:px-4': !onlyIcon,

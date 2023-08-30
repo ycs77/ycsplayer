@@ -45,7 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/user/settings', [UserController::class, 'show'])->name('user.settings');
     Route::get('/user/destroy/confirm', [UserController::class, 'confirmDestroy'])
-        ->middleware(config('ycsplayer.password_less') ? null : 'password.confirm')
+        ->middleware(config('ycsplayer.password_less') ? [] : ['password.confirm'])
         ->name('user.destroy.confirm');
     Route::delete('/user', [UserController::class, 'destroy'])->name('user.destroy');
 });

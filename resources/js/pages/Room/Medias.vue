@@ -52,6 +52,10 @@
                 </div>
               </li>
             </ul>
+
+            <div v-else class="py-32 flex justify-center items-center text-center text-lg rounded-lg">
+              在這裡可以上傳影片/音樂一起來觀賞~
+            </div>
           </div>
         </Card>
       </div>

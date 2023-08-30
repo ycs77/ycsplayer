@@ -15,17 +15,17 @@ class DummySeeder extends Seeder
      */
     public function run(): void
     {
-        if (! User::where('email', 'yangchenshin77@gmail.com')->exists()) {
+        if (! User::where('email', 'admin@example.com')->exists()) {
             /** @var \App\Models\User */
             $user = User::factory()->create([
-                'name' => 'Lucas Yang',
-                'email' => 'yangchenshin77@gmail.com',
+                'name' => 'Admin',
+                'email' => 'admin@example.com',
             ]);
 
             $user->assignRole('admin');
         } else {
             /** @var \App\Models\User */
-            $user = User::where('email', 'yangchenshin77@gmail.com')->first();
+            $user = User::where('email', 'admin@example.com')->first();
         }
 
         if (! User::where('email', 'soyo@example.com')->exists()) {
