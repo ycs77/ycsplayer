@@ -6,7 +6,7 @@
       </div>
 
       <div class="mt-6">
-        <button v-if="!waiting" type="submit" class="btn btn-primary">
+        <button v-if="!waiting" type="submit" class="btn btn-primary" :disabled="form.processing">
           發送登入 E-mail
         </button>
         <button v-else type="submit" class="btn btn-primary" disabled>

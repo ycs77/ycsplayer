@@ -6,10 +6,14 @@
         <TextInput v-if="!passwordLess" label="密碼" id="password" type="password" v-model="form.password" />
       </div>
 
-      <div class="mt-6">
-        <button type="submit" class="btn btn-primary">
+      <div class="mt-6 flex justify-between items-center">
+        <button type="submit" class="btn btn-primary" :disabled="form.processing">
           {{ passwordLess ? '下一步' : '登入' }}
         </button>
+
+        <Link v-if="!passwordLess" href="/forgot-password" class="underline">
+          忘記密碼?
+        </Link>
       </div>
     </form>
   </CardAuth>

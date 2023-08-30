@@ -11,7 +11,7 @@
       </div>
 
       <div class="mt-6">
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-primary" :disabled="form.processing">
           註冊
         </button>
       </div>

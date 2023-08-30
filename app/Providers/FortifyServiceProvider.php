@@ -40,6 +40,19 @@ class FortifyServiceProvider extends ServiceProvider
             ]);
         });
 
+        Fortify::requestPasswordResetLinkView(function () {
+            return Inertia::render('Auth/ForgotPassword', [
+                'status' => session('status'),
+            ]);
+        });
+
+        Fortify::resetPasswordView(function (Request $request) {
+            return Inertia::render('Auth/ResetPassword', [
+                'email' => $request->input('email'),
+                'token' => $request->route('token'),
+            ]);
+        });
+
         Fortify::registerView(function () {
             return Inertia::render('Auth/Register', [
                 'passwordLess' => config('ycsplayer.password_less'),
