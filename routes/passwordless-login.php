@@ -1,10 +1,13 @@
 <?php
 
+use App\PasswordlessLogin\Http\Controllers\PasswordlessDestroyUserController;
+use App\PasswordlessLogin\Http\Controllers\PasswordlessDestroyUserLinkController;
 use App\PasswordlessLogin\Http\Controllers\PasswordlessLoginController;
 use App\PasswordlessLogin\Http\Controllers\PasswordlessLoginLinkController;
 use Grosv\LaravelPasswordlessLogin\HandleAuthenticatedUsers;
 use Illuminate\Support\Facades\Route;
 
+// Password-less login
 Route::get('/login/send', [PasswordlessLoginLinkController::class, 'index'])->name('passwordless-login.send');
 Route::post('/login/send', [PasswordlessLoginLinkController::class, 'store']);
 
@@ -14,3 +17,13 @@ Route::get(
 )
     ->middleware(config('laravel-passwordless-login.middleware', [HandleAuthenticatedUsers::class]))
     ->name(config('laravel-passwordless-login.login_route_name'));
+
+// Password-less destroy user
+Route::get('/user/destroy', [PasswordlessDestroyUserLinkController::class, 'index'])
+    ->name('passwordless-destroy-user.send');
+
+Route::get(
+    '/passwordless-destroy-user/{uid}',
+    [PasswordlessDestroyUserController::class, 'destroy']
+)
+    ->name('passwordless-destroy-user.destroy');

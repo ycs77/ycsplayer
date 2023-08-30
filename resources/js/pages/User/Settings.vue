@@ -52,7 +52,7 @@ function submit() {
 
 function deleteAccount() {
   if (confirm('確定要刪除此帳號嗎? 此操作將無法恢復')) {
-    router.delete('/user')
+    router.get('/user/destroy/confirm')
   }
 }
 </script>
