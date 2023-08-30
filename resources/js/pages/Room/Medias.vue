@@ -12,14 +12,16 @@
       />
 
       <div class="col-span-12">
-        <div class="max-w-screen-md mx-auto bg-blue-950/50 p-4 rounded-lg lg:p-6">
-          <div class="flex justify-between items-center">
-            <h1 class="text-2xl">媒體檔案</h1>
-            <button type="button" class="btn btn-primary" @click="showRoomUploadMediaModal = true">
-              <HeroiconsCloudArrowUp class="w-4 h-4 mr-1" />
-              上傳檔案
-            </button>
-          </div>
+        <Card>
+          <template #title>
+            <div class="flex justify-between items-center">
+              <h1 class="text-2xl">媒體檔案</h1>
+              <button type="button" class="btn btn-primary" @click="showRoomUploadMediaModal = true">
+                <HeroiconsCloudArrowUp class="w-4 h-4 mr-1" />
+                上傳檔案
+              </button>
+            </div>
+          </template>
 
           <div class="mt-6">
             <ul v-if="medias.length" class="space-y-6">
@@ -50,7 +52,7 @@
               </li>
             </ul>
           </div>
-        </div>
+        </Card>
       </div>
 
     </div>

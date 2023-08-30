@@ -12,25 +12,21 @@
       />
 
       <div class="col-span-12">
-        <div class="max-w-screen-md mx-auto bg-blue-950/50 p-4 rounded-lg lg:p-6">
-          <h1 class="text-2xl">房間設定</h1>
+        <Card title="房間設定">
+          <form @submit.prevent="form.post(`/rooms/${room.id}/settings`)">
+            <div class="space-y-6">
+              <RoomTypeSelectField id="type" v-model="form.type" />
+              <SwitchField label="自動播放" id="auto_play" v-model="form.auto_play" />
+              <SwitchField label="播放完畢自動刪除" id="auto_remove" v-model="form.auto_remove" />
+            </div>
 
-          <div class="mt-6">
-            <form @submit.prevent="form.post(`/rooms/${room.id}/settings`)">
-              <div class="space-y-6">
-                <RoomTypeSelectField id="type" v-model="form.type" />
-                <SwitchField label="自動播放" id="auto_play" v-model="form.auto_play" />
-                <SwitchField label="播放完畢自動刪除" id="auto_remove" v-model="form.auto_remove" />
-              </div>
-
-              <div class="mt-6">
-                <button type="submit" class="btn btn-primary">
-                  保存
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+            <div class="mt-6">
+              <button type="submit" class="btn btn-primary">
+                保存
+              </button>
+            </div>
+          </form>
+        </Card>
       </div>
 
     </div>

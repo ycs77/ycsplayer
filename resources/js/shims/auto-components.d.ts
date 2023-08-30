@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Badge: typeof import('./../components/general/Badge.vue')['default']
+    Card: typeof import('./../components/cards/Card.vue')['default']
     CardAuth: typeof import('./../components/cards/CardAuth.vue')['default']
     Field: typeof import('./../components/form/Field.vue')['default']
     FileUpload: typeof import('./../components/form/FileUpload.vue')['default']
