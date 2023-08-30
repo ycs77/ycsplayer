@@ -3,7 +3,7 @@ import { createInertiaApp, Link } from '@inertiajs/vue3'
 import InertiaTitle from 'inertia-title/vue3'
 import { vfmPlugin as VueFinalModal } from 'vue-final-modal'
 import Toast from 'vue-toastification'
-import { Notification } from '@/modules/notification'
+import { Notification } from '@/plugins/notification'
 import Layout from './layouts/Layout.vue'
 import '../css/app.css'
 
