@@ -48,6 +48,6 @@ class RoomPolicy
 
     public function delete(User $user, Room $room): bool
     {
-        return false;
+        return $user->can("rooms.{$room->id}.delete");
     }
 }

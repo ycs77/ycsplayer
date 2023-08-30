@@ -19,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/rooms/{room}/members', [RoomController::class, 'members'])->name('rooms.members');
     Route::get('/rooms/{room}/settings', [RoomController::class, 'edit'])->name('rooms.edit');
     Route::post('/rooms/{room}/settings', [RoomController::class, 'update'])->name('rooms.update');
+    Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('rooms.destroy');
 
     Route::post('/rooms/{room}/playlist', [RoomPlaylistController::class, 'store'])->name('rooms.playlist.store');
     Route::post('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'click'])->name('rooms.playlist.click');

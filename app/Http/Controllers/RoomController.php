@@ -108,7 +108,7 @@ class RoomController extends Controller
             'room' => fn () => RoomPresenter::make($room),
             'can' => fn () => [
                 'uploadMedias' => $user->can('uploadMedias', $room),
-                'settings' => $user->can('settings', $room),
+                'delete' => $user->can('delete', $room),
             ],
         ]);
     }
@@ -124,5 +124,14 @@ class RoomController extends Controller
         ]);
 
         $room->update($request->only('type', 'auto_play', 'auto_remove'));
+    }
+
+    public function destroy(Room $room)
+    {
+        $this->authorize('delete', $room);
+
+        $room->delete();
+
+        return redirect()->route('rooms.index');
     }
 }

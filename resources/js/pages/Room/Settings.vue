@@ -8,7 +8,7 @@
         class="col-span-12"
         :room-id="room.id"
         :can-upload-medias="can.uploadMedias"
-        :can-settings="can.settings"
+        can-settings
       />
 
       <div class="col-span-12">
@@ -27,6 +27,12 @@
             </div>
           </form>
         </Card>
+
+        <Card v-if="can.delete" title="刪除房間" class="mt-8">
+          <button type="button" class="btn btn-danger" @click="deleteRoom">
+            刪除房間
+          </button>
+        </Card>
       </div>
 
     </div>
@@ -41,7 +47,7 @@ const props = defineProps<{
   room: Required<Room>
   can: {
     uploadMedias: boolean
-    settings: boolean
+    delete: boolean
   }
 }>()
 
@@ -50,4 +56,10 @@ const form = useForm({
   auto_play: props.room.auto_play,
   auto_remove: props.room.auto_remove,
 })
+
+function deleteRoom() {
+  if (props.can.delete && confirm(`確定要刪除房間「${props.room.name}」?`)) {
+    router.delete(`/rooms/${props.room.id}`)
+  }
+}
 </script>

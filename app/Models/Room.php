@@ -62,6 +62,7 @@ class Room extends Model implements HasMedia
             "rooms.{$this->id}.remove-member",
             "rooms.{$this->id}.upload-medias",
             "rooms.{$this->id}.settings",
+            "rooms.{$this->id}.delete",
         ];
     }
 
@@ -77,6 +78,7 @@ class Room extends Model implements HasMedia
                 "rooms.{$this->id}.remove-member",
                 "rooms.{$this->id}.upload-medias",
                 "rooms.{$this->id}.settings",
+                "rooms.{$this->id}.delete",
             ],
         ];
     }
