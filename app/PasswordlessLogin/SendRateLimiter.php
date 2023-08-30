@@ -10,7 +10,7 @@ class SendRateLimiter extends LoginRateLimiter
 {
     public function tooManyAttempts(Request $request)
     {
-        return $this->limiter->tooManyAttempts($this->throttleKey($request), 0);
+        return $this->limiter->tooManyAttempts($this->throttleKey($request), 1);
     }
 
     public function clearOnSent(Request $request, string $username)

@@ -14,7 +14,7 @@
               發送登入 E-mail
             </button>
             <button v-else type="submit" class="btn btn-primary" disabled>
-              等候 {{ seconds }} 秒可重新發送
+              等候 {{ currentSeconds }} 秒可重新發送
             </button>
           </div>
         </form>
@@ -26,27 +26,16 @@
 <script setup lang="ts">
 const props = defineProps<{
   email: string
-  seconds: number | null
+  seconds: number
 }>()
-
-const seconds = ref(0)
-const waiting = computed(() => seconds.value > 0)
 
 function submit() {
   router.post('/login/send', {
     email: props.email,
+  }, {
+    preserveState: false,
   })
 }
 
-watch(() => props.seconds, () => {
-  if (typeof props.seconds === 'number') {
-    seconds.value = props.seconds
-    const timer = setInterval(() => {
-      seconds.value--
-      if (seconds.value <= 0) {
-        clearInterval(timer)
-      }
-    }, 1000)
-  }
-}, { immediate: true })
+const { currentSeconds, waiting } = useButtonWaiting(() => props.seconds)
 </script>

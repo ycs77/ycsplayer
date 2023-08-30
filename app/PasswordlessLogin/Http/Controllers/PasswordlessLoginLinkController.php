@@ -32,7 +32,7 @@ class PasswordlessLoginLinkController extends Controller
         if ($email = $this->session->get('email')) {
             return Inertia::render('Auth/SendPasswordlessLogin', [
                 'email' => $email,
-                'seconds' => $this->session->get('seconds'),
+                'seconds' => $this->session->get('seconds', 0),
             ]);
         }
 
