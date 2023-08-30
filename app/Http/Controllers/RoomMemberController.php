@@ -22,12 +22,12 @@ class RoomMemberController extends Controller
         $user = Auth::user();
 
         if ($room->isMember($user)) {
-            return redirect()->to('/rooms/'.$room->hash_id);
+            return redirect('/rooms/'.$room->hash_id);
         }
 
         $room->join($user);
 
-        return redirect()->to('/rooms/'.$room->hash_id);
+        return redirect('/rooms/'.$room->hash_id);
     }
 
     public function generateJoinLink(Room $room)

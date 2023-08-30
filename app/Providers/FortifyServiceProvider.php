@@ -22,7 +22,8 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
+        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse
+        {
             public function toResponse($request)
             {
                 return Inertia::location('/');
@@ -64,6 +65,10 @@ class FortifyServiceProvider extends ServiceProvider
             return Inertia::render('Auth/VerifyEmail', [
                 'status' => session('status'),
             ]);
+        });
+
+        Fortify::confirmPasswordView(function () {
+            return Inertia::render('Auth/ConfirmPassword');
         });
 
         if (config('ycsplayer.password_less')) {
