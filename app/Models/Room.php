@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -133,9 +134,13 @@ class Room extends Model implements HasMedia
             })
             ->prepend(tap($user, fn (user $user) => $user->online = true))
             ->map(function (User $member) {
-                /** @var array */
-                $roleNames = $member->getRoleNames();
-                $member->role_name = preg_replace('/rooms\.\d+\./', '', $roleNames[0]);
+                /** @var string */
+                $role = $member->getRoleNames()
+                    ->first(fn (string $role) => Str::startsWith($role, "rooms.{$this->id}."));
+
+                if ($role) {
+                    $member->role_name = Str::after($role, "rooms.{$this->id}.");
+                }
 
                 return $member;
             });
