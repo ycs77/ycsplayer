@@ -179,6 +179,8 @@ class Room extends Model implements HasMedia
                 ->map(fn (string $permissionName) => [
                     'name' => $permissionName,
                     'guard_name' => 'web',
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ])
                 ->toArray()
         );
