@@ -19,6 +19,7 @@ class RedirectToSendPasswordlessLoginEmailRoute
 
     public function handle(Request $request, callable $next)
     {
+        /** @var \App\Models\User|null */
         $user = $this->users->retrieveByCredentials($request->only(Fortify::email()));
 
         if ($user) {

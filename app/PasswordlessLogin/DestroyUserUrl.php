@@ -6,6 +6,7 @@ use Grosv\LaravelPasswordlessLogin\UserClass;
 use Illuminate\Contracts\Auth\Authenticatable as User;
 use Illuminate\Support\Facades\URL;
 
+/** @phpstan-consistent-constructor */
 class DestroyUserUrl
 {
     protected User $user;

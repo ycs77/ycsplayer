@@ -5,6 +5,9 @@ namespace App\Presenters;
 use AdditionApps\FlexiblePresenter\FlexiblePresenter;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+/**
+ * @mixin \Spatie\MediaLibrary\MediaCollections\Models\Media
+ */
 class MediaPresenter extends FlexiblePresenter
 {
     public function values(): array

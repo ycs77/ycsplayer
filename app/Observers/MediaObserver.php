@@ -15,7 +15,7 @@ class MediaObserver
      */
     public function deleted(Media $media): void
     {
-        /** @var \App\Models\PlaylistItem */
+        /** @var \App\Models\PlaylistItem|null */
         $item = PlaylistItem::where('url', $media->getUrl())->first();
 
         if ($item) {

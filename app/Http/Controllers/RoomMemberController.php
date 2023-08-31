@@ -38,7 +38,7 @@ class RoomMemberController extends Controller
         $this->authorize('inviteMember', $room);
 
         $joinLink = URL::temporarySignedRoute(
-            'rooms.join', now()->addDay(), $room
+            'rooms.join', now()->addDay(), ['room' => $room->hash_id]
         );
 
         return response()->json([

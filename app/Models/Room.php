@@ -132,7 +132,7 @@ class Room extends Model implements HasMedia
 
                 return $member;
             })
-            ->prepend(tap($user, fn (user $user) => $user->online = true))
+            ->prepend(tap($user, fn (User $user) => $user->online = true))
             ->map(function (User $member) {
                 /** @var string */
                 $role = $member->getRoleNames()
@@ -216,12 +216,14 @@ class Room extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
+        /** @phpstan-ignore-next-line */
         $this->addMediaConversion('thumb')
             ->width(120)
             ->height(68)
             ->extractVideoFrameAtSecond(30)
             ->nonQueued();
 
+        /** @phpstan-ignore-next-line */
         $this->addMediaConversion('preview')
             ->width(1280)
             ->height(720)

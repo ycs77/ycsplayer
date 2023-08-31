@@ -47,7 +47,7 @@ trait HasHashId
     /**
      * Interact with the hash id.
      */
-    public function hashId(): Attribute
+    protected function hashId(): Attribute
     {
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => $this->hashids()->encode($attributes['id']),
@@ -64,11 +64,11 @@ trait HasHashId
     public function resolveRouteBinding($value, $field = null)
     {
         if (is_null($value) || is_numeric($value)) {
-            return;
+            return null;
         }
 
         if (! $value = current($this->hashids()->decode($value))) {
-            return;
+            return null;
         }
 
         return parent::resolveRouteBinding($value, $field);

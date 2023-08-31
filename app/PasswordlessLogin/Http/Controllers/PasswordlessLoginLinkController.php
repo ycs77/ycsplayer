@@ -54,7 +54,7 @@ class PasswordlessLoginLinkController extends Controller
             ])->status(Response::HTTP_TOO_MANY_REQUESTS);
         }
 
-        /** @var \App\Models\User */
+        /** @var \App\Models\User|null */
         $user = $this->users->retrieveByCredentials($request->only(Fortify::email()));
 
         if ($user) {

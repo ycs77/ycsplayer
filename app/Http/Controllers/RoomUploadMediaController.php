@@ -61,6 +61,7 @@ class RoomUploadMediaController extends Controller
             return ['success' => '檔案上傳成功'];
         }
 
+        /** @var \App\ChunkUpload\UploadHandler */
         $handler = $fileReceived->handler();
 
         return [

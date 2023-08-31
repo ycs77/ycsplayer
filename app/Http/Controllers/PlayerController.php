@@ -179,8 +179,9 @@ class PlayerController extends Controller
         return response()->noContent();
     }
 
-    protected function getRoomId(Request $request)
+    protected function getRoomId(Request $request): string
     {
+        /** @var string */
         $roomId = $request->input('room_id');
 
         if ($this->playerGuard->check($roomId)) {
@@ -188,22 +189,15 @@ class PlayerController extends Controller
         }
 
         if (! $intRoomId = current(Hashids::connection('rooms')->decode($roomId))) {
-            abort(403);
+            abort(404);
         }
 
-        if (! $room = Room::findOrFail($intRoomId, ['id'])) {
-            abort(403);
-        }
+        $room = Room::findOrFail($intRoomId, ['id']);
 
-        /** @var \App\Models\User */
-        $user = $request->user();
+        $this->authorize('view', $room);
 
-        if ($user->can('view', $room)) {
-            $this->playerGuard->authorized($roomId);
+        $this->playerGuard->authorized($roomId);
 
-            return $roomId;
-        }
-
-        abort(403);
+        return $roomId;
     }
 }

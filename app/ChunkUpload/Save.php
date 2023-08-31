@@ -11,7 +11,10 @@ class Save extends ParallelSave
     {
         parent::buildFullFileFromChunks();
 
+        /** @var \App\ChunkUpload\UploadHandler */
+        $handler = $this->handler();
+
         // 清除臨時檔名快取
-        Cache::delete($this->handler()->getFileNameCacheKey());
+        Cache::delete($handler->getFileNameCacheKey());
     }
 }

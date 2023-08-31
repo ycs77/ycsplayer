@@ -3,8 +3,10 @@
 namespace App\Presenters;
 
 use AdditionApps\FlexiblePresenter\FlexiblePresenter;
-use App\Models\Room;
 
+/**
+ * @mixin \App\Models\Room
+ */
 class RoomPresenter extends FlexiblePresenter
 {
     public function values(): array
@@ -20,8 +22,8 @@ class RoomPresenter extends FlexiblePresenter
 
     public function presetShow()
     {
-        return $this->with(fn (Room $room) => [
-            'note' => $room->note,
+        return $this->with(fn () => [
+            'note' => $this->note,
         ]);
     }
 }

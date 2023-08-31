@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasHashId;
+use App\Models\Concerns\HasRoomMemberAttributes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,6 +33,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory;
     use HasHashId;
     use HasRoles;
+    use HasRoomMemberAttributes;
     use Notifiable;
 
     /**
@@ -66,7 +68,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password' => 'hashed',
     ];
 
-    public function avatarUrl(): Attribute
+    protected function avatarUrl(): Attribute
     {
         return Attribute::make(function () {
             if ($this->avatar) {

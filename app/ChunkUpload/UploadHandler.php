@@ -46,6 +46,8 @@ class UploadHandler extends ResumableJSUploadHandler
     public function getFileNameCacheKey(): string
     {
         if (! $this->fileNameCacheKey) {
+            $array = [];
+
             // ensure that the chunk name is for unique for the client session
             $useSession = $this->config->chunkUseSessionForName();
             $useBrowser = $this->config->chunkUseBrowserInfoForName();
