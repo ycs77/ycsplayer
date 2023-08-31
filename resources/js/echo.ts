@@ -9,7 +9,7 @@ const Echo = new LaravelEcho({
   forceTLS: true,
 })
 
-axios.interceptors.request.use((config) => {
+axios.interceptors.request.use(config => {
   if (Echo.socketId()) {
     config.headers['X-Socket-Id'] = Echo.socketId()
   }

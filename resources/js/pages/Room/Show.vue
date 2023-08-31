@@ -1,8 +1,6 @@
 <template>
   <div class="px-[--layout-gap] pb-[calc(var(--layout-gap)+3rem)] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg]">
-
     <div class="grid grid-cols-12 gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
-
       <!-- 導覽列 -->
       <RoomNavbar
         class="col-span-12"
@@ -71,7 +69,6 @@
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- 手機底部播放清單按鈕層 -->
@@ -126,17 +123,16 @@
       :submitting="playlistItemForm.processing"
       @submit="submitPlaylistItemForm"
     />
-
   </div>
 </template>
 
 <script setup lang="ts">
 import type { InertiaForm } from '@inertiajs/vue3'
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock'
+import { clearAllBodyScrollLocks, disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 import { Echo, safeListenFn } from '@/echo'
 import Player from '@/components/player/Player.vue'
 import Playlist from '@/components/player/Playlist.vue'
-import { RoomType, PlayerType, type Room, type RoomMember, type PlaylistItem, type PlaylistItemForm, type Media } from '@/types'
+import { type Media, PlayerType, type PlaylistItem, type PlaylistItemForm, type Room, type RoomMember, RoomType } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>

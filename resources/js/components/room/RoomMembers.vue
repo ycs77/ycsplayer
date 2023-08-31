@@ -3,7 +3,7 @@
     <h5>房間成員</h5>
 
     <ul class="mt-2 space-y-1 -mx-2 -mb-2">
-      <li v-for="member in members">
+      <li v-for="member in members" :key="member.id">
         <button
           type="button"
           class="p-2 w-full flex items-center hover:bg-blue-900/50 rounded-lg transition-colors"
@@ -12,7 +12,7 @@
           <img
             class="w-8 h-8 rounded-full mr-2"
             :src="member.avatar ?? '/images/user.svg'"
-          />
+          >
 
           <div class="flex items-center h-10">
             <div>

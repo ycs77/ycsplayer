@@ -1,7 +1,7 @@
 <template>
   <component
-    v-if="value"
     :is="as"
+    v-if="value"
     class="block text-gray-400 text-sm border border-transparent select-none"
   >
     {{ value }}
@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue'
+import type { PropType } from 'vue'
 
 defineProps({
   as: {

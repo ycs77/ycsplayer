@@ -11,7 +11,7 @@
       v-if="item.thumbnail"
       :src="item.thumbnail"
       class="w-28 max-w-[40%] shrink-0 rounded-lg aspect-video object-cover mr-2"
-    />
+    >
     <MediaPlaceholder v-else class="w-28 max-w-[40%] shrink-0 mr-2" />
 
     <div class="grow break-all">{{ item.title }}</div>

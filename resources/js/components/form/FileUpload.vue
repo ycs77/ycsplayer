@@ -27,8 +27,6 @@
 <script setup lang="ts">
 import Resumable from 'resumablejs'
 
-defineOptions({ inheritAttrs: false })
-
 const props = defineProps<{
   target: string
   csrfToken: string
@@ -43,6 +41,8 @@ const emit = defineEmits<{
   success: [message: string]
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 const browseFilesBtnRef = ref(null!) as Ref<HTMLInputElement>
 const progress = ref(false)
 const progressPer = ref(0)
@@ -54,7 +54,7 @@ onMounted(() => {
     query: { _token: props.csrfToken },
     fileType: props.fileType,
     headers: {
-      'Accept': 'application/json',
+      Accept: 'application/json',
     },
     chunkSize: 5 * 1024 * 1024, // 5M
     testChunks: false,

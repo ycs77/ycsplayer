@@ -2,7 +2,7 @@
   <CardAuth title="確認密碼">
     <form @submit.prevent="form.post('/user/confirm-password')">
       <div class="space-y-6">
-        <TextInput label="密碼" id="password" type="password" v-model="form.password" />
+        <TextInput id="password" v-model="form.password" label="密碼" type="password" />
       </div>
 
       <div class="mt-6 flex justify-between items-center">

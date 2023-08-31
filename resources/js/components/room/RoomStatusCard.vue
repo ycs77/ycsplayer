@@ -15,8 +15,8 @@
       <div>
         <TextareaInput
           v-if="form.editing"
-          ref="inputRef"
           id="note"
+          ref="inputRef"
           v-model="form.note"
           rows="3"
           class="mt-2"
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { Room } from '@/types'
+import type { Room } from '@/types'
 
 const props = defineProps<{
   room: Room

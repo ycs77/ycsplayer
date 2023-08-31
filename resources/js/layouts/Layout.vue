@@ -34,8 +34,8 @@
         <div
           class="w-full flex-col justify-center items-center gap-4 mt-4 mb-2 md:flex md:flex-row md:mt-0 md:mb-0 md:w-auto"
           :class="{
-            'flex': showMenu,
-            'hidden': !showMenu,
+            flex: showMenu,
+            hidden: !showMenu,
           }"
         >
           <template v-if="!user">
@@ -49,7 +49,7 @@
           </template>
 
           <template v-else>
-            <Menu as="div" class="w-full relative" v-slot="{ close }">
+            <Menu v-slot="{ close }" as="div" class="w-full relative">
               <Float
                 placement="bottom-end"
                 :offset="8"
@@ -59,7 +59,7 @@
                   <img
                     class="w-8 h-8 rounded-full mr-2"
                     :src="user.avatar ?? '/images/user.svg'"
-                  />
+                  >
                   <div class="tracking-wide whitespace-nowrap truncate min-w-0">
                     {{ user.name }}
                   </div>

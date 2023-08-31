@@ -3,12 +3,12 @@
     <Card title="帳號設定">
       <form @submit.prevent="submit">
         <div class="space-y-6">
-          <TextInput label="姓名" id="name" v-model="form.name" />
-          <TextInput label="E-mail" id="email" type="email" v-model="form.email" />
+          <TextInput id="name" v-model="form.name" label="姓名" />
+          <TextInput id="email" v-model="form.email" label="E-mail" type="email" />
           <template v-if="!passwordLess">
-            <TextInput label="舊密碼" id="current_password" type="password" v-model="form.current_password" />
-            <TextInput label="新密碼" id="password" type="password" v-model="form.password" />
-            <TextInput label="確認密碼" id="password_confirmation" type="password" v-model="form.password_confirmation" />
+            <TextInput id="current_password" v-model="form.current_password" label="舊密碼" type="password" />
+            <TextInput id="password" v-model="form.password" label="新密碼" type="password" />
+            <TextInput id="password_confirmation" v-model="form.password_confirmation" label="確認密碼" type="password" />
           </template>
         </div>
 

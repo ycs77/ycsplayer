@@ -2,11 +2,11 @@
   <CardAuth title="註冊">
     <form @submit.prevent="form.post('/register')">
       <div class="space-y-6">
-        <TextInput label="姓名" id="name" v-model="form.name" />
-        <TextInput label="E-mail" id="email" type="email" v-model="form.email" />
+        <TextInput id="name" v-model="form.name" label="姓名" />
+        <TextInput id="email" v-model="form.email" label="E-mail" type="email" />
         <template v-if="!passwordLess">
-          <TextInput label="密碼" id="password" type="password" v-model="form.password" />
-          <TextInput label="確認密碼" id="password_confirmation" type="password" v-model="form.password_confirmation" />
+          <TextInput id="password" v-model="form.password" label="密碼" type="password" />
+          <TextInput id="password_confirmation" v-model="form.password_confirmation" label="確認密碼" type="password" />
         </template>
       </div>
 

@@ -1,8 +1,8 @@
 <template>
   <Modal
+    v-model="show"
     title="新增播放項目"
     max-width-class="max-w-[560px] w-full"
-    v-model="show"
   >
     <template #icon>
       <HeroiconsPlayCircle class="mr-1" />
@@ -11,13 +11,13 @@
     <div class="mt-4 relative">
       <form @submit.prevent="submit">
         <div class="space-y-6">
-          <MediaTypeSelectField label="媒體類型" id="type" v-model="form.type" />
-          <TextInput label="標題" id="title" v-model="form.title" />
+          <MediaTypeSelectField id="type" v-model="form.type" label="媒體類型" />
+          <TextInput id="title" v-model="form.title" label="標題" />
           <TextInput
             v-if="form.type === PlayerType.YouTube"
-            label="網址"
             id="url"
             v-model="form.url"
+            label="網址"
           />
           <Field
             v-if="form.type === PlayerType.Video || form.type === PlayerType.Audio"
@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import type { InertiaForm } from '@inertiajs/vue3'
-import { PlayerType, type Media, type PlaylistItemForm } from '@/types'
+import { type Media, PlayerType, type PlaylistItemForm } from '@/types'
 
 const props = defineProps<{
   form: InertiaForm<PlaylistItemForm>
@@ -89,7 +89,7 @@ watch(() => form.type, () => {
 watch(media, () => {
   if (media.value) {
     form.media_id = media.value.id
-    if ((form.type === PlayerType.Video || form.type === PlayerType.Audio) && ! form.title) {
+    if ((form.type === PlayerType.Video || form.type === PlayerType.Audio) && !form.title) {
       form.title = media.value.title.replace(/\.\w+$/, '')
     }
   } else {
@@ -98,7 +98,7 @@ watch(media, () => {
 })
 
 watch(show, () => {
-  if (show.value && ! form.media_id && media.value) {
+  if (show.value && !form.media_id && media.value) {
     media.value = null
   }
 })

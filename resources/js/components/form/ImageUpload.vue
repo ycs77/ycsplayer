@@ -69,8 +69,6 @@
 </template>
 
 <script setup lang="ts">
-defineOptions({ inheritAttrs: false })
-
 withDefaults(defineProps<{
   id?: string
   defaultImage?: string | null
@@ -94,6 +92,8 @@ withDefaults(defineProps<{
 defineEmits<{
   remove: []
 }>()
+
+defineOptions({ inheritAttrs: false })
 
 const modelFile = defineModel<File | null>()
 const fileEl = ref<HTMLInputElement>(null!)

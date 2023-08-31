@@ -2,8 +2,8 @@
   <CardAuth title="重設密碼">
     <form @submit.prevent="submit">
       <div class="space-y-6">
-        <TextInput label="新密碼" id="password" type="password" v-model="form.password" />
-        <TextInput label="確認密碼" id="password_confirmation" type="password" v-model="form.password_confirmation" />
+        <TextInput id="password" v-model="form.password" label="新密碼" type="password" />
+        <TextInput id="password_confirmation" v-model="form.password_confirmation" label="確認密碼" type="password" />
       </div>
 
       <div class="mt-6">
@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  email: string,
-  token: string,
+  email: string
+  token: string
 }>()
 
 const form = useForm({

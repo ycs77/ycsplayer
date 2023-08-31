@@ -8,11 +8,11 @@
     <RadioGroup v-model="selectedRoomType">
       <div class="grid grid-cols-2 gap-2">
         <RadioGroupOption
-          as="template"
           v-for="roomType in roomTypes"
           :key="roomType.value"
-          :value="roomType"
           v-slot="{ checked }"
+          as="template"
+          :value="roomType"
         >
           <div
             class="relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none"
@@ -55,8 +55,6 @@
 <script setup lang="ts">
 import { RoomType } from '@/types'
 
-defineOptions({ inheritAttrs: false })
-
 const props = defineProps<{
   modelValue: RoomType
   id?: string
@@ -68,6 +66,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: RoomType]
 }>()
+
+defineOptions({ inheritAttrs: false })
 
 const roomTypes = [
   {

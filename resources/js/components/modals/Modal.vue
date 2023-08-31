@@ -1,5 +1,6 @@
 <template>
   <VueFinalModal
+    v-slot="{ params, close }"
     classes="px-4 py-10 overflow-y-auto lg:py-20"
     overlay-class="!bg-black/30"
     :content-class="[
@@ -8,7 +9,6 @@
     ]"
     focus-trap
     :click-to-close="false"
-    v-slot="{ params, close }"
     v-bind="$attrs"
   >
     <div class="bg-blue-950/50 p-6 rounded-md">
@@ -21,11 +21,11 @@
       </div>
 
       <div>
-        <slot :params="params" :close="close"></slot>
+        <slot :params="params" :close="close" />
       </div>
 
       <div>
-        <slot name="footer" :params="params" :close="close"></slot>
+        <slot name="footer" :params="params" :close="close" />
       </div>
 
       <button
@@ -42,8 +42,6 @@
 </template>
 
 <script setup lang="ts">
-defineOptions({ inheritAttrs: false })
-
 withDefaults(defineProps<{
   title?: string
   maxWidthClass?: string
@@ -54,4 +52,6 @@ withDefaults(defineProps<{
   closeButton: true,
   closeButtonDisabled: false,
 })
+
+defineOptions({ inheritAttrs: false })
 </script>

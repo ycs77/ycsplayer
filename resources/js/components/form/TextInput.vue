@@ -7,20 +7,18 @@
     :class="wrapperClass"
   >
     <input
-      :type="type"
       :id="id"
-      :name="id"
       ref="el"
-      class="form-input"
       v-model="modelValue"
+      :type="type"
+      :name="id"
+      class="form-input"
       v-bind="$attrs"
-    />
+    >
   </Field>
 </template>
 
 <script setup lang="ts">
-defineOptions({ inheritAttrs: false })
-
 const props = withDefaults(defineProps<{
   id?: string
   type?: string
@@ -34,6 +32,8 @@ const props = withDefaults(defineProps<{
   type: 'text',
   horizontal: false,
 })
+
+defineOptions({ inheritAttrs: false })
 
 const modelValue = defineModel<string | number>()
 

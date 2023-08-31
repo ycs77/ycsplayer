@@ -1,8 +1,8 @@
 <template>
   <Modal
+    v-model="show"
     title="創建房間"
     max-width-class="max-w-[560px] w-full"
-    v-model="show"
   >
     <template #icon>
       <HeroiconsPlayCircle class="mr-1" />
@@ -11,10 +11,10 @@
     <div class="mt-4 relative">
       <form @submit.prevent="form.post('/rooms')">
         <div class="space-y-6">
-          <TextInput label="房間名稱" id="name" v-model="form.name" />
+          <TextInput id="name" v-model="form.name" label="房間名稱" />
           <RoomTypeSelectField id="type" v-model="form.type" />
-          <SwitchField label="自動播放" id="auto_play" v-model="form.auto_play" />
-          <SwitchField label="播放完畢自動刪除" id="auto_remove" v-model="form.auto_remove" />
+          <SwitchField id="auto_play" v-model="form.auto_play" label="自動播放" />
+          <SwitchField id="auto_remove" v-model="form.auto_remove" label="播放完畢自動刪除" />
         </div>
 
         <div class="mt-6">

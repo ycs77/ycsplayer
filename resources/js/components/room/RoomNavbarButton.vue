@@ -14,12 +14,12 @@
 </template>
 
 <script setup lang="ts">
-const attrs = useAttrs()
-
 defineProps<{
   onlyIcon?: boolean
   active?: boolean
 }>()
+
+const attrs = useAttrs()
 
 const is = computed(() => {
   if (attrs.href) return 'Link'

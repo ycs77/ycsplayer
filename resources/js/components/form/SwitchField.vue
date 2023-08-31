@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { SwitchLabel, SwitchDescription } from '@headlessui/vue'
+import { SwitchDescription, SwitchLabel } from '@headlessui/vue'
 
 defineProps<{
   label?: string

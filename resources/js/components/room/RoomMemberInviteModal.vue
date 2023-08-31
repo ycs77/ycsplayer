@@ -1,8 +1,8 @@
 <template>
   <Modal
+    v-model="show"
     title="邀請房間成員"
     max-width-class="max-w-[560px] w-full"
-    v-model="show"
   >
     <template #icon>
       <HeroiconsUser class="mr-1" />
@@ -34,7 +34,7 @@
             <template v-if="copied">
               <HeroiconsClipboardDocumentCheck class="mr-1" />複製成功
             </template>
-            <template v-else class="flex items-center">
+            <template v-else>
               <HeroiconsClipboard class="mr-1" />點選複製
             </template>
           </button>
@@ -47,13 +47,13 @@
         <form @submit.prevent="inviteMember">
           <h5 class="text-lg">直接輸入 E-mail 邀請加入</h5>
           <div class="mt-4">
-            <TextInput label="E-mail" id="email" v-model="form.email" autocomplete="off" />
+            <TextInput id="email" v-model="form.email" label="E-mail" autocomplete="off" />
           </div>
           <div v-if="member" class="mt-4 flex items-center">
             <img
               class="w-8 h-8 rounded-full mr-2"
               :src="member.avatar ?? '/images/user.svg'"
-            />
+            >
             <div class="flex items-center">
               <div class="tracking-wide">{{ member.name }}</div>
             </div>

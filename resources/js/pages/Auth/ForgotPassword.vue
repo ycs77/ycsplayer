@@ -2,7 +2,7 @@
   <CardAuth title="忘記密碼">
     <form @submit.prevent="form.post('/forgot-password')">
       <div class="space-y-6">
-        <TextInput label="E-mail" id="email" type="email" v-model="form.email" />
+        <TextInput id="email" v-model="form.email" label="E-mail" type="email" />
       </div>
 
       <div

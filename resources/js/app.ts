@@ -1,10 +1,10 @@
 import { createApp, h } from 'vue'
-import { createInertiaApp, Link } from '@inertiajs/vue3'
+import { Link, createInertiaApp } from '@inertiajs/vue3'
 import InertiaTitle from 'inertia-title/vue3'
 import { vfmPlugin as VueFinalModal } from 'vue-final-modal'
 import Toast from 'vue-toastification'
-import { Notification } from '@/plugins/notification'
 import Layout from './layouts/Layout.vue'
+import { Notification } from '@/plugins/notification'
 import '../css/app.css'
 
 declare global {
@@ -18,7 +18,7 @@ window.HELP_IMPROVE_VIDEOJS = false
 createInertiaApp({
   resolve: async name => {
     const pages = import.meta.glob('./pages/**/*.vue')
-    let page = await pages[`./pages/${name}.vue`]() as any
+    const page = await pages[`./pages/${name}.vue`]() as any
     page.default.layout = page.default.layout
       ? Array.isArray(page.default.layout)
         ? page.default.layout

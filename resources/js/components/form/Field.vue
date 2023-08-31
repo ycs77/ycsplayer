@@ -1,12 +1,12 @@
 <template>
-  <div :class="{ 'flex': horizontal }">
+  <div :class="{ flex: horizontal }">
     <FormLabel
       :value="label"
       :class="horizontal ? 'w-[70px] py-1' : 'mb-2'"
     />
 
     <div :class="{ 'flex-1': horizontal }">
-      <slot></slot>
+      <slot />
     </div>
 
     <FormError :message="error" />

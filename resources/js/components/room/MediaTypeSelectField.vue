@@ -8,11 +8,11 @@
     <RadioGroup v-model="selectedPlayerType">
       <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
         <RadioGroupOption
-          as="template"
           v-for="playerType in playerTypes"
           :key="playerType.value"
-          :value="playerType"
           v-slot="{ checked }"
+          as="template"
+          :value="playerType"
         >
           <div
             class="relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none"
@@ -60,8 +60,6 @@
 <script setup lang="ts">
 import { PlayerType } from '@/types'
 
-defineOptions({ inheritAttrs: false })
-
 const props = defineProps<{
   modelValue: PlayerType
   id?: string
@@ -73,6 +71,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: PlayerType]
 }>()
+
+defineOptions({ inheritAttrs: false })
 
 const playerTypes = [
   {

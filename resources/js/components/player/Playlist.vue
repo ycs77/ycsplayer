@@ -3,8 +3,8 @@
     <ul>
       <li v-for="item in playlistItems" :key="item.id" ref="itemRefs">
         <PlaylistItem
-          v-if="item.id === currentPlaying?.id"
           is="div"
+          v-if="item.id === currentPlaying?.id"
           active
           :item="item"
           :can-remove="canRemove"
@@ -12,8 +12,8 @@
         />
 
         <PlaylistItem
-          v-else
           is="button"
+          v-else
           type="button"
           :item="item"
           :can-remove="canRemove"
@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import type { PlaylistItem } from '@/types'
+import { type PlaylistItem } from '@/types'
 
 const props = withDefaults(defineProps<{
   currentPlaying: PlaylistItem | null

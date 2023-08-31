@@ -8,18 +8,16 @@
   >
     <textarea
       :id="id"
-      :name="id"
       ref="el"
-      class="form-textarea"
       v-model="modelValue"
+      :name="id"
+      class="form-textarea"
       v-bind="$attrs"
-    ></textarea>
+    />
   </Field>
 </template>
 
 <script setup lang="ts">
-defineOptions({ inheritAttrs: false })
-
 const props = withDefaults(defineProps<{
   id?: string
   label?: string
@@ -31,6 +29,8 @@ const props = withDefaults(defineProps<{
 }>(), {
   horizontal: false,
 })
+
+defineOptions({ inheritAttrs: false })
 
 const modelValue = defineModel<string>()
 

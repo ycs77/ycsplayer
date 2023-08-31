@@ -1,8 +1,6 @@
 <template>
   <div class="px-[--layout-gap] pb-[--layout-gap] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg]">
-
     <div class="grid grid-cols-12 gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
-
       <!-- 導覽列 -->
       <RoomNavbar
         class="col-span-12"
@@ -35,7 +33,7 @@
                     v-if="media.thumbnail"
                     :src="media.thumbnail"
                     class="w-28 shrink-0 rounded-lg aspect-video object-cover mr-2 sm:w-32"
-                  />
+                  >
                   <MediaPlaceholder v-else class="w-28 shrink-0 mr-2 sm:w-32" />
 
                   <div class="grow break-all">{{ media.name }}</div>
@@ -59,7 +57,6 @@
           </div>
         </Card>
       </div>
-
     </div>
 
     <RoomUploadMediaModal
@@ -68,13 +65,12 @@
       :csrf-token="csrfToken"
       @uploaded="uploaded"
     />
-
   </div>
 </template>
 
 <script setup lang="ts">
 import { useToast } from 'vue-toastification'
-import type { Room, Media } from '@/types'
+import type { Media, Room } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>

@@ -1,8 +1,6 @@
 <template>
   <div class="px-[--layout-gap] pb-[--layout-gap] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg]">
-
     <div class="grid grid-cols-12 gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
-
       <!-- 導覽列 -->
       <RoomNavbar
         class="col-span-12"
@@ -16,8 +14,8 @@
           <form @submit.prevent="form.post(`/rooms/${room.id}/settings`)">
             <div class="space-y-6">
               <RoomTypeSelectField id="type" v-model="form.type" />
-              <SwitchField label="自動播放" id="auto_play" v-model="form.auto_play" />
-              <SwitchField label="播放完畢自動刪除" id="auto_remove" v-model="form.auto_remove" />
+              <SwitchField id="auto_play" v-model="form.auto_play" label="自動播放" />
+              <SwitchField id="auto_remove" v-model="form.auto_remove" label="播放完畢自動刪除" />
             </div>
 
             <div class="mt-6">
@@ -34,9 +32,7 @@
           </button>
         </Card>
       </div>
-
     </div>
-
   </div>
 </template>
 

@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { throttle, debounce } from 'lodash-es'
+import { debounce, throttle } from 'lodash-es'
 import { promiseTimeout } from '@vueuse/core'
 import 'video.js/dist/video-js.css'
 import '@videojs/themes/dist/forest/index.css'
@@ -21,7 +21,7 @@ import type PlayToggle from 'video.js/dist/types/control-bar/play-toggle'
 import type SeekBar from 'video.js/dist/types/control-bar/progress-control/seek-bar'
 import 'videojs-youtube'
 import { Echo } from '@/echo'
-import { PlayerType, type PlayerPlayedEvent, type PlayerPausedEvent, type PlayerSeekedEvent } from '@/types'
+import { type PlayerPausedEvent, type PlayerPlayedEvent, type PlayerSeekedEvent, PlayerType } from '@/types'
 
 const props = defineProps<{
   roomId: string
@@ -140,9 +140,9 @@ onMounted(() => {
   videojs.log.level('off')
 
   const sourceType =
-    props.type === PlayerType.YouTube ? 'video/youtube' :
-    props.type === PlayerType.Audio ? 'audio/mpeg' :
-    'video/mp4'
+    props.type === PlayerType.YouTube ? 'video/youtube'
+      : props.type === PlayerType.Audio ? 'audio/mpeg'
+        : 'video/mp4'
 
   const videojsOptions = {
     controls: true,
@@ -171,7 +171,7 @@ onMounted(() => {
   player.on('timeupdate', timeUpdate)
   player.on('ended', end)
 
-  player.ready(function() {
+  player.ready(() => {
     if (!player) return
 
     if (props.autoplay) {
@@ -217,7 +217,7 @@ onMounted(() => {
       play(() => {
         if (this.player_)
           super.handleClick(event)
-          emit('play', currentTime())
+        emit('play', currentTime())
       }, false)
     }
   }
@@ -247,6 +247,7 @@ onMounted(() => {
     onSekked_: () => void
 
     constructor(player: Player, options?: any) {
+      // eslint-disable-next-line constructor-super
       super(player, options)
 
       this.onSekked_ = debounce(seeked, 100)
@@ -268,7 +269,7 @@ onMounted(() => {
   const seekBar = progressControl.getChild('SeekBar')!
   const playProgressBar = seekBar.getChild('PlayProgressBar')!
   const timeTooltip = playProgressBar.getChild('TimeTooltip')
-  const hasTimeTooltip = typeof timeTooltip !== undefined
+  const hasTimeTooltip = typeof timeTooltip !== 'undefined'
 
   player.removeChild(posterImage)
   player.removeChild(bigPlayButton)

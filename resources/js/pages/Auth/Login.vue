@@ -2,8 +2,8 @@
   <CardAuth title="登入">
     <form @submit.prevent="form.post('/login')">
       <div class="space-y-6">
-        <TextInput label="E-mail" id="email" type="email" v-model="form.email" />
-        <TextInput v-if="!passwordLess" label="密碼" id="password" type="password" v-model="form.password" />
+        <TextInput id="email" v-model="form.email" label="E-mail" type="email" />
+        <TextInput v-if="!passwordLess" id="password" v-model="form.password" label="密碼" type="password" />
       </div>
 
       <div class="mt-6 flex justify-between items-center">

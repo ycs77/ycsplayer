@@ -1,8 +1,8 @@
 <template>
   <Modal
+    v-model="show"
     title="房間成員"
     max-width-class="max-w-[560px] w-full"
-    v-model="show"
   >
     <template #icon>
       <HeroiconsUser class="mr-1" />
@@ -14,7 +14,7 @@
           <img
             :src="member.avatar ?? '/images/user.svg'"
             class="w-20 h-20 rounded-full"
-          />
+          >
         </div>
 
         <h4 class="mt-3 text-2xl text-center">{{ member.name }}</h4>
