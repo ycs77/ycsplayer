@@ -27,5 +27,6 @@ const props = defineProps<{
 const form = useForm({
   email: '',
   password: props.passwordLess ? '__skip__' : '',
+  remember: true,
 })
 </script>
