@@ -15,7 +15,7 @@ class UserController extends Controller
     {
         return Inertia::render('User/Settings', [
             'passwordLess' => config('ycsplayer.password_less'),
-        ]);
+        ])->title('帳號設定');
     }
 
     public function confirmDestroy()

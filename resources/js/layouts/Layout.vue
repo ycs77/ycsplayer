@@ -75,7 +75,7 @@
                       class="block w-full px-4 py-1.5 text-left text-sm rounded-md transition-colors"
                       :class="{ 'bg-blue-900 text-white': active }"
                     >
-                      點播房間
+                      房間列表
                     </Link>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">

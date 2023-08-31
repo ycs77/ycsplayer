@@ -29,7 +29,7 @@ class RoomController extends Controller
             'can' => fn () => [
                 'create' => $user->can('create', Room::class),
             ],
-        ]);
+        ])->title('房間列表');
     }
 
     public function store(Request $request)
@@ -78,7 +78,7 @@ class RoomController extends Controller
                 'uploadMedias' => $user->can('uploadMedias', $room),
                 'settings' => $user->can('settings', $room),
             ],
-        ]);
+        ])->title($room->name);
     }
 
     public function members(Room $room)
@@ -97,7 +97,7 @@ class RoomController extends Controller
                 'uploadMedias' => $user->can('uploadMedias', $room),
                 'settings' => $user->can('settings', $room),
             ],
-        ]);
+        ])->title($room->name);
     }
 
     public function edit(Room $room)
@@ -113,7 +113,7 @@ class RoomController extends Controller
                 'uploadMedias' => $user->can('uploadMedias', $room),
                 'delete' => $user->can('delete', $room),
             ],
-        ]);
+        ])->title($room->name);
     }
 
     public function update(Request $request, Room $room)

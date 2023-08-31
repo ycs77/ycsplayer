@@ -39,36 +39,37 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(function () {
             return Inertia::render('Auth/Login', [
                 'passwordLess' => config('ycsplayer.password_less'),
-            ]);
+            ])->title('登入');
         });
 
         Fortify::requestPasswordResetLinkView(function () {
             return Inertia::render('Auth/ForgotPassword', [
                 'status' => session('status'),
-            ]);
+            ])->title('忘記密碼');
         });
 
         Fortify::resetPasswordView(function (Request $request) {
             return Inertia::render('Auth/ResetPassword', [
                 'email' => $request->input('email'),
                 'token' => $request->route('token'),
-            ]);
+            ])->title('重設密碼');
         });
 
         Fortify::registerView(function () {
             return Inertia::render('Auth/Register', [
                 'passwordLess' => config('ycsplayer.password_less'),
-            ]);
+            ])->title('註冊');
         });
 
         Fortify::verifyEmailView(function () {
             return Inertia::render('Auth/VerifyEmail', [
                 'status' => session('status'),
-            ]);
+            ])->title('E-mail 驗證');
         });
 
         Fortify::confirmPasswordView(function () {
-            return Inertia::render('Auth/ConfirmPassword');
+            return Inertia::render('Auth/ConfirmPassword')
+                ->title('確認密碼');
         });
 
         if (config('ycsplayer.password_less')) {

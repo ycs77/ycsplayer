@@ -27,7 +27,7 @@ class RoomMediaController extends Controller
                 'uploadMedias' => $user->can('uploadMedias', $room),
                 'settings' => $user->can('settings', $room),
             ],
-        ]);
+        ])->title($room->name);
     }
 
     public function destroy(Room $room, Media $media)
