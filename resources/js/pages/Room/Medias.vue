@@ -65,7 +65,7 @@
     <RoomUploadMediaModal
       v-model="showRoomUploadMediaModal"
       :room-id="room.id"
-      :csrf-token="csrf_token"
+      :csrf-token="csrfToken"
       @uploaded="uploaded"
     />
 
@@ -78,7 +78,7 @@ import type { Room, Media } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>
-  csrf_token: string
+  csrfToken: string
   medias: Media[]
   can: {
     uploadMedias: boolean
@@ -92,7 +92,7 @@ const toast = useToast()
 
 function uploaded(message: string) {
   router.get(usePage().url, {}, {
-    only: [...globalOnly, 'csrf_token', 'medias'],
+    only: [...globalOnly, 'csrfToken', 'medias'],
     preserveScroll: true,
     onSuccess() {
       toast.success(message)
@@ -103,7 +103,7 @@ function uploaded(message: string) {
 function deleteMedia(media: Media) {
   if (confirm(`確定要刪除 ${media.name} 嗎?`)) {
     router.delete(`/rooms/${props.room.id}/medias/${media.id}`, {
-      only: [...globalOnly, 'csrf_token', 'medias'],
+      only: [...globalOnly, 'csrfToken', 'medias'],
       preserveScroll: true,
     })
   }

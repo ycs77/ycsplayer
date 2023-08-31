@@ -21,7 +21,7 @@ class RoomMediaController extends Controller
 
         return Inertia::render('Room/Medias', [
             'room' => fn () => RoomPresenter::make($room),
-            'csrf_token' => fn () => csrf_token(),
+            'csrfToken' => fn () => csrf_token(),
             'medias' => fn () => MediaPresenter::collection($room->getMedia()),
             'can' => fn () => [
                 'uploadMedias' => $user->can('uploadMedias', $room),

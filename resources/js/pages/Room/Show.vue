@@ -143,8 +143,8 @@ import { RoomType, PlayerType, type Room, type RoomMember, type PlaylistItem, ty
 
 const props = defineProps<{
   room: Required<Room>
-  current_playing: PlaylistItem | null
-  playlist_items: PlaylistItem[]
+  currentPlaying: PlaylistItem | null
+  playlistItems: PlaylistItem[]
   medias: Media[]
   members: RoomMember[]
   can: {
@@ -162,9 +162,6 @@ const mobilePlaylist = ref(null) as Ref<InstanceType<typeof Playlist> | null>
 const showAddPlaylistItemModal = ref(false)
 const showMobilePlaylist = ref(false)
 
-const currentPlaying = toRef(props, 'current_playing')
-const playlistItems = toRef(props, 'playlist_items')
-
 const playlistItemForm = useForm({
   type: PlayerType.Video,
   title: '',
@@ -174,14 +171,14 @@ const playlistItemForm = useForm({
 
 function ended() {
   router.post(`/rooms/${props.room.id}/next`, {
-    current_playing_id: currentPlaying.value?.id,
+    current_playing_id: props.currentPlaying?.id,
   })
 }
 
 function selectPlaylistItem(item: PlaylistItem) {
   showMobilePlaylist.value = false
   router.post(`/rooms/${props.room.id}/playlist/${item.id}`, {}, {
-    only: ['current_playing', 'playlist_items'],
+    only: ['currentPlaying', 'playlistItems'],
     preserveScroll: true,
   })
 }
@@ -189,10 +186,10 @@ function selectPlaylistItem(item: PlaylistItem) {
 function removePlaylistItem(item: PlaylistItem) {
   router.delete(`/rooms/${props.room.id}/playlist/${item.id}`, {
     only: [
-      ...(item.id === currentPlaying.value?.id
-        ? ['current_playing']
+      ...(item.id === props.currentPlaying?.id
+        ? ['currentPlaying']
         : []),
-      'playlist_items',
+      'playlistItems',
     ],
     preserveScroll: true,
   })
@@ -216,7 +213,7 @@ function submitPlaylistItemForm(form: PlaylistItemForm) {
   playlistItemForm.media_id = form.media_id
 
   playlistItemForm.post(`/rooms/${props.room.id}/playlist`, {
-    only: [...globalOnly, 'playlist_items'],
+    only: [...globalOnly, 'playlistItems'],
     preserveScroll: true,
     onSuccess() {
       showAddPlaylistItemModal.value = false
@@ -227,21 +224,21 @@ function submitPlaylistItemForm(form: PlaylistItemForm) {
 // 監聽當有其他人新增播放項目時的事件
 function onPlayerlistItemAdded() {
   router.reload({
-    only: ['playlist_items'],
+    only: ['playlistItems'],
   })
 }
 
 // 監聽當有其他人切換播放影片時的事件
 function onPlayerlistItemClicked() {
   router.reload({
-    only: ['current_playing', 'playlist_items'],
+    only: ['currentPlaying', 'playlistItems'],
   })
 }
 
 // 監聽當有其他人刪除待播影片(不是當前播放)時的事件
 function onPlayerlistItemRemoved() {
   router.reload({
-    only: ['playlist_items'],
+    only: ['playlistItems'],
   })
 }
 
@@ -266,7 +263,7 @@ watch(showMobilePlaylist, showMobilePlaylist => {
 watch(player, (v, ov, invalidate) => {
   // 如果當前有播放影片，就要擋掉第一次監聽，因為 `player` 還沒載入。
   // 但如果是沒有播放，就可以註冊，因為要監聽其他人切換影片時的事件。
-  if (currentPlaying.value && !player.value) return
+  if (props.currentPlaying && !player.value) return
 
   Echo.join(`player.${props.room.id}`)
     .listen('PlayerPlayed', safeListenFn(player.value?.onPlayerPlayed))

@@ -65,8 +65,8 @@ class RoomController extends Controller
 
         return Inertia::render('Room/Show', [
             'room' => fn () => RoomPresenter::make($room)->preset('show'),
-            'current_playing' => fn () => PlaylistItemPresenter::make($room->current_playing)->preset('play'),
-            'playlist_items' => fn () => PlaylistItemPresenter::collection($room->playlist_items),
+            'currentPlaying' => fn () => PlaylistItemPresenter::make($room->current_playing)->preset('play'),
+            'playlistItems' => fn () => PlaylistItemPresenter::collection($room->playlist_items),
             'medias' => fn () => $user->can('operatePlaylistItem', $room)
                 ? MediaPresenter::collection($room->getMedia())
                 : [],
