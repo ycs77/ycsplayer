@@ -17,6 +17,6 @@ class Flash extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return \App\Inertia\Flash::class;
+        return \App\Flash\Flash::class;
     }
 }

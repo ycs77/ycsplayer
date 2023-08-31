@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Inertia;
+namespace App\Flash;
 
 use Illuminate\Session\Store as Session;
 
