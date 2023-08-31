@@ -6,6 +6,8 @@
     "build": "vite build",
     "lint": "eslint --ext .ts,.vue resources/js",
     "lint:fix": "eslint --ext .ts,.vue resources/js --fix",
+    "type-check": "vue-tsc --noEmit",
+    "code-check": "./vendor/bin/pint && ./vendor/bin/phpstan analyse --memory-limit=512M && npm run lint && npm run type-check",
     "postinstall": "patch-package"
   },
   "dependencies": {
