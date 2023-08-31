@@ -58,13 +58,7 @@
 cp .env.example .env
 ```
 
-必須要設定的有 DB、Mail、Pusher，注意 broadcast driver 一定要設 `pusher`。`YCSPLAYER` 開頭的變數可以參考 [ycsPlayer 相關環境變數](#ycsplayer-相關環境變數) 來設定，關於 Pusher 可以[參考 設定 Pusher](#設定-pusher)：
-
-```ini
-YCSPLAYER_OPEN_ROOM_CREATION=false
-YCSPLAYER_LOG_ENABLED=false
-YCSPLAYER_PASSWORD_LESS=false
-```
+必須要設定的有 DB、Mail、Pusher，broadcast driver 一定要設 `pusher`。`YCSPLAYER` 開頭的變數可以參考 [ycsPlayer 相關環境變數](#ycsplayer-相關環境變數) 來設定，關於 Pusher 可以[參考 設定 Pusher](#設定-pusher)。
 
 然後執行指令來安裝依賴套件和編譯：
 
@@ -127,15 +121,7 @@ VITE_DEV_SERVER_CERT=/etc/ssl/certs/localhost.crt
 cp .env.example .env
 ```
 
-必須要設定的有 DB、Mail、Pusher，`APP_URL` 如果有用 HTTPS 記得網址要加上，注意 broadcast driver 一定要設 `pusher`。`YCSPLAYER` 開頭的變數可以參考 [ycsPlayer 相關環境變數](#ycsplayer-相關環境變數) 來設定，關於 Pusher 可以[參考 設定 Pusher](#設定-pusher)：
-
-```ini
-APP_URL=https://[your-domain]
-
-YCSPLAYER_OPEN_ROOM_CREATION=false
-YCSPLAYER_LOG_ENABLED=false
-YCSPLAYER_PASSWORD_LESS=false
-```
+必須要設定的有 DB、Mail、Pusher，如果有用 HTTPS 記得 `APP_URL` 網址要加上，broadcast driver 一定要設 `pusher`。`YCSPLAYER` 開頭的變數可以參考 [ycsPlayer 相關環境變數](#ycsplayer-相關環境變數) 來設定，關於 Pusher 可以[參考 設定 Pusher](#設定-pusher)。
 
 然後執行指令來安裝依賴套件和編譯：
 
