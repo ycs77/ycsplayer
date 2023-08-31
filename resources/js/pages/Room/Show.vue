@@ -106,7 +106,7 @@
       <div class="bg-gray-950 grow-0">
         <button
           type="button"
-          class="w-full p-2 flex justify-between items-center bg-blue-950/50 border-t border-blue-900/50"
+          class="w-full p-3 flex justify-between items-center bg-blue-950/50 border-t border-blue-900/50"
           @click="showMobilePlaylist = !showMobilePlaylist"
         >
           <div class="flex items-center">
