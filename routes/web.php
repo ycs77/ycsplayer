@@ -16,6 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
     Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
     Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
+    Route::put('/rooms/{room}/note', [RoomController::class, 'note'])->name('rooms.note.update');
     Route::get('/rooms/{room}/members', [RoomController::class, 'members'])->name('rooms.members');
     Route::get('/rooms/{room}/settings', [RoomController::class, 'edit'])->name('rooms.edit');
     Route::post('/rooms/{room}/settings', [RoomController::class, 'update'])->name('rooms.update');

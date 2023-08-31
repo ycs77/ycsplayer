@@ -46,7 +46,7 @@ class DummySeeder extends Seeder
             'type' => RoomType::Video,
             'auto_play' => false,
             'auto_remove' => false,
-            'note' => '備註文字欄...',
+            'note' => '記事本文字欄...',
         ]);
         if ($videoRoom->doesntMember($user)) {
             $videoRoom->join($user, 'admin');
@@ -114,7 +114,7 @@ class DummySeeder extends Seeder
             'type' => RoomType::Audio,
             'auto_play' => false,
             'auto_remove' => false,
-            'note' => '備註文字欄...',
+            'note' => '記事本文字欄...',
         ]);
         if ($audioRoom->doesntMember($user)) {
             $audioRoom->join($user, 'admin');

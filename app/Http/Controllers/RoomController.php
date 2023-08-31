@@ -81,6 +81,21 @@ class RoomController extends Controller
         ])->title($room->name);
     }
 
+    public function note(Request $request, Room $room)
+    {
+        $this->authorize('view', $room);
+
+        $request->validate([
+            'note' => ['nullable', 'string', 'max:500'],
+        ], [], [
+            'note' => '記事本',
+        ]);
+
+        $room->update($request->only('note'));
+
+        Flash::success('記事本更新成功');
+    }
+
     public function members(Room $room)
     {
         $this->authorize('view', $room);
