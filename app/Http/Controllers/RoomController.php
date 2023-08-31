@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RoomType;
+use App\Events\RoomNoteUpdated;
 use App\Facades\Flash;
 use App\Models\Room;
 use App\Presenters\MediaPresenter;
@@ -92,6 +93,8 @@ class RoomController extends Controller
         ]);
 
         $room->update($request->only('note'));
+
+        RoomNoteUpdated::broadcast($room->hash_id)->toOthers();
 
         Flash::success('記事本更新成功');
     }
