@@ -9,7 +9,7 @@ export function Notification() {
 
   function notify() {
     // 過濾掉重複呼叫
-    if (timer) return
+    if (typeof timer === 'number') return
     timer = setTimeout(() => {
       timer = undefined
     }, 100)
