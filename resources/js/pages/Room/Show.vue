@@ -41,7 +41,15 @@
           <div>
             <!-- 房間資訊卡 -->
             <div class="bg-blue-950/50 p-4 rounded-lg">
-              <h1 class="text-xl">{{ room.name }}</h1>
+              <div class="flex items-center">
+                <RoomLogo
+                  :room="room"
+                  class="w-6 h-6 mr-1"
+                  color-class="text-blue-400/50"
+                />
+                <h1 class="text-xl">{{ room.name }}</h1>
+              </div>
+
               <div class="mt-2 text-blue-300 space-y-2">
                 <div>成員數：{{ members.length }}人</div>
                 <div v-if="room.note">{{ room.note }}</div>

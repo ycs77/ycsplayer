@@ -63,6 +63,7 @@ declare module '@vue/runtime-core' {
     RadioGroupOption: typeof import('@headlessui/vue')['RadioGroupOption']
     RoomAddPlaylistItemModal: typeof import('./../components/room/RoomAddPlaylistItemModal.vue')['default']
     RoomFormModal: typeof import('./../components/room/RoomFormModal.vue')['default']
+    RoomLogo: typeof import('./../components/room/RoomLogo.vue')['default']
     RoomMemberInviteModal: typeof import('./../components/room/RoomMemberInviteModal.vue')['default']
     RoomMemberModal: typeof import('./../components/room/RoomMemberModal.vue')['default']
     RoomMembers: typeof import('./../components/room/RoomMembers.vue')['default']
