@@ -27,7 +27,7 @@
 - [大綱](#大綱)
 - [依賴](#依賴)
 - [本地安裝](#本地安裝)
-  - [Laravel Homestead 環境相關](#laravel-homestead-環境相關)
+  - [Laravel Homestead 開發環境相關](#laravel-homestead-開發環境相關)
 - [部署專案](#部署專案)
 - [依賴軟體/服務](#依賴軟體服務)
   - [設定 Pusher](#設定-pusher)
@@ -72,22 +72,38 @@ YCSPLAYER_PASSWORD_LESS=false
 composer install
 php artisan key:generate
 php artisan migrate
+php artisan db:seed
 php artisan storage:link
 yarn
 yarn check
+yarn build
 ```
 
 還有轉影片的部分有依賴到 FFMpeg，要確保執行環境裡有存在 (執行 `ffmpeg -version` 確認)，要安裝可以參考[安裝 FFMpeg](#安裝-ffmpeg)。
 
-啟動 Vite dev server：
+裝完之後預設會是沒有用戶和房間，如果你想要馬上試用的話，可以執行指令來新增測試用戶和房間：
+
+```bash
+php artisan db:seed DummySeeder
+```
+
+然後就會有兩個用戶和房間，管理員的帳密是：
+
+* E-mail：admin@example.com
+* 密碼：password
+
+普通用戶的帳密是：
+
+* E-mail：soyo@example.com
+* 密碼：password
+
+### Laravel Homestead 開發環境相關
+
+啟動 Vite dev server 記得要轉發 Homestead 的 5173 port：
 
 ```bash
 yarn dev
 ```
-
-### Laravel Homestead 環境相關
-
-記得要轉發 Homestead 的 5173 port。
 
 以及在 Homestead 裡要建立 Vite 開發伺服器的 HTTPS 證書的話，可以執行創建指令：
 
@@ -127,6 +143,7 @@ YCSPLAYER_PASSWORD_LESS=false
 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 php artisan key:generate
 php artisan migrate --force
+php artisan db:seed
 php artisan storage:link
 php artisan optimize
 php artisan view:cache
