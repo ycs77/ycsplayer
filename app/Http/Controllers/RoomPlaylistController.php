@@ -31,7 +31,7 @@ class RoomPlaylistController extends Controller
 
         $request->validate([
             'type' => [new Enum(PlayerType::class)],
-            'title' => ['required', 'string', 'max:20'],
+            'title' => ['required', 'string', 'max:50'],
             'url' => [
                 'required_if:type,youtube',
                 'nullable',

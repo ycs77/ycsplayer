@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('playlist_items', function (Blueprint $table) {
             $table->id();
             $table->char('type', 10);
-            $table->string('title', 20);
+            $table->string('title');
             $table->string('url');
             $table->string('thumbnail')->nullable();
             $table->string('preview')->nullable();
