@@ -16,7 +16,7 @@
 
     <div class="grow break-all">{{ item.title }}</div>
 
-    <div v-if="canRemove" class="shrink-0 whitespace-nowrap">
+    <div v-if="canRemove" class="ml-1 shrink-0 whitespace-nowrap">
       <button
         type="button"
         class="btn btn-sm btn-danger"
