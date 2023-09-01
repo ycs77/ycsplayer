@@ -261,7 +261,7 @@ watch(showMobilePlaylist, showMobilePlaylist => {
   }
 })
 
-watch(player, (v, ov, invalidate) => {
+watch(player, (v, ov, onInvalidate) => {
   // 如果當前有播放影片，就要擋掉第一次監聽，因為 `player` 還沒載入。
   // 但如果是沒有播放，就可以註冊，因為要監聽其他人切換影片時的事件。
   if (props.currentPlaying && !player.value) return
@@ -276,7 +276,7 @@ watch(player, (v, ov, invalidate) => {
     .listen('RoomNoteUpdated', onNoteUpdated)
     .listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)
 
-  invalidate(() => {
+  onInvalidate(() => {
     Echo.leave(`player.${props.room.id}`)
   })
 }, { immediate: true })
