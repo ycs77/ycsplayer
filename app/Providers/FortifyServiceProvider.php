@@ -12,7 +12,12 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Laravel\Fortify\Actions\AttemptToAuthenticate;
+use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
+use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
+use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\LogoutResponse;
+use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -72,11 +77,18 @@ class FortifyServiceProvider extends ServiceProvider
                 ->title('確認密碼');
         });
 
-        if (config('ycsplayer.password_less')) {
-            Fortify::authenticateThrough(function (Request $request) {
+        Fortify::authenticateThrough(function (Request $request) {
+            if (config('ycsplayer.password_less')) {
                 return [RedirectToSendPasswordlessLoginEmailRoute::class];
-            });
-        }
+            }
+
+            return [
+                config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
+                Features::enabled(Features::twoFactorAuthentication()) ? RedirectIfTwoFactorAuthenticatable::class : null,
+                AttemptToAuthenticate::class,
+                PrepareAuthenticatedSession::class,
+            ];
+        });
 
         Fortify::createUsersUsing(CreateNewUser::class);
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);

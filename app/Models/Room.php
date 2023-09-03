@@ -216,6 +216,10 @@ class Room extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
+        if (config('app.env') === 'testing') {
+            return;
+        }
+
         /** @phpstan-ignore-next-line */
         $this->addMediaConversion('thumb')
             ->width(120)

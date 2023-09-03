@@ -10,7 +10,7 @@ use App\Http\Controllers\RoomUploadMediaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'landing-page')->middleware('guest');
+Route::view('/', 'landing-page')->middleware('guest')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
@@ -27,7 +27,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'destroy'])->name('rooms.playlist.destroy');
     Route::post('/rooms/{room}/next', [RoomPlaylistController::class, 'next'])->name('rooms.playlist.next');
 
-    Route::get('/rooms/{room}/join', [RoomMemberController::class, 'join'])->name('rooms.join');
+    Route::get('/rooms/{room}/join', [RoomMemberController::class, 'join'])
+        ->middleware('signed')->name('rooms.join');
     Route::post('/rooms/{room}/generate-join-link', [RoomMemberController::class, 'generateJoinLink'])->name('rooms.generate-join-link');
     Route::post('/rooms/{room}/invite', [RoomMemberController::class, 'invite'])->name('rooms.invite');
     Route::post('/rooms/{room}/search-member', [RoomMemberController::class, 'searchMember'])->name('rooms.member.search');
@@ -45,9 +46,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/player/end', [PlayerController::class, 'end'])->name('player.end');
 
     Route::get('/user/settings', [UserController::class, 'show'])->name('user.settings');
-    Route::get('/user/destroy/confirm', [UserController::class, 'confirmDestroy'])
-        ->middleware(config('ycsplayer.password_less') ? [] : ['password.confirm'])
-        ->name('user.destroy.confirm');
+    Route::get('/user/destroy/confirm', [UserController::class, 'confirmDestroy'])->name('user.destroy.confirm');
     Route::delete('/user', [UserController::class, 'destroy'])->name('user.destroy');
 });
 

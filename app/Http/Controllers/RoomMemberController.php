@@ -13,12 +13,8 @@ use Illuminate\Validation\ValidationException;
 
 class RoomMemberController extends Controller
 {
-    public function join(Request $request, Room $room)
+    public function join(Room $room)
     {
-        if (! $request->hasValidSignature()) {
-            abort(401);
-        }
-
         /** @var \App\Models\User */
         $user = Auth::user();
 

@@ -124,6 +124,10 @@ class RoomPlaylistController extends Controller
     {
         $this->authorize('view', $room);
 
+        $request->validate([
+            'current_playing_id' => ['required', 'string', 'max:20'],
+        ]);
+
         if ($room->current_playing_id) {
             // 解碼 Hash ID
             $requestedCurrentPlayingId = current(Hashids::connection('playlist_items')->decode(

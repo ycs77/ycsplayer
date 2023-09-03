@@ -24,7 +24,7 @@ class PlayerController extends Controller
     public function play(Request $request)
     {
         $request->validate([
-            'room_id' => ['required', 'string', 'max:12'],
+            'room_id' => ['required', 'string', 'max:20'],
             'timestamp' => ['required', 'numeric'],
             'current_time' => ['nullable', 'numeric'],
             'is_clicked_big_button' => ['required', 'boolean'],

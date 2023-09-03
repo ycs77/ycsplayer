@@ -11,6 +11,13 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        if (! config('ycsplayer.password_less')) {
+            $this->middleware('password.confirm')->only('confirmDestroy');
+        }
+    }
+
     public function show()
     {
         return Inertia::render('User/Settings', [
