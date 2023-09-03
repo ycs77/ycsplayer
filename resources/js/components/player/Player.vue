@@ -12,7 +12,7 @@ import { promiseTimeout } from '@vueuse/core'
 import 'video.js/dist/video-js.css'
 import '@videojs/themes/dist/forest/index.css'
 import videojs from 'video.js'
-import 'video.js/dist/lang/zh-TW.json'
+import videojsZhTW from 'video.js/dist/lang/zh-TW.json'
 import type Player from 'video.js/dist/types/player'
 import type Component from 'video.js/dist/types/component'
 import type PosterImage from 'video.js/dist/types/poster-image'
@@ -138,6 +138,8 @@ function end() {
 
 onMounted(() => {
   videojs.log.level('off')
+
+  videojs.addLanguage('zh-TW', videojsZhTW)
 
   const sourceType =
     props.type === PlayerType.YouTube ? 'video/youtube'
