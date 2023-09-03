@@ -38,19 +38,6 @@ class RoomSeeder extends Seeder
         }
 
         if (! $videoRoom->playlist_items()
-            ->where('type', PlayerType::Video)
-            ->exists()
-        ) {
-            $videoRoom->playlist_items()->create([
-                'type' => PlayerType::Video,
-                'title' => '色違いの翼',
-                'url' => '/media/色違いの翼.mp4',
-                'thumbnail' => '/media/色違いの翼.jpg',
-                'preview' => '/media/色違いの翼.jpg',
-            ]);
-        }
-
-        if (! $videoRoom->playlist_items()
             ->where('type', PlayerType::YouTube)
             ->where('title', '春日影')
             ->exists()
@@ -60,6 +47,19 @@ class RoomSeeder extends Seeder
                 'title' => '春日影',
                 'url' => 'https://www.youtube.com/watch?v=W8DCWI_Gc9c',
                 'thumbnail' => 'https://img.youtube.com/vi/W8DCWI_Gc9c/default.jpg',
+            ]);
+        }
+
+        if (! $videoRoom->playlist_items()
+            ->where('type', PlayerType::YouTube)
+            ->where('title', 'メリーゴーランド')
+            ->exists()
+        ) {
+            $videoRoom->playlist_items()->create([
+                'type' => PlayerType::YouTube,
+                'title' => 'メリーゴーランド',
+                'url' => 'https://www.youtube.com/watch?v=eWeSqrRk-gs',
+                'thumbnail' => 'https://img.youtube.com/vi/eWeSqrRk-gs/default.jpg',
             ]);
         }
 
@@ -103,17 +103,6 @@ class RoomSeeder extends Seeder
         }
 
         if (! $audioRoom->playlist_items()
-            ->where('type', PlayerType::Audio)
-            ->exists()
-        ) {
-            $audioRoom->playlist_items()->create([
-                'type' => PlayerType::Audio,
-                'title' => '色違いの翼',
-                'url' => '/media/色違いの翼.mp3',
-            ]);
-        }
-
-        if (! $audioRoom->playlist_items()
             ->where('type', PlayerType::YouTube)
             ->where('title', '色違いの翼')
             ->exists()
@@ -123,6 +112,19 @@ class RoomSeeder extends Seeder
                 'title' => '色違いの翼',
                 'url' => 'https://www.youtube.com/watch?v=Melo0YFiDSY',
                 'thumbnail' => 'https://img.youtube.com/vi/Melo0YFiDSY/default.jpg',
+            ]);
+        }
+
+        if (! $audioRoom->playlist_items()
+            ->where('type', PlayerType::YouTube)
+            ->where('title', 'メリーゴーランド')
+            ->exists()
+        ) {
+            $audioRoom->playlist_items()->create([
+                'type' => PlayerType::YouTube,
+                'title' => 'メリーゴーランド',
+                'url' => 'https://www.youtube.com/watch?v=P9cuGQNDf-A',
+                'thumbnail' => 'https://img.youtube.com/vi/P9cuGQNDf-A/default.jpg',
             ]);
         }
 
