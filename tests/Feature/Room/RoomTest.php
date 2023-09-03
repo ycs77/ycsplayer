@@ -169,6 +169,7 @@ test('should update room settings', function () {
     $room = room('動漫觀影室');
 
     post("/rooms/{$room->hash_id}/settings", [
+        'name' => '為什麼要改房間名字?',
         'type' => RoomType::Audio->value,
         'auto_play' => true,
         'auto_remove' => false,
@@ -176,6 +177,7 @@ test('should update room settings', function () {
 
     $room->refresh();
 
+    expect($room->name)->toBe('為什麼要改房間名字?');
     expect($room->type)->toBe(RoomType::Audio);
     expect($room->auto_play)->toBeTrue();
     expect($room->auto_remove)->toBeFalse();

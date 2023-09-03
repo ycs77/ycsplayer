@@ -13,6 +13,7 @@
         <Card title="房間設定">
           <form @submit.prevent="form.post(`/rooms/${room.id}/settings`)">
             <div class="space-y-6">
+              <TextInput id="name" v-model="form.name" label="房間名稱" />
               <RoomTypeSelectField id="type" v-model="form.type" />
               <SwitchField id="auto_play" v-model="form.auto_play" label="自動播放" />
               <SwitchField id="auto_remove" v-model="form.auto_remove" label="播放完畢自動刪除" />
@@ -48,6 +49,7 @@ const props = defineProps<{
 }>()
 
 const form = useForm({
+  name: props.room.name,
   type: props.room.type,
   auto_play: props.room.auto_play,
   auto_remove: props.room.auto_remove,

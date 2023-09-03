@@ -139,12 +139,13 @@ class RoomController extends Controller
         $this->authorize('settings', $room);
 
         $request->validate([
+            'name' => ['required', 'string', 'max:20'],
             'type' => [new Enum(RoomType::class)],
             'auto_play' => ['required', 'boolean'],
             'auto_remove' => ['required', 'boolean'],
         ]);
 
-        $room->update($request->only('type', 'auto_play', 'auto_remove'));
+        $room->update($request->only('name', 'type', 'auto_play', 'auto_remove'));
 
         Flash::success('房間設定更新成功');
     }
