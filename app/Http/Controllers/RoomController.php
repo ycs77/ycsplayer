@@ -75,6 +75,7 @@ class RoomController extends Controller
             'can' => fn () => [
                 'operatePlaylistItem' => $user->can('operatePlaylistItem', $room),
                 'inviteMember' => $user->can('inviteMember', $room),
+                'changeMemberRole' => $user->can('removeMember', $room),
                 'removeMember' => $user->can('removeMember', $room),
                 'uploadMedias' => $user->can('uploadMedias', $room),
                 'settings' => $user->can('settings', $room),
@@ -111,6 +112,7 @@ class RoomController extends Controller
             'members' => fn () => RoomMemberPresenter::collection($room->membersForPresent()),
             'can' => fn () => [
                 'inviteMember' => $user->can('inviteMember', $room),
+                'changeMemberRole' => $user->can('inviteMember', $room),
                 'removeMember' => $user->can('removeMember', $room),
                 'uploadMedias' => $user->can('uploadMedias', $room),
                 'settings' => $user->can('settings', $room),

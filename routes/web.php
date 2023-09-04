@@ -32,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/rooms/{room}/generate-join-link', [RoomMemberController::class, 'generateJoinLink'])->name('rooms.generate-join-link');
     Route::post('/rooms/{room}/invite', [RoomMemberController::class, 'invite'])->name('rooms.invite');
     Route::post('/rooms/{room}/search-member', [RoomMemberController::class, 'searchMember'])->name('rooms.member.search');
+    Route::patch('/rooms/{room}/members/{member}/role', [RoomMemberController::class, 'role'])->name('rooms.member.role');
     Route::delete('/rooms/{room}/members/{member}', [RoomMemberController::class, 'destroy'])->name('rooms.member.destroy');
 
     Route::get('/rooms/{room}/medias', [RoomMediaController::class, 'index'])->name('rooms.medias.index');

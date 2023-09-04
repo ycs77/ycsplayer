@@ -80,6 +80,23 @@ class RoomMemberController extends Controller
         ]);
     }
 
+    public function role(Request $request, Room $room, User $member)
+    {
+        $this->authorize('changeMemberRole', $room);
+
+        if ($member->is($request->user())) {
+            abort(403);
+        }
+
+        $request->validate([
+            'role' => ['required', 'string', 'max:12'],
+        ]);
+
+        $room->changeMemberRole($member, $request->input('role'));
+
+        Flash::success('成員切換角色成功');
+    }
+
     public function destroy(Room $room, User $member)
     {
         $this->authorize('view', $room);

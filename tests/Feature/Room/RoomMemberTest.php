@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Testing\Fluent\AssertableJson;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
+use function Pest\Laravel\patch;
 use function Pest\Laravel\post;
 use function Pest\Laravel\seed;
 use function Pest\Laravel\withoutMiddleware;
@@ -68,6 +69,20 @@ test('should search a member by e-mail', function () {
     );
 });
 
+test('admin should change a member role to uploader', function () {
+    $room = room('動漫觀影室');
+
+    $member = user(email: 'soyo@example.com');
+
+    patch("/rooms/{$room->hash_id}/members/{$member->hash_id}/role", [
+        'role' => 'uploader',
+    ]);
+
+    $roles = $member->getRoleNames();
+    expect($roles)->toHaveCount(1);
+    expect($roles)->toContain('rooms.1.uploader');
+});
+
 test('member should leave out of room', function () {
     $user = loginUser('soyo@example.com');
 
@@ -81,13 +96,13 @@ test('member should leave out of room', function () {
 });
 
 test('admin should move a member out of room', function () {
-    $user = user(email: 'soyo@example.com');
-
     $room = room('動漫觀影室');
 
-    delete("/rooms/{$room->hash_id}/members/{$user->hash_id}", [
+    $member = user(email: 'soyo@example.com');
+
+    delete("/rooms/{$room->hash_id}/members/{$member->hash_id}", [
         'email' => 'soyo@example.com',
     ]);
 
-    expect($room->isMember($user))->toBeFalse();
+    expect($room->isMember($member))->toBeFalse();
 });

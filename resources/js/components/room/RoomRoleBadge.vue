@@ -1,13 +1,31 @@
 <template>
-  <Badge v-if="role === 'admin'" color="blue">管理員</Badge>
-  <template v-else-if="!onlyAdmin">
-    <Badge v-if="role === 'user'" color="green">成員</Badge>
-  </template>
+  <Badge
+    v-if="findRole"
+    :color="findRole.color"
+    :size="size"
+  >
+    <slot name="before" />
+    {{ findRole.label }}
+    <slot name="after" />
+  </Badge>
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { roles } from '@/const'
+
+const props = defineProps<{
   role: string
+  size?: 'base' | 'lg'
   onlyAdmin?: boolean
 }>()
+
+const findRole = ref<typeof roles[number]>()
+
+watch(() => props.role, () => {
+  if (props.onlyAdmin) {
+    findRole.value = roles.slice(0, 1).find(role => props.role === role.value)
+  } else {
+    findRole.value = roles.find(role => props.role === role.value)
+  }
+}, { immediate: true })
 </script>

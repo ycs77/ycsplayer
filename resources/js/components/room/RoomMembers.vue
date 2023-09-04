@@ -50,6 +50,7 @@
       v-model="showMemberModal"
       :room-id="roomId"
       :member="memberDetail"
+      :can-change-role="canChangeRole"
       :can-remove="canRemove"
       @remove="removeMember"
     />
@@ -59,13 +60,15 @@
 <script setup lang="ts">
 import type { RoomMember } from '@/types'
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   roomId: string
   members: RoomMember[]
   canInvite?: boolean
+  canChangeRole?: boolean
   canRemove?: boolean
 }>(), {
   canInvite: true,
+  canChangeRole: true,
   canRemove: true,
 })
 
@@ -90,4 +93,10 @@ function openMemberModal(member: RoomMember) {
 function removeMember() {
   showMemberModal.value = false
 }
+
+watch(() => props.members, () => {
+  if (memberDetail.value) {
+    memberDetail.value = props.members.find(member => member.id === memberDetail.value?.id)
+  }
+}, { deep: true })
 </script>

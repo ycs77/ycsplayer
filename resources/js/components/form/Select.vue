@@ -4,7 +4,7 @@
       class="
         flex justify-between items-center
         w-full
-        px-3 py-2
+        pl-3 pr-9 py-2
         bg-blue-950/50
         hover:bg-blue-900/50
         border border-gray-600 rounded
@@ -12,9 +12,11 @@
         transition-colors
       "
     >
-      <div class="flex items-center select-none">
-        {{ selected?.label ?? selectMessage }}
-      </div>
+      <slot name="option" :option="selected" :label="selected?.label ?? selectMessage">
+        <span class="truncate select-none">
+          {{ selected?.label ?? selectMessage }}
+        </span>
+      </slot>
       <SelectButtonIcon chevron-down />
     </ListboxButton>
 
@@ -40,12 +42,14 @@
         as="template"
       >
         <li
-          class="relative flex items-center px-3 py-2 border border-transparent transition-colors cursor-pointer"
-          :class="{ 'bg-blue-900/50': active }"
+          class="relative flex items-center pl-3 pr-9 py-2 border border-transparent transition-colors cursor-pointer"
+          :class="{ 'bg-blue-900/50 text-white': active }"
         >
-          <span class="truncate select-none" :class="{ 'text-white': active }">
-            {{ option.label }}
-          </span>
+          <slot name="option" :option="option" :label="option.label">
+            <span class="truncate select-none">
+              {{ option.label }}
+            </span>
+          </slot>
           <SelectSelectedIcon v-if="selected" :active="active" />
         </li>
       </ListboxOption>
@@ -54,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-interface Option {
+interface Option extends Record<string, any> {
   label: string
   value: any
 }

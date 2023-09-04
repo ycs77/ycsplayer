@@ -31,6 +31,11 @@ class RoomPolicy
         return $user->can("rooms.{$room->id}.invite-member");
     }
 
+    public function changeMemberRole(User $user, Room $room)
+    {
+        return $user->can("rooms.{$room->id}.change-member-role");
+    }
+
     public function removeMember(User $user, Room $room): bool
     {
         return $user->can("rooms.{$room->id}.remove-member");

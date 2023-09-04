@@ -60,6 +60,7 @@ class Room extends Model implements HasMedia
         return [
             "rooms.{$this->id}.operate-playlist-item",
             "rooms.{$this->id}.invite-member",
+            "rooms.{$this->id}.change-member-role",
             "rooms.{$this->id}.remove-member",
             "rooms.{$this->id}.upload-medias",
             "rooms.{$this->id}.settings",
@@ -73,9 +74,14 @@ class Room extends Model implements HasMedia
             "rooms.{$this->id}.user" => [
                 "rooms.{$this->id}.operate-playlist-item",
             ],
+            "rooms.{$this->id}.uploader" => [
+                "rooms.{$this->id}.operate-playlist-item",
+                "rooms.{$this->id}.upload-medias",
+            ],
             "rooms.{$this->id}.admin" => [
                 "rooms.{$this->id}.operate-playlist-item",
                 "rooms.{$this->id}.invite-member",
+                "rooms.{$this->id}.change-member-role",
                 "rooms.{$this->id}.remove-member",
                 "rooms.{$this->id}.upload-medias",
                 "rooms.{$this->id}.settings",
@@ -158,6 +164,13 @@ class Room extends Model implements HasMedia
         $user->getRoleNames()->each(fn (string $role) => $user->removeRole($role));
 
         $this->members()->detach($user);
+    }
+
+    public function changeMemberRole(User $user, string $role): void
+    {
+        $user->getRoleNames()->each(fn (string $role) => $user->removeRole($role));
+
+        $user->assignRole('rooms.'.$this->id.'.'.$role);
     }
 
     public function isMember(User $user): bool

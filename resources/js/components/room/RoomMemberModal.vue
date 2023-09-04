@@ -19,7 +19,25 @@
 
         <h4 class="mt-3 text-2xl text-center">{{ member.name }}</h4>
         <div class="mt-1.5 flex justify-center gap-1">
-          <RoomRoleBadge :role="member.role" />
+          <RoomRoleBadge :role="member.role" size="lg" />
+        </div>
+
+        <div v-if="canChangeRole">
+          <Field
+            v-if="user?.id !== member.id"
+            label="用戶角色"
+            :error="$page.props.errors.role"
+            class="mt-6"
+          >
+            <Select v-model="role" :options="roles">
+              <template #option="{ option }">
+                <div class="text-left select-none">
+                  <div>{{ option.label }}</div>
+                  <div class="mt-1 text-sm text-gray-300/50">{{ option.description }}</div>
+                </div>
+              </template>
+            </Select>
+          </Field>
         </div>
       </div>
 
@@ -33,13 +51,16 @@
 </template>
 
 <script setup lang="ts">
+import { roles } from '@/const'
 import type { RoomMember } from '@/types'
 
 const props = withDefaults(defineProps<{
   roomId: string
   member: RoomMember | undefined
+  canChangeRole?: boolean
   canRemove?: boolean
 }>(), {
+  canChangeRole: true,
   canRemove: true,
 })
 
@@ -50,6 +71,29 @@ const emit = defineEmits<{
 const show = defineModel<boolean>({ required: true })
 
 const { user } = useAuth()
+
+const role = ref(roles[1])
+
+const { ignoreUpdates } = watchIgnorable(
+  [show, role], ([newShow, newRole], [prevShow, prevRole]) => {
+    if (newShow && prevShow && newRole !== prevRole) {
+      router.patch(`/rooms/${props.roomId}/members/${props.member?.id}/role`, {
+        role: newRole.value,
+      }, {
+        only: [...globalOnly, 'members'],
+        preserveScroll: true,
+      })
+    }
+  }
+)
+
+watch(show, (newShow, prevShow) => {
+  if (newShow && !prevShow) {
+    ignoreUpdates(() => {
+      role.value = roles.find(role => role.value === props.member?.role) ?? roles[1]
+    })
+  }
+})
 
 const canRemoveMember = computed(() => {
   if (!props.member) return false

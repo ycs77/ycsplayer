@@ -4,7 +4,7 @@
       class="
         flex justify-between items-center
         w-full
-        px-3 py-2
+        pl-3 pr-9 py-2
         bg-blue-950/50
         hover:bg-blue-900/50
         border border-gray-600 rounded
@@ -52,7 +52,7 @@
         as="template"
       >
         <li
-          class="relative flex items-center px-3 py-2 border border-transparent transition-colors cursor-pointer select-none"
+          class="relative flex items-center pl-3 pr-9 py-2 border border-transparent transition-colors cursor-pointer select-none"
           :class="{ 'bg-blue-900/50': active }"
         >
           <img
@@ -81,7 +81,7 @@
 export interface Model extends Record<string, any> {
   id: number | string
   title: string
-  thumbnail: string | null
+  thumbnail?: string | null
 }
 
 withDefaults(defineProps<{

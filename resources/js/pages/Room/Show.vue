@@ -64,6 +64,7 @@
               :members="members"
               :room-id="room.id"
               :can-invite="can.inviteMember"
+              :can-change-role="can.changeMemberRole"
               :can-remove="can.removeMember"
             />
           </div>
@@ -143,6 +144,7 @@ const props = defineProps<{
   can: {
     operatePlaylistItem: boolean
     inviteMember: boolean
+    changeMemberRole: boolean
     removeMember: boolean
     uploadMedias: boolean
     settings: boolean
