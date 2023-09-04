@@ -2,6 +2,7 @@
 
 use App\Enums\PlayerType;
 use App\Events\PlayerlistItemClicked;
+use App\Events\PlayerlistItemNexted;
 use App\Events\PlayerlistItemRemoved;
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\UserSeeder;
@@ -122,7 +123,7 @@ test('should remove playlist item is current playing', function () {
 
     expect($room->current_playing_id)->toBe($nextItem->id);
 
-    Event::assertDispatched(PlayerlistItemClicked::class);
+    Event::assertDispatched(PlayerlistItemNexted::class);
 });
 
 test('should remove playlist item is not current playing', function () {
@@ -145,6 +146,8 @@ test('should remove playlist item is not current playing', function () {
 });
 
 test('should move to next playlist item', function () {
+    Event::fake();
+
     $room = room('動漫觀影室');
     $currentItem = playlist($room, '星座になれたら');
     $nextItem = playlist($room, 'spiral');
@@ -158,4 +161,6 @@ test('should move to next playlist item', function () {
     $room->refresh();
 
     expect($room->current_playing_id)->toBe($nextItem->id);
+
+    Event::assertDispatched(PlayerlistItemNexted::class);
 });

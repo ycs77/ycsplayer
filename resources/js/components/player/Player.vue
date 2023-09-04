@@ -99,6 +99,7 @@ function pause(handler?: () => void) {
 
 function seeked() {
   if (!player) return
+  if (isEnded) return
 
   emit('seek', currentTime())
 
@@ -126,6 +127,7 @@ const timeUpdate = throttle(() => {
 
 function end() {
   if (!player) return
+  if (isEnded) return
 
   isEnded = true
 
@@ -137,8 +139,6 @@ function end() {
 }
 
 onMounted(() => {
-  videojs.log.level('off')
-
   videojs.addLanguage('zh-TW', videojsZhTW)
 
   const sourceType =
@@ -316,16 +316,13 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
       e.socketId !== Echo.socketId()
   ) return
 
-  isEnded = false
-
   let newCurrentTime = e.status.current_time ?? 0
 
   // 如果現在觸發的不是第一個開始播放的，就要校正播放時間。(觸發的當前播放器，正在點擊 bigPlayButton)
   //
   // 但需要注意：如果是播放中同時開啟兩個播放器會正常，但是如果播放一段時間後關閉，
   // 再過一會兒重開播放器會發現時間跳過了一段時間，這是因為下面這段的關係。
-  // 解決此問題是使用 Pusher 的 Webhook 功能，可以查看
-  // `app/Broadcasting/Http/Controllers/PusherWebhookController.php`
+  // 解決此問題是使用 Pusher 的 Webhook 功能，可以查看 `app/Listeners/PlayerAllConnectionClosed.php`
   if (!e.isFirst &&
       !e.status.is_clicked_big_button &&
       typeof e.status.current_time === 'number' &&
@@ -350,6 +347,8 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
     silencePromise(player.play())
     emit('play', currentTime())
   }
+
+  isEnded = false
 }
 
 // 監聽暫停事件

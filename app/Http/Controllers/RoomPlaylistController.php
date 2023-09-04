@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\PlayerType;
 use App\Events\PlayerlistItemAdded;
 use App\Events\PlayerlistItemClicked;
+use App\Events\PlayerlistItemNexted;
 use App\Events\PlayerlistItemRemoved;
 use App\Models\PlaylistItem;
 use App\Models\Room;
@@ -112,7 +113,7 @@ class RoomPlaylistController extends Controller
                 $room, $room->current_playing_id, true
             );
 
-            PlayerlistItemClicked::broadcast($room->hash_id)->toOthers();
+            PlayerlistItemNexted::broadcast($room->hash_id)->toOthers();
         } else {
             $item->delete();
 
@@ -136,20 +137,26 @@ class RoomPlaylistController extends Controller
 
             if ($room->current_playing_id === $requestedCurrentPlayingId) {
                 $this->changeToNextPlaylistItem(
-                    $room, $requestedCurrentPlayingId, $room->auto_remove
+                    $room, $requestedCurrentPlayingId, $room->auto_remove,
+                    fn () => PlayerlistItemNexted::broadcast($room->hash_id)->toOthers()
                 );
             }
         }
     }
 
-    protected function changeToNextPlaylistItem(Room $room, int $requestedCurrentPlayingId, bool $autoRemove)
+    protected function changeToNextPlaylistItem(Room $room,
+        int $requestedCurrentPlayingId,
+        bool $autoRemove,
+        callable $callback = null)
     {
         $roomId = $room->id;
 
         /** @var \App\Models\PlaylistItem|null */
         $item = null;
 
-        DB::transaction(function () use ($roomId, &$item, $requestedCurrentPlayingId, $autoRemove) {
+        DB::transaction(function () use (
+            $roomId, &$item, $requestedCurrentPlayingId, $autoRemove, $callback
+        ) {
             /** @var \App\Models\Room */
             $room = Room::query()
                 ->lockForUpdate()
@@ -172,6 +179,10 @@ class RoomPlaylistController extends Controller
                 }
 
                 $this->playItem($room, $item);
+
+                if (is_callable($callback)) {
+                    $callback();
+                }
             }
         });
     }

@@ -49,14 +49,13 @@ class PlayerController extends Controller
         }
 
         $status->isClickedBigButton = $request->input('is_clicked_big_button');
-        $status->paused = false;
 
-        if (is_null($status->currentTime)) {
-            $status->currentTime = 0.0;
-        }
+        $status->paused = false;
 
         if (is_numeric($request->input('current_time'))) {
             $status->currentTime = $request->input('current_time');
+        } elseif (is_null($status->currentTime)) {
+            $status->currentTime = 0.0;
         }
 
         if ($status->isClickedBigButton || $isFirst) {
@@ -87,7 +86,7 @@ class PlayerController extends Controller
 
         $socketId = $request->header('X-Socket-Id');
 
-        $status = new PlayStatus();
+        $status = $this->statusCache->get($roomId) ?? new PlayStatus();
         $status->currentTime = $request->input('current_time');
         $status->paused = true;
 
@@ -117,7 +116,7 @@ class PlayerController extends Controller
 
         $socketId = $request->header('X-Socket-Id');
 
-        $status = new PlayStatus();
+        $status = $this->statusCache->get($roomId) ?? new PlayStatus();
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
         $status->paused = $request->input('paused');
@@ -150,7 +149,7 @@ class PlayerController extends Controller
             ]);
         }
 
-        $status = new PlayStatus();
+        $status = $this->statusCache->get($roomId);
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
         $status->paused = $request->input('paused');

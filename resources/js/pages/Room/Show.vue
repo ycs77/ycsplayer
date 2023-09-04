@@ -223,8 +223,15 @@ function onPlayerlistItemAdded() {
   })
 }
 
-// 監聽當有其他人切換播放影片時的事件
+// 監聽當有其他人點擊指定播放影片時的事件
 function onPlayerlistItemClicked() {
+  router.reload({
+    only: ['currentPlaying', 'playlistItems'],
+  })
+}
+
+// 監聽當有其他人切換下一部播放影片時的事件
+function onPlayerlistItemNexted() {
   router.reload({
     only: ['currentPlaying', 'playlistItems'],
   })
@@ -274,6 +281,7 @@ watch(player, (v, ov, onInvalidate) => {
     .listen('PlayerSeeked', safeListenFn(player.value?.onPlayerSeeked))
     .listen('PlayerlistItemAdded', onPlayerlistItemAdded)
     .listen('PlayerlistItemClicked', onPlayerlistItemClicked)
+    .listen('PlayerlistItemNexted', onPlayerlistItemNexted)
     .listen('PlayerlistItemRemoved', onPlayerlistItemRemoved)
     .listen('RoomNoteUpdated', onNoteUpdated)
     .listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)
