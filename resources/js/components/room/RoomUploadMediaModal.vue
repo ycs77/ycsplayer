@@ -27,12 +27,12 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  uploaded: [message: string]
+  uploaded: [message: string | null]
 }>()
 
 const show = defineModel<boolean>({ required: true })
 
-function uploaded(message: string) {
+function uploaded(message: string | null) {
   show.value = false
   emit('uploaded', message)
 }

@@ -173,7 +173,7 @@ function ended() {
 function selectPlaylistItem(item: PlaylistItem) {
   showMobilePlaylist.value = false
   router.post(`/rooms/${props.room.id}/playlist/${item.id}`, {}, {
-    only: ['currentPlaying', 'playlistItems'],
+    only: [...globalOnly, 'currentPlaying', 'playlistItems'],
     preserveScroll: true,
   })
 }
@@ -181,6 +181,7 @@ function selectPlaylistItem(item: PlaylistItem) {
 function removePlaylistItem(item: PlaylistItem) {
   router.delete(`/rooms/${props.room.id}/playlist/${item.id}`, {
     only: [
+      ...globalOnly,
       ...(item.id === props.currentPlaying?.id
         ? ['currentPlaying']
         : []),
@@ -219,42 +220,42 @@ function submitPlaylistItemForm(form: PlaylistItemForm) {
 // 監聽當有其他人新增播放項目時的事件
 function onPlayerlistItemAdded() {
   router.reload({
-    only: ['playlistItems'],
+    only: [...globalOnly, 'playlistItems'],
   })
 }
 
 // 監聽當有其他人點擊指定播放影片時的事件
 function onPlayerlistItemClicked() {
   router.reload({
-    only: ['currentPlaying', 'playlistItems'],
+    only: [...globalOnly, 'currentPlaying', 'playlistItems'],
   })
 }
 
 // 監聽當有其他人切換下一部播放影片時的事件
 function onPlayerlistItemNexted() {
   router.reload({
-    only: ['currentPlaying', 'playlistItems'],
+    only: [...globalOnly, 'currentPlaying', 'playlistItems'],
   })
 }
 
 // 監聽當有其他人刪除待播影片(不是當前播放)時的事件
 function onPlayerlistItemRemoved() {
   router.reload({
-    only: ['playlistItems'],
+    only: [...globalOnly, 'playlistItems'],
   })
 }
 
 // 監聽當有其他人更新記事本時的事件
 function onNoteUpdated() {
   router.reload({
-    only: ['room'],
+    only: [...globalOnly, 'room'],
   })
 }
 
 // 監聽當有其他人上線或離線時的事件
 function onOnlineMembersUpdated() {
   router.reload({
-    only: ['members'],
+    only: [...globalOnly, 'members'],
   })
 }
 

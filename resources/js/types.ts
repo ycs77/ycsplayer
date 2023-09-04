@@ -29,6 +29,7 @@ export interface Media {
   id: string
   name: string
   src: string
+  converting: boolean
   thumbnail: string | null
   preview: string | null
 }
@@ -91,4 +92,9 @@ export interface PlayerlistItemClickedEvent {
 
 export interface PlayerlistItemRemovedEvent {
   roomId: string
+}
+
+export interface RoomMediaConvertedEvent {
+  roomId: string
+  message: string
 }

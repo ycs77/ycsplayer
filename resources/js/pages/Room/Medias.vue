@@ -29,8 +29,9 @@
             <ul v-if="medias.length" class="space-y-6">
               <li v-for="media in medias" :key="media.id">
                 <div class="flex items-center">
+                  <MediaLoading v-if="media.converting" class="w-28 shrink-0 mr-2 sm:w-32" />
                   <img
-                    v-if="media.thumbnail"
+                    v-else-if="media.thumbnail"
                     :src="media.thumbnail"
                     class="w-28 shrink-0 rounded-lg aspect-video object-cover mr-2 sm:w-32"
                   >
@@ -38,7 +39,7 @@
 
                   <div class="grow break-all">{{ media.name }}</div>
 
-                  <div class="shrink-0 whitespace-nowrap">
+                  <div v-if="!media.converting" class="shrink-0 whitespace-nowrap">
                     <button
                       type="button"
                       class="btn btn-sm btn-danger"
@@ -70,7 +71,8 @@
 
 <script setup lang="ts">
 import { useToast } from 'vue-toastification'
-import type { Media, Room } from '@/types'
+import { Echo } from '@/echo'
+import type { Media, Room, RoomMediaConvertedEvent } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>
@@ -86,12 +88,13 @@ const showRoomUploadMediaModal = ref(false)
 
 const toast = useToast()
 
-function uploaded(message: string) {
-  router.get(usePage().url, {}, {
+function uploaded(message: string | null) {
+  router.reload({
     only: [...globalOnly, 'csrfToken', 'medias'],
-    preserveScroll: true,
     onSuccess() {
-      toast.success(message)
+      if (message) {
+        toast.success(message)
+      }
     },
   })
 }
@@ -104,4 +107,29 @@ function deleteMedia(media: Media) {
     })
   }
 }
+
+function onRoomMediaCreated() {
+  router.reload({
+    only: [...globalOnly, 'medias'],
+  })
+}
+
+function onRoomMediaConverted(e: RoomMediaConvertedEvent) {
+  router.reload({
+    only: [...globalOnly, 'medias'],
+    onSuccess() {
+      toast.success(e.message)
+    },
+  })
+}
+
+onMounted(() => {
+  Echo.private(`medias.${props.room.id}`)
+    .listen('RoomMediaCreated', onRoomMediaCreated)
+    .listen('RoomMediaConverted', onRoomMediaConverted)
+})
+
+onUnmounted(() => {
+  Echo.leave(`medias.${props.room.id}`)
+})
 </script>

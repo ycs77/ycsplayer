@@ -38,7 +38,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  success: [message: string]
+  success: [message: string | null]
 }>()
 
 defineOptions({ inheritAttrs: false })
@@ -81,7 +81,7 @@ onMounted(() => {
     setTimeout(() => {
       progress.value = false
 
-      const data = JSON.parse(response) as { success: string }
+      const data = JSON.parse(response) as { success: string | null }
 
       emit('success', data.success)
     }, 500)

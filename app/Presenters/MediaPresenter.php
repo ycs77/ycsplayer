@@ -18,6 +18,7 @@ class MediaPresenter extends FlexiblePresenter
             'thumbnail' => $this->hasGeneratedConversion('thumb')
                 ? $this->getUrl('thumb')
                 : null,
+            'converting' => $this->converting,
         ];
     }
 
