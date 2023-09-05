@@ -276,3 +276,7 @@ If you think my created projects have helped you, please consider [Becoming a sp
 <a href="https://www.patreon.com/ycs77">
   <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Become a Patron" />
 </a>
+
+## License
+
+[MIT LICENSE](LICENSE)
