@@ -93,7 +93,7 @@ php artisan db:seed DummySeeder
 * E-mail：soyo@example.com
 * 密碼：password
 
-如果想要讓上傳任務在背景執行，可以開啟 Redis 的 Queue，`QUEUE_CONNECTION` 要改成 `redis`。為了要讓 Queue 可以持續上傳約 1-2G 的大檔案，可以設定 30 分鐘 (1800秒) 的 timeout (Job 的最長執行時間)：
+如果想要讓上傳任務在背景執行，可以開啟 Redis 的 Queue，`QUEUE_CONNECTION` 要改成 `redis`。為了要讓 Queue 可以持續上傳約 1-2G 的大檔案，可以設定 30 分鐘 (1800秒) 的 timeout (Job 的最長執行時間)，但要記得每次改完程式碼後都必須重啟：
 
 ```bash
 php artisan queue:work --timeout=1800
@@ -162,9 +162,9 @@ yarn
 yarn build
 ```
 
-如果想要讓上傳任務在背景執行，可以開啟 Redis 的 Queue，`QUEUE_CONNECTION` 要改成 `redis`。為了要讓 Queue 可以持續上傳約 1-2G 的大檔案，可以在建立 Worker 時設定 30 分鐘 (1800秒) 的 timeout (Job 的最長執行時間)。
+如果想要讓上傳任務在背景執行，可以開啟 Redis 的 Queue，`QUEUE_CONNECTION` 要改成 `redis`。為了要讓 Queue 可以持續上傳約 1-2G 的大檔案，可以在建立 Worker 時設定 30 分鐘 (1800秒) 的 timeout (Job 的最長執行時間)，但要記得每次更新完程式碼後都必須重啟。
 
-如果覺得影片太慢常常 lag，可以試試 [DigitalOcean Spaces 來儲存影片檔案](#digitalocean-spaces-s3-兼容儲存空間)，還有 CDN 加速來讓讀取速度變快。
+如果覺得影片太慢常常 lag，可以試試 [在 DigitalOcean Spaces 儲存影片檔案](#digitalocean-spaces-s3-兼容儲存空間)，還有 CDN 加速來讓讀取速度變快。
 
 ## 依賴軟體/服務
 
@@ -172,16 +172,16 @@ yarn build
 
 專案中有使用到 Pusher 的 Channels 服務來及時同步房間的影片播放狀態，Pusher 有提供免費額度使用，基本上私人用量應該是不會到需要付費的程度。
 
-註冊完帳號之後，到 [Pusher](https://pusher.com/) 新增 APP 後將金鑰複製到 `.env`：
+註冊完帳號之後，到 [Pusher](https://pusher.com/) 新增 APP 後將 App keys 複製到 `.env`，只需要填 `PUSHER_APP_ID`、`PUSHER_APP_KEY`、`PUSHER_APP_SECRET`、`PUSHER_APP_CLUSTER` 這4個就可以：
 
 ```ini
-PUSHER_APP_ID=
-PUSHER_APP_KEY=
-PUSHER_APP_SECRET=
+PUSHER_APP_ID=[你的app_id]
+PUSHER_APP_KEY=[你的key]
+PUSHER_APP_SECRET=[你的secret]
 PUSHER_HOST=
 PUSHER_PORT=443
 PUSHER_SCHEME=https
-PUSHER_APP_CLUSTER=mt1
+PUSHER_APP_CLUSTER=[你的cluster]
 ```
 
 然後在 Pusher APP 的 Webhooks 設定裡加上兩個 `https://[your-domain]/pusher/webhook` 連結，**Event type** 選擇 *Channel existence* 和 *Presence*。如果在本地需要測試時，可以使用 ngrok 建立臨時網址來測試，但每次測試都需要更新網址到 Pusher 的後台。
@@ -196,20 +196,24 @@ sudo apt install ffmpeg
 
 ### DigitalOcean Spaces (S3 兼容儲存空間)
 
-DigitalOcean Spaces 是一個兼容 AWS S3 API 的服務，可以提供大容量的儲存空間，還有附加 CDN 加速功能，如果想要看影片更順暢的話可以使用此服務。
+DigitalOcean Spaces 是一個兼容 AWS S3 API 的服務，可以提供大容量的儲存空間，還有附加 CDN 加速功能，如果想要看影片更順暢的話可以使用此服務。不過這是要費用的，1個月5美金起跳。
+
+可以點下面連結來免費註冊 DigitalOcean，註冊完2個月內有200美金的免費額度可以玩：
+
+[![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=83488d5c9afd&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
 > 配置方式是參考自 [Using Digital Ocean Spaces with Laravel](https://lightit.io/blog/using-digital-ocean-spaces-with-laravel-8/)。
 
 ```ini
 FILESYSTEM_DISK=do
 
-DO_ACCESS_KEY_ID={Your-Key}
-DO_SECRET_ACCESS_KEY={Your-Secret}
-DO_DEFAULT_REGION={Your-region}
-DO_BUCKET={Your-bucket}
-DO_CDN_ENDPOINT=https://api.digitalocean.com/v2/cdn/endpoints/{Your-CDN-ID}
-DO_URL=https://{Your-bucket}.{Your-region}.cdn.digitaloceanspaces.com
-DO_ENDPOINT=https://{Your-region}.digitaloceanspaces.com/
+DO_ACCESS_KEY_ID=[你的Key]
+DO_SECRET_ACCESS_KEY=[你的Secret]
+DO_DEFAULT_REGION=[你的region]
+DO_BUCKET=[你的bucket]
+DO_CDN_ENDPOINT=https://api.digitalocean.com/v2/cdn/endpoints/[你的CDN-ID]
+DO_URL=https://[你的bucket].[你的region].cdn.digitaloceanspaces.com
+DO_ENDPOINT=https://[你的region].digitaloceanspaces.com/
 DO_USE_PATH_STYLE_ENDPOINT=false
 ```
 
