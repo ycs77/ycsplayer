@@ -1,12 +1,10 @@
 <br />
 <h1 align="center">ycsPlayer</h1>
-<p align="center">線上影音點播包廂</p>
+<p align="center"><strong>線上影音點播包廂<br>可以讓同一個房間的成員都可以像卡拉 OK 點歌機一樣選影片或點歌~🎵</strong></p>
 <p align="center">
 <img src="screenshot.png" width="600" />
 </p>
 <br />
-
-可以讓同一個房間的成員都可以像卡拉 OK 點歌機一樣選影片或點歌~🎵
 
 ## 功能
 
@@ -202,8 +200,6 @@ DigitalOcean Spaces 是一個兼容 AWS S3 API 的服務，可以提供大容量
 
 [![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=83488d5c9afd&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
-> 配置方式是參考自 [Using Digital Ocean Spaces with Laravel](https://lightit.io/blog/using-digital-ocean-spaces-with-laravel-8/)。
-
 ```ini
 FILESYSTEM_DISK=do
 
@@ -216,6 +212,8 @@ DO_URL=https://[你的bucket].[你的region].cdn.digitaloceanspaces.com
 DO_ENDPOINT=https://[你的region].digitaloceanspaces.com/
 DO_USE_PATH_STYLE_ENDPOINT=false
 ```
+
+> 配置方式是參考自 [Using Digital Ocean Spaces with Laravel](https://lightit.io/blog/using-digital-ocean-spaces-with-laravel-8/)。
 
 `DO_BUCKET` 是開新的 Bucket 設定的名稱，`DO_DEFAULT_REGION` 是選擇的伺服器地區代號，`DO_ENDPOINT` 是 Endpoint 端點，記得開頭只有加地區代號，還有記得把 CDN 設定打開。
 
