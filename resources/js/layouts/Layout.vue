@@ -49,10 +49,17 @@
           </template>
 
           <template v-else>
-            <Menu v-slot="{ close }" as="div" class="w-full relative">
+            <Menu ref="menuRef" v-slot="{ close }" as="div" class="w-full relative">
               <Float
                 placement="bottom-end"
                 :offset="8"
+                enter="transition-[transform,opacity] duration-200 origin-top md:origin-top-right ease-out"
+                enter-from="scale-y-95 md:scale-95 opacity-0"
+                enter-to="scale-100 opacity-100"
+                leave="transition-[transform,opacity] duration-150 origin-top md:origin-top-right ease-in"
+                leave-from="scale-100 opacity-100"
+                leave-to="scale-y-95 md:scale-95 opacity-0"
+                :transform="false"
                 floating-as="template"
               >
                 <MenuButton class="w-full flex items-center md:-my-1 md:max-w-[160px]">
@@ -115,5 +122,13 @@
 <script setup lang="ts">
 const { user } = useAuth()
 
+const menuRef = ref<any>()
+
 const showMenu = ref(false)
+
+router.on('finish', () => {
+  setTimeout(() => {
+    showMenu.value = false
+  }, 150)
+})
 </script>
