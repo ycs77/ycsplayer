@@ -6,7 +6,6 @@ use App\Broadcasting\Events\PusherChannelVacated;
 use App\Models\Room;
 use App\Player\PlayStatusCacheRepository;
 use App\Room\RoomOnlineMembersRepository;
-use Vinkla\Hashids\Facades\Hashids;
 
 class PlayerAllConnectionClosed
 {
@@ -27,7 +26,7 @@ class PlayerAllConnectionClosed
     {
         if (str_starts_with($event->channel, $channelNamespace = 'presence-player.')) {
             $roomHashId = substr($event->channel, strlen($channelNamespace));
-            $roomId = current(Hashids::connection('rooms')->decode($roomHashId));
+            $roomId = Room::decodeHashId($roomHashId);
 
             if (Room::find($roomId, ['id'])) {
                 $this->statusCache->delete($roomHashId);

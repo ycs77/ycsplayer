@@ -5,8 +5,8 @@ namespace App\Listeners;
 use App\Broadcasting\Events\PusherMemberAdded;
 use App\Events\RoomOnlineMembersUpdated;
 use App\Models\Room;
+use App\Models\User;
 use App\Room\RoomOnlineMembersRepository;
-use Vinkla\Hashids\Facades\Hashids;
 
 class PlayerMemberOnline
 {
@@ -26,10 +26,10 @@ class PlayerMemberOnline
     {
         if (str_starts_with($event->channel, $channelNamespace = 'presence-player.')) {
             $roomHashId = substr($event->channel, strlen($channelNamespace));
-            $roomId = current(Hashids::connection('rooms')->decode($roomHashId));
+            $roomId = Room::decodeHashId($roomHashId);
 
             if (Room::find($roomId, ['id'])) {
-                $userHashId = Hashids::connection('users')->encode($event->user_id);
+                $userHashId = User::encodeHashId($event->user_id);
 
                 $this->onlineMembers->online($roomHashId, $userHashId);
 

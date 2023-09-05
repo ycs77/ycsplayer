@@ -3,7 +3,6 @@
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
-use Vinkla\Hashids\Facades\Hashids;
 
 Broadcast::channel('player.{roomId}', function (User $user) {
     return [
@@ -13,7 +12,7 @@ Broadcast::channel('player.{roomId}', function (User $user) {
 });
 
 Broadcast::channel('medias.{roomId}', function (User $user, string $roomId) {
-    if ($room = Room::find(current(Hashids::connection('rooms')->decode($roomId)))) {
+    if ($room = Room::find(Room::decodeHashId($roomId))) {
         return $user->can('uploadMedias', $room);
     }
 });

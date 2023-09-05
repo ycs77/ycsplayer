@@ -16,7 +16,6 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Vinkla\Hashids\Facades\Hashids;
 
 class RoomPlaylistController extends Controller
 {
@@ -131,9 +130,9 @@ class RoomPlaylistController extends Controller
 
         if ($room->current_playing_id) {
             // 解碼 Hash ID
-            $requestedCurrentPlayingId = current(Hashids::connection('playlist_items')->decode(
+            $requestedCurrentPlayingId = PlaylistItem::decodeHashId(
                 $request->input('current_playing_id')
-            ));
+            );
 
             if ($room->current_playing_id === $requestedCurrentPlayingId) {
                 $this->changeToNextPlaylistItem(

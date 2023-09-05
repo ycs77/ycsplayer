@@ -10,7 +10,6 @@ use App\Player\PlayerGuard;
 use App\Player\PlayStatus;
 use App\Player\PlayStatusCacheRepository;
 use Illuminate\Http\Request;
-use Vinkla\Hashids\Facades\Hashids;
 
 class PlayerController extends Controller
 {
@@ -187,7 +186,7 @@ class PlayerController extends Controller
             return $roomId;
         }
 
-        if (! $intRoomId = current(Hashids::connection('rooms')->decode($roomId))) {
+        if (! $intRoomId = Room::decodeHashId($roomId)) {
             abort(404);
         }
 

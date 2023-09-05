@@ -12,13 +12,6 @@ use Vinkla\Hashids\Facades\Hashids;
 trait HasHashId
 {
     /**
-     * The model hash id.
-     *
-     * @var string
-     */
-    protected $hashId;
-
-    /**
      * Get model hash id connection name.
      *
      * Example:
@@ -49,9 +42,24 @@ trait HasHashId
      */
     protected function hashId(): Attribute
     {
-        return Attribute::make(
-            get: fn (mixed $value, array $attributes) => $this->hashids()->encode($attributes['id']),
+        return Attribute::make(fn (mixed $value, array $attributes) => $this->hashids()->encode($attributes['id'])
         )->shouldCache();
+    }
+
+    /**
+     * Encode hash ID.
+     */
+    public static function encodeHashId(int|string $id): string
+    {
+        return static::make()->hashids()->encode($id);
+    }
+
+    /**
+     * Decode hashed ID.
+     */
+    public static function decodeHashId(string $id): ?int
+    {
+        return static::make()->hashids()->decode($id)[0] ?? null;
     }
 
     /**
