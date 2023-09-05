@@ -67,6 +67,8 @@ cp .env.example .env
 
 broadcast driver 一定要設 `pusher`，關於 Pusher 可以[參考 設定 Pusher](#設定-pusher)。
 
+還有轉影片的部分有依賴到 FFMpeg，要確保執行環境裡有存在 (執行 `ffmpeg -version` 確認)，要安裝可以參考[安裝 FFMpeg](#安裝-ffmpeg)。
+
 然後執行指令來安裝依賴套件和編譯：
 
 ```bash
@@ -79,8 +81,6 @@ yarn
 yarn code-check
 yarn build
 ```
-
-還有轉影片的部分有依賴到 FFMpeg，要確保執行環境裡有存在 (執行 `ffmpeg -version` 確認)，要安裝可以參考[安裝 FFMpeg](#安裝-ffmpeg)。
 
 裝完之後預設會是沒有用戶和房間，如果你想要馬上試用的話，可以執行指令來新增測試用戶和房間：
 
@@ -138,6 +138,8 @@ cp .env.example .env
 
 broadcast driver 一定要設 `pusher`，關於 Pusher 可以[參考 設定 Pusher](#設定-pusher)。
 
+還有轉影片的部分有依賴到 FFMpeg，要確保執行環境裡有安裝過，要安裝可以參考[安裝 FFMpeg](#安裝-ffmpeg)。
+
 然後執行指令來安裝依賴套件和編譯：
 
 ```bash
@@ -151,8 +153,6 @@ php artisan view:cache
 yarn
 yarn build
 ```
-
-還有轉影片的部分有依賴到 FFMpeg，要確保執行環境裡有安裝過，要安裝可以參考[安裝 FFMpeg](#安裝-ffmpeg)。
 
 以上就是部署專案的流程，之後更新原始碼之後都要執行以下指令來更新專案：
 
@@ -201,9 +201,9 @@ sudo apt install ffmpeg
 
 ### DigitalOcean Spaces (S3 兼容儲存空間)
 
-DigitalOcean Spaces 是一個兼容 AWS S3 API 的服務，可以提供大容量的儲存空間，還有附加 CDN 加速功能，如果想要看影片更順暢的話可以使用此服務。不過這是要費用的，1個月5美金起跳。
+DigitalOcean Spaces 是一個兼容 AWS S3 API 的服務，可以提供大容量的儲存空間，還有附加 CDN 加速功能，如果想要看影片更順暢的話可以使用此服務。不過這是要費用的，1 個月 5 美金起跳。
 
-可以點下面連結來免費註冊 DigitalOcean，註冊完2個月內有200美金的免費額度可以玩：
+可以點下面連結來免費註冊 DigitalOcean，註冊完 2 個月內有 200 美金的免費額度可以玩：
 
 [![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=83488d5c9afd&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
