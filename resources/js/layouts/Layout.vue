@@ -31,38 +31,32 @@
           </button>
         </div>
 
-        <div
-          class="w-full flex-col justify-center items-center gap-4 mt-4 mb-2 md:flex md:flex-row md:mt-0 md:mb-0 md:w-auto"
-          :class="{
-            flex: showMenu,
-            hidden: !showMenu,
-          }"
-        >
+        <!-- 電腦版 -->
+        <div class="hidden md:flex md:justify-center md:items-center md:space-x-4">
           <template v-if="!user">
-            <Link href="/login" class="btn btn-primary btn-sm w-full sm:btn-base md:w-auto">
+            <Link href="/login" class="btn btn-primary">
               登入
             </Link>
 
-            <Link href="/register" class="btn btn-primary btn-sm w-full sm:btn-base md:w-auto">
+            <Link href="/register" class="btn btn-primary">
               註冊
             </Link>
           </template>
 
           <template v-else>
-            <Menu ref="menuRef" v-slot="{ close }" as="div" class="w-full relative">
+            <Menu v-slot="{ close }">
               <Float
                 placement="bottom-end"
                 :offset="8"
-                enter="transition-[transform,opacity] duration-200 origin-top md:origin-top-right ease-out"
-                enter-from="scale-y-95 md:scale-95 opacity-0"
+                enter="transition-[transform,opacity] duration-200 origin-top-right ease-out"
+                enter-from="scale-95 opacity-0"
                 enter-to="scale-100 opacity-100"
-                leave="transition-[transform,opacity] duration-150 origin-top md:origin-top-right ease-in"
+                leave="transition-[transform,opacity] duration-150 origin-top-right ease-in"
                 leave-from="scale-100 opacity-100"
-                leave-to="scale-y-95 md:scale-95 opacity-0"
+                leave-to="scale-95 opacity-0"
                 :transform="false"
-                floating-as="template"
               >
-                <MenuButton class="w-full flex items-center md:-my-1 md:max-w-[160px]">
+                <MenuButton class="w-full flex items-center -my-1 max-w-[160px]">
                   <Avatar class="w-8 h-8 mr-2" :src="user.avatar" />
                   <div class="tracking-wide whitespace-nowrap truncate min-w-0">
                     {{ user.name }}
@@ -70,41 +64,60 @@
                 </MenuButton>
 
                 <MenuItems
-                  class="w-full p-1.5 space-y-1.5 bg-blue-900/50 rounded-md shadow-md shadow-blue-950/50 backdrop-blur-md overflow-hidden focus:outline-none md:w-40"
+                  class="w-40 p-1.5 space-y-1.5 bg-blue-900/50 rounded-md shadow-md shadow-blue-950/50 backdrop-blur-md overflow-hidden focus:outline-none"
                   @click="close"
                 >
-                  <MenuItem v-slot="{ active }">
-                    <Link
-                      href="/rooms"
+                  <MenuItem
+                    v-for="item in userMenu"
+                    v-slot="{ active }"
+                    :key="item.href"
+                  >
+                    <component
+                      :is="item.is ?? 'Link'"
+                      :href="item.is !== 'button' ? item.href : undefined"
                       class="block w-full px-4 py-1.5 text-left text-sm rounded-md transition-colors"
                       :class="{ 'bg-blue-900 text-white': active }"
+                      @click="item.onClick"
                     >
-                      房間列表
-                    </Link>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <Link
-                      href="/user/settings"
-                      class="block w-full px-4 py-1.5 text-left text-sm rounded-md transition-colors"
-                      :class="{ 'bg-blue-900 text-white': active }"
-                    >
-                      帳號設定
-                    </Link>
-                  </MenuItem>
-                  <MenuItem v-slot="{ active }">
-                    <Link
-                      href="/logout"
-                      as="button"
-                      method="post"
-                      class="block w-full px-4 py-1.5 text-left text-sm rounded-md transition-colors"
-                      :class="{ 'bg-blue-900 text-white': active }"
-                    >
-                      登出
-                    </Link>
+                      {{ item.label }}
+                    </component>
                   </MenuItem>
                 </MenuItems>
               </Float>
             </Menu>
+          </template>
+        </div>
+
+        <!-- 手機版 -->
+        <div v-if="showMenu" class="w-full mt-4 mb-2 space-y-4 md:hidden">
+          <template v-if="!user">
+            <Link href="/login" class="block w-full py-1 text-left">
+              登入
+            </Link>
+
+            <Link href="/register" class="block w-full py-1 text-left">
+              註冊
+            </Link>
+          </template>
+
+          <template v-else>
+            <Link href="/user/settings" class="w-full flex items-center">
+              <Avatar class="w-8 h-8 mr-2" :src="user.avatar" />
+              <div class="tracking-wide whitespace-nowrap truncate min-w-0">
+                {{ user.name }}
+              </div>
+            </Link>
+
+            <component
+              :is="item.is ?? 'Link'"
+              v-for="item in userMenu"
+              :key="item.href"
+              :href="item.is !== 'button' ? item.href : undefined"
+              class="block w-full py-1 text-left"
+              @click="item.onClick"
+            >
+              {{ item.label }}
+            </component>
           </template>
         </div>
       </div>
@@ -119,13 +132,33 @@
 <script setup lang="ts">
 const { user } = useAuth()
 
-const menuRef = ref<any>()
-
 const showMenu = ref(false)
 
+const userMenu = [
+  {
+    href: '/rooms',
+    label: '房間列表',
+  },
+  {
+    href: '/user/settings',
+    label: '帳號設定',
+  },
+  {
+    href: '/logout',
+    label: '登出',
+    is: 'button',
+    onClick() {
+      router.post('/logout')
+    },
+  },
+] as {
+  href: string
+  label: string
+  is?: string
+  onClick?: () => void
+}[]
+
 router.on('finish', () => {
-  setTimeout(() => {
-    showMenu.value = false
-  }, 150)
+  showMenu.value = false
 })
 </script>
