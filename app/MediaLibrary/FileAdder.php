@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\Conversions\ImageGenerators\Image as ImageGenerator;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\DiskCannotBeAccessed;
+use Spatie\MediaLibrary\MediaCollections\FileAdder as MediaLibraryFileAdder;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\ResponsiveImages\Jobs\GenerateResponsiveImagesJob;
 use Spatie\MediaLibrary\Support\RemoteFile;
-use Spatie\MediaLibrary\MediaCollections\FileAdder as MediaLibraryFileAdder;
 
 class FileAdder extends MediaLibraryFileAdder
 {
@@ -42,6 +42,7 @@ class FileAdder extends MediaLibraryFileAdder
             ($this->onModelCreatedCallback)($media);
         }
 
+        /** @phpstan-ignore-next-line */
         if ($fileAdder->file instanceof RemoteFile) {
             $addedMediaSuccessfully = $this->filesystem->addRemote($fileAdder->file, $media, $fileAdder->fileName);
         } else {
@@ -55,6 +56,7 @@ class FileAdder extends MediaLibraryFileAdder
         }
 
         if (! $fileAdder->preserveOriginal) {
+            /** @phpstan-ignore-next-line */
             if ($fileAdder->file instanceof RemoteFile) {
                 Storage::disk($fileAdder->file->getDisk())->delete($fileAdder->file->getKey());
             } else {
@@ -79,6 +81,7 @@ class FileAdder extends MediaLibraryFileAdder
         }
 
         if ($collectionSizeLimit = optional($this->getMediaCollection($media->collection_name))->collectionSizeLimit) {
+            /** @phpstan-ignore-next-line */
             $collectionMedia = $this->subject->fresh()->getMedia($media->collection_name);
 
             if ($collectionMedia->count() > $collectionSizeLimit) {

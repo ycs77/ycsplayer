@@ -62,11 +62,11 @@ class RoomUploadMediaController extends Controller
                 return;
             }
 
-            $queueFile = QueueRoomFile::make();
-            $queueFile->name = $fileName;
-            $queueFile->path = $file->store('medias', ['disk' => 'local']);
-            $queueFile->disk = 'local';
-            $queueFile->save();
+            $queueFile = QueueRoomFile::create([
+                'name' => $fileName,
+                'path' => $file->store('medias', ['disk' => 'local']),
+                'disk' => 'local',
+            ]);
 
             AddRoomMediaFile::dispatch($room, $queueFile);
 

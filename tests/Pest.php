@@ -48,8 +48,10 @@ function playlist(Room $room, string $itemTitle): ?PlaylistItem
         ->first();
 }
 
-function fakeFileFromPath(string $path, string $filename)
+function fakeFileFromPath(string $path, string $filename = null)
 {
+    $filename = $filename ?? basename($path);
+
     $r = fopen(base_path($path), 'rb');
     $contents = fread($r, filesize(base_path($path)));
     fclose($r);

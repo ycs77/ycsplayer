@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Storage;
  */
 class QueueRoomFile extends Model
 {
+    protected $fillable = [
+        'name',
+        'path',
+        'disk',
+    ];
+
     protected static function booted(): void
     {
         static::deleted(function (QueueRoomFile $queueFile) {

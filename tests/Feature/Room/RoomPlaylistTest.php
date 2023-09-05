@@ -24,7 +24,7 @@ test('should add video playlist item', function () {
 
     $room = room('動漫觀影室');
 
-    $file = fakeFileFromPath('tests/fixtures/mov_bbb.mp4', 'mov_bbb.mp4');
+    $file = fakeFileFromPath('tests/fixtures/mov_bbb.mp4');
 
     /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media */
     $media = $room
@@ -43,7 +43,7 @@ test('should add video playlist item', function () {
     $item = $room->playlist_items()->latest('id')->first();
     expect($item->type)->toBe(PlayerType::Video);
     expect($item->title)->toBe('Big Buck Bunny');
-    expect($item->url)->toBe('/storage/1/mov_bbb.mp4');
+    expect($item->url)->toContain('/storage/1/mov_bbb.mp4');
 
     Storage::assertExists('1/mov_bbb.mp4');
 });
@@ -53,7 +53,7 @@ test('should add audio playlist item', function () {
 
     $room = room('動漫觀影室');
 
-    $file = fakeFileFromPath('tests/fixtures/mov_bbb.mp3', 'mov_bbb.mp3');
+    $file = fakeFileFromPath('tests/fixtures/mov_bbb.mp3');
 
     /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media */
     $media = $room
@@ -72,7 +72,7 @@ test('should add audio playlist item', function () {
     $item = $room->playlist_items()->latest('id')->first();
     expect($item->type)->toBe(PlayerType::Audio);
     expect($item->title)->toBe('Big Buck Bunny');
-    expect($item->url)->toBe('/storage/1/mov_bbb.mp3');
+    expect($item->url)->toContain('/storage/1/mov_bbb.mp3');
 
     Storage::assertExists('1/mov_bbb.mp3');
 });

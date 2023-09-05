@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\CDN;
 use App\Facades\Flash;
 use App\Jobs\RemoveRoomMediaFile;
 use App\Models\Room;
