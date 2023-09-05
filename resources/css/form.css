@@ -15,10 +15,10 @@
     @apply resize-none;
   }
   .form-checkbox {
-    @apply bg-blue-950/50 text-blue-500 border-gray-600 focus:ring-blue-500 rounded;
+    @apply bg-blue-950/50 text-blue-500 border-gray-600 focus:ring-blue-500 focus:ring-offset-blue-950 rounded;
   }
   .form-radio {
-    @apply bg-blue-950/50 text-blue-500 border-gray-600 focus:ring-blue-500;
+    @apply bg-blue-950/50 text-blue-500 border-gray-600 focus:ring-blue-500 focus:ring-offset-blue-950;
   }
 
   .input-group {

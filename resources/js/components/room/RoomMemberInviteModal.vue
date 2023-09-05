@@ -96,8 +96,10 @@ const url = ref('')
 const { copy, copied } = useClipboard({ source: url })
 
 function generateLink() {
-  axios.post(`/rooms/${props.roomId}/generate-join-link`).then(({ data }) => {
-    url.value = data.join_link
+  axios.post<{
+    join_link: string
+  }>(`/rooms/${props.roomId}/generate-join-link`).then(({ data }) => {
+    url.value = `${data.join_link}${data.join_link.includes('?') ? '&' : '?'}openExternalBrowser=1`
   })
 }
 
