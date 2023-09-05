@@ -8,9 +8,10 @@ use App\Models\QueueRoomFile;
 use App\Models\Room;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator as ValidatorFactory;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Validator;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 
 class RoomUploadMediaController extends Controller
@@ -37,7 +38,7 @@ class RoomUploadMediaController extends Controller
             $extension = $file->getClientOriginalExtension();
             $fileName = str_replace('.'.$extension, '', $file->getClientOriginalName());
 
-            $validator = Validator::make(['file' => $file], [
+            $validator = ValidatorFactory::make(['file' => $file], [
                 'file' => [
                     'required',
                     'file',
@@ -51,16 +52,15 @@ class RoomUploadMediaController extends Controller
                 ],
             ]);
 
-            if ($validator->fails()) {
-                if (is_file($file->getPathname())) {
-                    unlink($file->getPathname());
+            $validator->after(function (Validator $validator) use ($file) {
+                if ($validator->errors()->isNotEmpty()) {
+                    if (is_file($file->getPathname())) {
+                        unlink($file->getPathname());
+                    }
                 }
+            });
 
-                // throw validate exception
-                $validator->validate();
-
-                return;
-            }
+            $validator->validate();
 
             $queueFile = QueueRoomFile::create([
                 'name' => $fileName,
@@ -69,11 +69,11 @@ class RoomUploadMediaController extends Controller
                 'expired_at' => now()->addHour(),
             ]);
 
-            AddRoomMediaFile::dispatch($room, $queueFile);
-
             if (is_file($file->getPathname())) {
                 unlink($file->getPathname());
             }
+
+            AddRoomMediaFile::dispatch($room, $queueFile);
 
             if (config('queue.default') !== 'sync') {
                 return ['success' => '檔案上傳成功，等待處理媒體檔案...'];

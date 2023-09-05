@@ -52,7 +52,7 @@ class AddRoomMediaFile implements ShouldQueue
 
         gc_collect_cycles();
 
-        @unlink($path);
+        unlink($path);
 
         $this->queueFile->delete();
 

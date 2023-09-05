@@ -2,7 +2,7 @@
   <div v-if="!progress" class="my-6">
     <Field
       :label="label"
-      :error="error ?? fileError"
+      :error="error"
       :tip="tip"
       :class="wrapperClass"
     >
@@ -38,7 +38,9 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
+  start: []
   success: [message: string | null]
+  error: [message: string]
 }>()
 
 defineOptions({ inheritAttrs: false })
@@ -46,7 +48,6 @@ defineOptions({ inheritAttrs: false })
 const browseFilesBtnRef = ref(null!) as Ref<HTMLInputElement>
 const progress = ref(false)
 const progressPer = ref(0)
-const fileError = ref<string | undefined>(undefined)
 
 onMounted(() => {
   const resumable = new Resumable({
@@ -65,10 +66,10 @@ onMounted(() => {
   resumable.assignBrowse(browseFilesBtnRef.value, false)
 
   resumable.on('fileAdded', file => {
-    fileError.value = undefined
-
     progress.value = true
     progressPer.value = 0
+
+    emit('start')
 
     resumable.upload()
   })
@@ -92,7 +93,7 @@ onMounted(() => {
 
     try {
       const data = JSON.parse(response)
-      fileError.value = data.message
+      emit('error', data.message)
     } catch (e) {
       console.error(response)
     }
