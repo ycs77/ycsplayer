@@ -66,6 +66,7 @@ class RoomUploadMediaController extends Controller
                 'name' => $fileName,
                 'path' => $file->store('medias', ['disk' => 'local']),
                 'disk' => 'local',
+                'expired_at' => now()->addHour(),
             ]);
 
             AddRoomMediaFile::dispatch($room, $queueFile);

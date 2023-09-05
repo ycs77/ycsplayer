@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
  * @property string $name
  * @property string $path
  * @property string $disk
+ * @property \Illuminate\Support\Carbon $expired_at
  */
 class QueueRoomFile extends Model
 {
@@ -16,6 +18,11 @@ class QueueRoomFile extends Model
         'name',
         'path',
         'disk',
+        'expired_at',
+    ];
+
+    protected $casts = [
+        'expired_at' => 'datetime',
     ];
 
     protected static function booted(): void
@@ -25,5 +32,15 @@ class QueueRoomFile extends Model
                 Storage::disk($queueFile->disk)->delete($queueFile->path);
             }
         });
+    }
+
+    public function expired()
+    {
+        return $this->expired_at->isPast();
+    }
+
+    public function scopeExpired(Builder $query)
+    {
+        $query->where('expired_at', '<', now());
     }
 }

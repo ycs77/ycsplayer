@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('path');
             $table->string('disk');
+            $table->timestamp('expired_at');
             $table->timestamps();
         });
     }

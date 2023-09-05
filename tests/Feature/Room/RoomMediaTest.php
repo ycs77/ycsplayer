@@ -87,6 +87,7 @@ test('should convert media files', function () {
         'name' => 'mov_bbb',
         'path' => $file->storeAs('medias', 'mov_bbb.mp3', ['disk' => 'local']),
         'disk' => 'local',
+        'expired_at' => now()->addHour(),
     ]);
 
     AddRoomMediaFile::dispatch($room, $queueFile);
