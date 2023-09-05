@@ -93,6 +93,12 @@ php artisan db:seed DummySeeder
 * E-mail：soyo@example.com
 * 密碼：password
 
+如果想要讓上傳任務在背景執行，可以開啟 Redis 的 Queue，`QUEUE_CONNECTION` 要改成 `redis`。為了要讓 Queue 可以持續上傳約 1-2G 的大檔案，可以設定 30 分鐘 (1800秒) 的 timeout (Job 的最長執行時間)：
+
+```bash
+php artisan queue:work --timeout=1800
+```
+
 ### Laravel Homestead 開發環境相關
 
 啟動 Vite dev server 記得要轉發 Homestead 的 5173 port：
@@ -156,6 +162,10 @@ yarn
 yarn build
 ```
 
+如果想要讓上傳任務在背景執行，可以開啟 Redis 的 Queue，`QUEUE_CONNECTION` 要改成 `redis`。為了要讓 Queue 可以持續上傳約 1-2G 的大檔案，可以在建立 Worker 時設定 30 分鐘 (1800秒) 的 timeout (Job 的最長執行時間)。
+
+如果覺得影片太慢常常 lag，可以試試 [DigitalOcean Spaces 來儲存影片檔案](#digitalocean-spaces-s3-兼容儲存空間)，還有 CDN 加速來讓讀取速度變快。
+
 ## 依賴軟體/服務
 
 ### 設定 Pusher
@@ -183,6 +193,39 @@ PUSHER_APP_CLUSTER=mt1
 ```
 sudo apt install ffmpeg
 ```
+
+### DigitalOcean Spaces (S3 兼容儲存空間)
+
+DigitalOcean Spaces 是一個兼容 AWS S3 API 的服務，可以提供大容量的儲存空間，還有附加 CDN 加速功能，如果想要看影片更順暢的話可以使用此服務。
+
+> 配置方式是參考自 [Using Digital Ocean Spaces with Laravel](https://lightit.io/blog/using-digital-ocean-spaces-with-laravel-8/)。
+
+```ini
+FILESYSTEM_DISK=do
+
+DO_ACCESS_KEY_ID={Your-Key}
+DO_SECRET_ACCESS_KEY={Your-Secret}
+DO_DEFAULT_REGION={Your-region}
+DO_BUCKET={Your-bucket}
+DO_CDN_ENDPOINT=https://api.digitalocean.com/v2/cdn/endpoints/{Your-CDN-ID}
+DO_URL=https://{Your-bucket}.{Your-region}.cdn.digitaloceanspaces.com
+DO_ENDPOINT=https://{Your-region}.digitaloceanspaces.com/
+DO_USE_PATH_STYLE_ENDPOINT=false
+```
+
+`DO_BUCKET` 是開新的 Bucket 設定的名稱，`DO_DEFAULT_REGION` 是選擇的伺服器地區代號，`DO_ENDPOINT` 是 Endpoint 端點，記得開頭只有加地區代號，還有記得把 CDN 設定打開。
+
+`DO_ACCESS_KEY_ID` 跟 `DO_SECRET_ACCESS_KEY` 到 [Spaces access keys](https://cloud.digitalocean.com/account/api/spaces) 新增，新增完一短一長的就是這兩個 KEY。
+
+最後是 CDN 的設定，因為要在刪除完檔案之後順便也清掉 Cache 的檔案，需要設定清 CDN Cache 的 API 網址，網址取得方式為：
+
+```bash
+$ curl -X GET -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $API_TOKEN" \
+    "https://api.digitalocean.com/v2/cdn/endpoints"
+```
+
+而 `API_TOKEN` 可以到 [Personal access tokens](https://cloud.digitalocean.com/account/api/tokens) 新增，取得完之後就可以刪掉了。在回傳的資料中可以看到 CDN Endpoint 的 ID，填到 `DO_CDN_ENDPOINT` 後面即可。因為使用了 CDN，就可以在 `DO_URL` 配置 CDN 專屬的網址了。
 
 ## ycsPlayer 相關環境變數
 
