@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-screen-2xl mx-auto">
     <header class="p-[--layout-gap] lg:p-[--layout-gap-lg]">
-      <div class="px-4 py-2.5 flex justify-between items-center flex-col bg-blue-950/50 rounded-lg md:flex-row lg:px-6 lg:py-3">
+      <div class="px-4 py-2.5 flex justify-between items-center flex-col bg-blue-950/50 rounded-lg md:flex-row lg:px-6">
         <div class="w-full flex justify-between items-center md:w-auto">
           <Link v-if="user" href="/rooms" class="font-bold tracking-wide">
             ycsPlayer
@@ -34,11 +34,11 @@
         <!-- 電腦版 -->
         <div class="hidden md:flex md:justify-center md:items-center md:space-x-4">
           <template v-if="!user">
-            <Link href="/login" class="btn btn-primary">
+            <Link href="/login" class="btn btn-primary py-1.5">
               登入
             </Link>
 
-            <Link href="/register" class="btn btn-primary">
+            <Link href="/register" class="btn btn-primary py-1.5">
               註冊
             </Link>
           </template>
@@ -56,8 +56,8 @@
                 leave-to="scale-95 opacity-0"
                 :transform="false"
               >
-                <MenuButton class="w-full flex items-center -my-1 max-w-[160px]">
-                  <Avatar class="w-8 h-8 mr-2" :src="user.avatar" />
+                <MenuButton class="w-full flex items-center -my-0.5 max-w-[160px]">
+                  <Avatar class="w-9 h-9 mr-2" :src="user.avatar" />
                   <div class="tracking-wide whitespace-nowrap truncate min-w-0">
                     {{ user.name }}
                   </div>
