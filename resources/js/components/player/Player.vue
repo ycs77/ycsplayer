@@ -377,11 +377,8 @@ function onPlayerSeeked(e: PlayerSeekedEvent) {
     console.log('PlayerSeeked', e.status.current_time)
   }
 
-  if (typeof e.status.timestamp === 'number' &&
-      typeof e.status.current_time === 'number'
-  ) {
-    const seconds = (Date.now() - e.status.timestamp) / 1000
-    player.currentTime(Math.round((e.status.current_time + seconds) * 100) / 100)
+  if (typeof e.status.current_time === 'number') {
+    player.currentTime(e.status.current_time)
   }
 
   emit('seek', currentTime())
