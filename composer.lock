@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3bbfbe9d2b69a1b4998347c60c4daaa7",
+    "content-hash": "689a6468f77472f1c7d9870f0e5102d1",
     "packages": [
         {
             "name": "additionapps/flexible-presenter",

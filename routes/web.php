@@ -47,6 +47,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/player/end', [PlayerController::class, 'end'])->name('player.end');
 
     Route::get('/user/settings', [UserController::class, 'show'])->name('user.settings');
+    Route::post('/user/avatar', [UserController::class, 'uploadAvatar'])->name('user.avatar.destroy');
+    Route::delete('/user/avatar', [UserController::class, 'removeAvatar'])->name('user.avatar.destroy');
     Route::get('/user/destroy/confirm', [UserController::class, 'confirmDestroy'])->name('user.destroy.confirm');
     Route::delete('/user', [UserController::class, 'destroy'])->name('user.destroy');
 });

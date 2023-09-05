@@ -4,9 +4,12 @@ use App\PasswordlessLogin\Notifications\SendPasswordlessDestroyUserLink;
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\UserSeeder;
 use Grosv\LaravelPasswordlessLogin\UserClass;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertGuest;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
@@ -30,6 +33,7 @@ test('should save user settings only name & email', function () {
     put('/user/profile-information', [
         'name' => 'New Admin',
         'email' => 'admin@example.com',
+        'avatar' => null,
         'current_password' => '',
         'password' => '',
         'password_confirmation' => '',
@@ -45,6 +49,7 @@ test('should save user settings with password', function () {
     put('/user/profile-information', [
         'name' => 'Admin',
         'email' => 'admin@example.com',
+        'avatar' => null,
         'current_password' => 'password',
         'password' => 'new_password',
         'password_confirmation' => 'new_password',
@@ -55,6 +60,46 @@ test('should save user settings with password', function () {
     expect($user->name)->toBe('Admin');
     expect($user->email)->toBe('admin@example.com');
     expect(Hash::check('new_password', $user->password))->toBeTrue();
+});
+
+test('should upload custom user avatar', function () {
+    Storage::fake();
+
+    $avatar = UploadedFile::fake()
+        ->image('avatar.jpg', 500, 500);
+
+    post('/user/avatar', [
+        'avatar' => $avatar,
+    ]);
+
+    $user = user(email: 'admin@example.com');
+
+    expect($user->avatar)->not->toBeNull();
+
+    Storage::assertExists($user->avatar);
+});
+
+test('should remove custom user avatar', function () {
+    Storage::fake();
+
+    $avatarPath = UploadedFile::fake()
+        ->image('avatar.jpg', 500, 500)
+        ->store('avatars');
+
+    $user = user(email: 'admin@example.com');
+
+    $user->avatar = $avatarPath;
+    $user->save();
+
+    actingAs($user);
+
+    delete('/user/avatar');
+
+    $user->refresh();
+
+    expect($user->avatar)->toBeNull();
+
+    Storage::assertMissing($avatarPath);
 });
 
 test('should destroy user with password confirm', function () {

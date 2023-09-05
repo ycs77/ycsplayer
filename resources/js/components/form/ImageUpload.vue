@@ -28,6 +28,7 @@
           <button
             type="button"
             class="absolute top-3 right-3 w-6 h-6 flex justify-center items-center bg-gray-700/50 text-white rounded-full"
+            :disabled="loading"
             @click="removeSelectedFile"
           >
             <HeroiconsXMark class="w-5 h-5" />
@@ -41,6 +42,7 @@
         v-if="removeable ? !!defaultImage : false"
         type="button"
         class="btn btn-danger btn-sm"
+        :disabled="loading"
         @click="$emit('remove')"
       >
         <HeroiconsTrash class="mr-1" />
@@ -51,6 +53,7 @@
         v-else
         type="button"
         class="btn btn-primary btn-sm"
+        :disabled="loading"
         @click="selectFile"
       >
         <HeroiconsCloudArrowUp class="mr-1" />
@@ -76,6 +79,7 @@ withDefaults(defineProps<{
   horizontal?: boolean
   error?: string
   tip?: string
+  loading?: boolean
   placeholder?: boolean
   removeable?: boolean
   centerButton?: boolean
@@ -85,17 +89,19 @@ withDefaults(defineProps<{
 }>(), {
   type: 'text',
   horizontal: false,
+  loading: false,
   placeholder: true,
   imageClass: 'aspect-square',
 })
 
-defineEmits<{
+const emit = defineEmits<{
+  selected: [file: File, dataUrl: string]
   remove: []
 }>()
 
 defineOptions({ inheritAttrs: false })
 
-const modelFile = defineModel<File | null>()
+const modelFile = defineModel<File | null>({ required: true })
 const fileEl = ref<HTMLInputElement>(null!)
 const previewImageSrc = ref<string | null>(null)
 
@@ -120,6 +126,9 @@ const onChangeFile = () => {
       const dataUrl = reader.result as string
       previewImageSrc.value = dataUrl
       modelFile.value = file
+      nextTick(() => {
+        emit('selected', file, dataUrl)
+      })
     }
   }
 }
