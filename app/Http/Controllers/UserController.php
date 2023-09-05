@@ -33,7 +33,6 @@ class UserController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'avatar' => $user->avatar_url,
-                'avatar_uploaded' => $user->avatar_uploaded_url,
             ],
             'passwordLess' => config('ycsplayer.password_less'),
         ])->title('帳號設定');

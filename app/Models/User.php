@@ -21,8 +21,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property \Illuminate\Support\Carbon $email_verified_at
  * @property string $password
  * @property string|null $avatar
- * @property-read string $avatar_url
- * @property-read string|null $avatar_uploaded_url
+ * @property-read string|null $avatar_url
  * @property string $remember_token
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -79,21 +78,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     protected function avatarUrl(): Attribute
-    {
-        return Attribute::make(function () {
-            if ($this->avatar) {
-                if (filter_var($this->avatar, FILTER_VALIDATE_URL)) {
-                    return $this->avatar;
-                }
-
-                return Storage::url($this->avatar);
-            }
-
-            return 'https://unavatar.io/'.$this->email.'?fallback=https://source.boringavatars.com/beam/120/Mary%20Baker?colors=dbeafe,60a5fa';
-        });
-    }
-
-    protected function avatarUploadedUrl(): Attribute
     {
         return Attribute::make(function () {
             if ($this->avatar) {

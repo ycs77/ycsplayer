@@ -63,10 +63,7 @@
                 floating-as="template"
               >
                 <MenuButton class="w-full flex items-center md:-my-1 md:max-w-[160px]">
-                  <img
-                    class="w-8 h-8 rounded-full mr-2"
-                    :src="user.avatar ?? '/images/user.svg'"
-                  >
+                  <Avatar class="w-8 h-8 mr-2" :src="user.avatar" />
                   <div class="tracking-wide whitespace-nowrap truncate min-w-0">
                     {{ user.name }}
                   </div>

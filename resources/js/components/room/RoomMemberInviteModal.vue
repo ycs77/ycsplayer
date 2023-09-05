@@ -50,10 +50,7 @@
             <TextInput id="email" v-model="form.email" label="E-mail" autocomplete="off" />
           </div>
           <div v-if="member" class="mt-4 flex items-center">
-            <img
-              class="w-8 h-8 rounded-full mr-2"
-              :src="member.avatar ?? '/images/user.svg'"
-            >
+            <Avatar class="w-9 h-9 mr-2" :src="member.avatar" />
             <div class="flex items-center">
               <div class="tracking-wide">{{ member.name }}</div>
             </div>

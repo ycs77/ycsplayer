@@ -7,8 +7,8 @@
             id="avatar"
             v-model="avataForm.avatar"
             :loading="avataForm.processing"
-            :default-image="user.avatar"
-            :removeable="!!user.avatar_uploaded"
+            :default-image="user.avatar ?? userPlaceholderSrc"
+            :removeable="!!user.avatar"
             wrapper-class="text-center sm:col-span-2"
             image-class="w-32 h-32 rounded-full mx-auto"
             center-button
@@ -51,13 +51,14 @@
 </template>
 
 <script setup lang="ts">
+import userPlaceholderSrc from '@/images/user.svg'
+
 const props = defineProps<{
   user: {
     id: string
     name: string
     email: string
-    avatar: string
-    avatar_uploaded: string | null
+    avatar: string | null
   }
   passwordLess: boolean
 }>()

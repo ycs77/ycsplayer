@@ -11,10 +11,7 @@
     <div v-if="member" class="mt-4 relative">
       <div class="py-6">
         <div class="flex justify-center">
-          <img
-            :src="member.avatar ?? '/images/user.svg'"
-            class="w-20 h-20 rounded-full"
-          >
+          <Avatar :src="member.avatar" class="w-20 h-20" />
         </div>
 
         <h4 class="mt-3 text-2xl text-center">{{ member.name }}</h4>

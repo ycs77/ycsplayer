@@ -9,11 +9,7 @@
           class="p-2 w-full flex items-center hover:bg-blue-900/50 rounded-lg transition-colors"
           @click="openMemberModal(member)"
         >
-          <img
-            class="w-8 h-8 rounded-full mr-2"
-            :src="member.avatar ?? '/images/user.svg'"
-          >
-
+          <Avatar class="w-9 h-9 mr-2" :src="member.avatar" />
           <div class="flex items-center h-10">
             <div>
               <div class="tracking-wide">
