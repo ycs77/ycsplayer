@@ -10,6 +10,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
 import DefineOptions from 'unplugin-vue-define-options/vite'
+import { ViteS3 } from '@froxz/vite-plugin-s3'
 
 export default defineConfig(({ mode }) => {
   process.env = {
@@ -74,6 +75,20 @@ export default defineConfig(({ mode }) => {
       }),
       Icons(),
       DefineOptions(),
+      ViteS3(!!process.env.VITE_S3_UPLOAD_VITE_ASSETS_ENABLED, {
+        basePath: '/build',
+        clientConfig: {
+          credentials: {
+            accessKeyId: process.env.VITE_S3_ACCESS_KEY_ID!,
+            secretAccessKey: process.env.VITE_S3_SECRET_ACCESS_KEY!,
+          },
+          endpoint: process.env.VITE_S3_ENDPOINT,
+          region: process.env.VITE_S3_DEFAULT_REGION,
+        },
+        uploadOptions: {
+          Bucket: process.env.VITE_S3_BUCKET,
+        },
+      }),
     ],
     server: {
       host: true,

@@ -36,6 +36,7 @@
   - [設定 Pusher](#設定-pusher)
   - [安裝 FFMpeg](#安裝-ffmpeg)
   - [DigitalOcean Spaces (S3 兼容儲存空間)](#digitalocean-spaces-s3-兼容儲存空間)
+    - [上傳 Vite 資產到 DigitalOcean Spaces](#上傳-vite-資產到-digitalocean-spaces)
 - [ycsPlayer 相關環境變數](#ycsplayer-相關環境變數)
   - [開放建立房間權限](#開放建立房間權限)
   - [播放器 Log 紀錄](#播放器-log-紀錄)
@@ -165,6 +166,7 @@ php artisan route:clear
 php artisan migrate --force
 php artisan optimize
 php artisan view:cache
+php artisan queue:restart
 yarn
 yarn build
 ```
@@ -237,6 +239,19 @@ $ curl -X GET -H "Content-Type: application/json" \
 ```
 
 而 `API_TOKEN` 可以到 [Personal access tokens](https://cloud.digitalocean.com/account/api/tokens) 新增，取得完之後就可以刪掉了。在回傳的資料中可以看到 CDN Endpoint 的 ID，填到 `DO_CDN_ENDPOINT` 後面即可。因為使用了 CDN，就可以在 `DO_URL` 配置 CDN 專屬的網址了。
+
+#### 上傳 Vite 資產到 DigitalOcean Spaces
+
+使用到了 [@froxz/vite-plugin-s3](https://github.com/SergkeiM/vite-plugin-s3) 套件來上傳資產，當然預設是不會開啟上傳的。要使用之前需要先配置好上面 DigitalOcean Spaces 的金鑰等，然後把 `DO_UPLOAD_VITE_ASSETS_ENABLED` 設成 `true`，`ASSET_URL` 反註解掉：
+
+```ini
+DO_UPLOAD_VITE_ASSETS_ENABLED=true
+ASSET_URL="${DO_URL}"
+```
+
+以及還要到 DigitalOcean Spaces 的 Settings 裡面設定 CORS，否則會因為跨域的原因無法執行 JS。在 CORS Configurations 裡面增加一條規則，`Allowed Methods` 允許 `GET`，`Access Control Max Age` 設定 5，然後儲存。
+
+之後在每次執行 `yarn build` 的時候就會自動上傳到 DigitalOcean Spaces 了。
 
 ## ycsPlayer 相關環境變數
 
