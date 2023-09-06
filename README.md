@@ -151,7 +151,8 @@ php artisan key:generate
 php artisan migrate --force
 php artisan db:seed --force
 php artisan storage:link
-php artisan optimize
+php artisan config:cache
+php artisan route:cache
 php artisan view:cache
 yarn
 yarn build
@@ -161,11 +162,10 @@ yarn build
 
 ```bash
 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-php artisan config:clear
-php artisan route:clear
-php artisan migrate --force
-php artisan optimize
+php artisan config:cache
+php artisan route:cache
 php artisan view:cache
+php artisan migrate --force
 php artisan queue:restart
 yarn
 yarn build
