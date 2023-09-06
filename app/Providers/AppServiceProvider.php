@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Inertia::titleTemplate(fn ($title) => $title ? $title.' | '.config('app.name') : config('app.name'));
+        Inertia::titleTemplate(fn ($title) => $title ? $title.' | ycsPlayer' : 'ycsPlayer');
 
         Media::observe(MediaObserver::class);
     }

@@ -36,7 +36,7 @@ class SendPasswordlessLoginLink extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('登入 '.config('app.name'))
+            ->subject('登入 ycsPlayer')
             ->line('您收到這封 E-mail 是因為我們收到了您的登入請求，請點擊以下按鈕來登入。')
             ->action('登入', $this->url)
             ->line(sprintf('這個連結將於 %d 分鐘後失效。', (int) config('laravel-passwordless-login.login_route_expires')))
