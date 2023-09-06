@@ -2,6 +2,7 @@
 
 use App\Events\RoomMediaConverted;
 use App\Events\RoomMediaCreated;
+use App\Events\RoomMediaRemoved;
 use App\Jobs\AddRoomMediaFile;
 use App\Models\QueueRoomFile;
 use Database\Seeders\RoomSeeder;
@@ -102,6 +103,8 @@ test('should convert media files', function () {
 test('should remove a media', function () {
     Storage::fake();
 
+    Event::fake([RoomMediaRemoved::class]);
+
     $room = room('動漫觀影室');
 
     $file = fakeFileFromPath('tests/fixtures/mov_bbb.mp3');
@@ -121,4 +124,6 @@ test('should remove a media', function () {
     expect($room->getMedia()->firstWhere('name', 'mov_bbb'))->toBeNull();
 
     Storage::assertMissing('1/mov_bbb.mp3');
+
+    Event::assertDispatched(RoomMediaRemoved::class);
 });

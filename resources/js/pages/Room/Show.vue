@@ -257,6 +257,20 @@ function onNoteUpdated() {
   })
 }
 
+// 監聽當上傳並轉換完成檔案時的事件
+function onRoomMediaConverted() {
+  router.reload({
+    only: [...globalOnly, 'medias'],
+  })
+}
+
+// 監聽當刪除檔案時的事件
+function onRoomMediaRemoved() {
+  router.reload({
+    only: [...globalOnly, 'medias'],
+  })
+}
+
 // 監聽當有其他人上線或離線時的事件
 function onOnlineMembersUpdated() {
   router.reload({
@@ -290,6 +304,8 @@ watch(player, (v, ov, onInvalidate) => {
     .listen('PlayerlistItemNexted', onPlayerlistItemNexted)
     .listen('PlayerlistItemRemoved', onPlayerlistItemRemoved)
     .listen('RoomNoteUpdated', onNoteUpdated)
+    .listen('RoomMediaConverted', onRoomMediaConverted)
+    .listen('RoomMediaRemoved', onRoomMediaRemoved)
     .listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)
 
   onInvalidate(() => {
