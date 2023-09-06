@@ -195,6 +195,11 @@ function openAddPlaylistItemModal() {
   playlistItemForm.type = props.room.type === RoomType.Audio
     ? PlayerType.Audio
     : PlayerType.Video
+
+  if (props.playlistItems.length) {
+    playlistItemForm.type = props.playlistItems.slice(-1)[0].type
+  }
+
   playlistItemForm.title = ''
   playlistItemForm.url = ''
   playlistItemForm.media_id = null

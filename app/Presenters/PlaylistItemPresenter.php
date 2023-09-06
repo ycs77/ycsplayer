@@ -13,6 +13,7 @@ class PlaylistItemPresenter extends FlexiblePresenter
     {
         return [
             'id' => $this->hash_id,
+            'type' => $this->type->value,
             'title' => $this->title,
             'thumbnail' => $this->thumbnail,
         ];
@@ -21,7 +22,6 @@ class PlaylistItemPresenter extends FlexiblePresenter
     public function presetPlay()
     {
         return $this->with(fn () => [
-            'type' => $this->type->value,
             'url' => $this->url,
             'preview' => $this->preview,
         ]);
