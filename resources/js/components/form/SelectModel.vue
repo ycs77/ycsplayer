@@ -1,12 +1,13 @@
 <template>
-  <Listbox v-model="selected" as="div" class="relative w-full group">
+  <Listbox v-model="selected" as="div" class="relative w-full group" :disabled="disabled">
     <ListboxButton
       class="
         flex justify-between items-center
         w-full
         pl-3 pr-9 py-2
         bg-blue-950/50
-        hover:bg-blue-900/50
+        enabled:hover:bg-blue-900/50
+        disabled:text-blue-400/50
         border border-gray-600 rounded
         group-focus-within:border-blue-300 group-focus-within:ring-1 group-focus-within:ring-blue-300
         transition-colors
@@ -86,10 +87,12 @@ export interface Model extends Record<string, any> {
 
 withDefaults(defineProps<{
   models: Model[]
+  disabled?: boolean
   selectMessage?: string
   thumbnailWidthClass?: string
   thumbnailHeightClass?: string
 }>(), {
+  disabled: false,
   selectMessage: '請選擇...',
   thumbnailWidthClass: 'w-10',
   thumbnailHeightClass: 'h-10',

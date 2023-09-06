@@ -26,7 +26,8 @@
           >
             <SelectModel
               v-model="media"
-              :models="filteredMedias.map(media => ({ ...media, title: media.name }))"
+              :models="filteredMediasOptions"
+              :disabled="!filteredMediasOptions.length"
               select-message="請選擇已上傳的媒體檔案..."
               thumbnail-width-class="w-28"
               thumbnail-height-class="h-16"
@@ -68,14 +69,17 @@ const form = reactive(toRaw(props.form)) as InertiaForm<PlaylistItemForm>
 
 const media = ref(null) as Ref<(Media & { title: string }) | null>
 
-const filteredMedias = computed(() => {
+const filteredMediasOptions = computed(() => {
   if (form.type === PlayerType.Video) {
-    return props.medias.filter(media => /\.mp4$/.test(media.name))
+    return props.medias
+      .filter(media => /\.mp4$/.test(media.name))
+      .map(media => ({ ...media, title: media.name }))
   } else if (form.type === PlayerType.Audio) {
-    return props.medias.filter(media => /\.mp3$/.test(media.name))
-  } else {
-    return []
+    return props.medias
+      .filter(media => /\.mp3$/.test(media.name))
+      .map(media => ({ ...media, title: media.name }))
   }
+  return []
 })
 
 watch(() => form.type, () => {
