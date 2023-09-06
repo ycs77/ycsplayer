@@ -49,6 +49,7 @@ class PlayerController extends Controller
 
         $status->isClickedBigButton = $request->input('is_clicked_big_button');
 
+        $paused = $status->paused;
         $status->paused = false;
 
         if (is_numeric($request->input('current_time'))) {
@@ -57,7 +58,11 @@ class PlayerController extends Controller
             $status->currentTime = 0.0;
         }
 
-        if ($status->isClickedBigButton || $isFirst) {
+        // 只有以下條件之一的才能儲存當前播放進度:
+        // 1. 初次播放
+        // 2. 已經點擊過開始播放鍵
+        // 3. 當前是暫停狀態
+        if ($isFirst || $status->isClickedBigButton || $paused) {
             $status->timestamp = $request->input('timestamp');
 
             $this->statusCache->store($roomId, $status);
@@ -72,6 +77,7 @@ class PlayerController extends Controller
     {
         $request->validate([
             'room_id' => ['required', 'string', 'max:12'],
+            'timestamp' => ['required', 'numeric'],
             'current_time' => ['required', 'numeric'],
         ]);
 
@@ -86,6 +92,7 @@ class PlayerController extends Controller
         $socketId = $request->header('X-Socket-Id');
 
         $status = $this->statusCache->get($roomId) ?? new PlayStatus();
+        $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
         $status->paused = true;
 

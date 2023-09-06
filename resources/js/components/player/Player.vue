@@ -55,6 +55,11 @@ function currentTime() {
     : 0
 }
 
+function adjustmentCurrentTime(timestamp: number, currentTime: number) {
+  const seconds = (Date.now() - timestamp) / 1000
+  return Math.round((currentTime + seconds) * 100) / 100
+}
+
 function play(handler?: () => void, checkPaused = true) {
   if (!player) return
   if (checkPaused && !player.paused()) return
@@ -93,6 +98,7 @@ function pause(handler?: () => void) {
 
   axios.post('/player/pause', {
     room_id: props.roomId,
+    timestamp: Date.now(),
     current_time: currentTime(),
   }).then()
 }
@@ -110,20 +116,6 @@ function seeked() {
     paused: player.paused(),
   }).then()
 }
-
-const timeUpdate = throttle(() => {
-  if (!player) return
-  if (isEnded) return
-
-  emit('timeupdate', currentTime())
-
-  axios.post('/player/time-update', {
-    room_id: props.roomId,
-    timestamp: Date.now(),
-    current_time: currentTime(),
-    paused: player.paused(),
-  }).then()
-}, 1000 * 5)
 
 function end() {
   if (!player) return
@@ -170,7 +162,6 @@ onMounted(() => {
 
   player = videojs(videoRef.value, videojsOptions)
 
-  player.on('timeupdate', timeUpdate)
   player.on('ended', end)
 
   player.ready(() => {
@@ -214,13 +205,14 @@ onMounted(() => {
     new (player: Player, options?: any): BigPlayButton
   }) {
     handleClick(event: KeyboardEvent) {
-      this.player_.handleTechWaiting_()
-      super.handleClick(event)
-      play(() => {
-        if (this.player_)
+      if (this.player_.paused()) {
+        this.player_.handleTechWaiting_()
+        silencePromise(this.player_.play())
+        play(() => {
           super.handleClick(event)
-        emit('play', currentTime())
-      }, false)
+          emit('play', currentTime())
+        })
+      }
     }
   }
 
@@ -265,7 +257,6 @@ onMounted(() => {
   const bigPlayButton = player.getChild('bigPlayButton')!
   const controlBar = player.getChild('controlBar')!
   const playToggle = controlBar.getChild('playToggle')!
-  // const volumePanel = controlBar.getChild('volumePanel')!
   const pictureInPictureToggle = controlBar.getChild('pictureInPictureToggle')!
   const progressControl = controlBar.getChild('ProgressControl')!
   const seekBar = progressControl.getChild('SeekBar')!
@@ -276,7 +267,6 @@ onMounted(() => {
   player.removeChild(posterImage)
   player.removeChild(bigPlayButton)
   controlBar.removeChild(playToggle)
-  // controlBar.removeChild(volumePanel)
   controlBar.removeChild(pictureInPictureToggle)
   if (hasTimeTooltip && timeTooltip) {
     playProgressBar.removeChild(timeTooltip)
@@ -310,10 +300,12 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
   // 如果觸發的播放器是正在點擊 bigPlayButton，
   // 同時當前播放器已經點擊過 bigPlayButton，
   // 同時觸發的播放器不是當前播放器，
+  // 同時已經是播放狀態，
   // 就不要執行播放。
   if (!e.status.is_clicked_big_button &&
       isClickedBigButton() &&
-      e.socketId !== Echo.socketId()
+      e.socketId !== Echo.socketId() &&
+      !player.paused()
   ) return
 
   let newCurrentTime = e.status.current_time ?? 0
@@ -328,8 +320,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
       typeof e.status.current_time === 'number' &&
       e.socketId === Echo.socketId()
   ) {
-    const seconds = (Date.now() - e.status.timestamp) / 1000
-    newCurrentTime = Math.round((e.status.current_time + seconds) * 100) / 100
+    newCurrentTime = adjustmentCurrentTime(e.status.timestamp, e.status.current_time)
   }
 
   if (newCurrentTime < player.duration()) {
@@ -399,7 +390,6 @@ onBeforeUnmount(async () => {
     player.pause()
     await promiseTimeout(100)
 
-    player.off('timeupdate', timeUpdate)
     player.off('ended', end)
     await promiseTimeout(100)
 
