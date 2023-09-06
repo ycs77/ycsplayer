@@ -127,6 +127,7 @@ test('should pause player', function () {
 
     post('/player/pause', [
         'room_id' => $room->hash_id,
+        'timestamp' => Date::now()->timestamp,
         'current_time' => 6.26,
     ], [
         'X-Socket-Id' => '0000.00000000',
