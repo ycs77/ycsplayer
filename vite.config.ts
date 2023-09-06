@@ -75,7 +75,7 @@ export default defineConfig(({ mode }) => {
       }),
       Icons(),
       DefineOptions(),
-      ViteS3(!!process.env.VITE_S3_UPLOAD_VITE_ASSETS_ENABLED, {
+      ViteS3(process.env.VITE_S3_UPLOAD_VITE_ASSETS_ENABLED === 'true', {
         basePath: '/build',
         clientConfig: {
           credentials: {

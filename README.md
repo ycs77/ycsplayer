@@ -242,11 +242,12 @@ $ curl -X GET -H "Content-Type: application/json" \
 
 #### 上傳 Vite 資產到 DigitalOcean Spaces
 
-使用到了 [@froxz/vite-plugin-s3](https://github.com/SergkeiM/vite-plugin-s3) 套件來上傳資產，當然預設是不會開啟上傳的。要使用之前需要先配置好上面 DigitalOcean Spaces 的金鑰等，然後把 `DO_UPLOAD_VITE_ASSETS_ENABLED` 設成 `true`，`ASSET_URL` 反註解掉：
+使用到了 [@froxz/vite-plugin-s3](https://github.com/SergkeiM/vite-plugin-s3) 套件來上傳資產，當然預設是不會開啟上傳的。要使用之前需要先配置好上面 DigitalOcean Spaces 的金鑰等，然後把 `VITE_S3_UPLOAD_VITE_ASSETS_ENABLED` 設成 `true`，`ASSET_URL` 反註解掉：
 
 ```ini
-DO_UPLOAD_VITE_ASSETS_ENABLED=true
 ASSET_URL="${DO_URL}"
+
+VITE_S3_UPLOAD_VITE_ASSETS_ENABLED=true
 ```
 
 以及還要到 DigitalOcean Spaces 的 Settings 裡面設定 CORS，否則會因為跨域的原因無法執行 JS。在 CORS Configurations 裡面增加一條規則，`Allowed Methods` 允許 `GET`，`Access Control Max Age` 設定 5，然後儲存。
