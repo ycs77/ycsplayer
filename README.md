@@ -35,12 +35,14 @@
 - [依賴軟體/服務](#依賴軟體服務)
   - [設定 Pusher](#設定-pusher)
   - [安裝 FFMpeg](#安裝-ffmpeg)
+  - [DigitalOcean Spaces (S3 兼容儲存空間)](#digitalocean-spaces-s3-兼容儲存空間)
 - [ycsPlayer 相關環境變數](#ycsplayer-相關環境變數)
   - [開放建立房間權限](#開放建立房間權限)
   - [播放器 Log 紀錄](#播放器-log-紀錄)
   - [無密碼登入](#無密碼登入)
 - [專案 Artisan 指令](#專案-artisan-指令)
 - [贊助](#贊助)
+- [License](#license)
 
 ## 依賴
 
