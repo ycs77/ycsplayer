@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { debounce, throttle } from 'lodash-es'
+import { debounce } from 'lodash-es'
 import { promiseTimeout } from '@vueuse/core'
 import 'video.js/dist/video-js.css'
 import '@videojs/themes/dist/forest/index.css'
