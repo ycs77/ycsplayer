@@ -1,4 +1,4 @@
-export function useButtonWaiting(seconds: Ref<number> | (() => number)) {
+export function useWaitingCountdown(seconds: Ref<number> | (() => number)) {
   const currentSeconds = ref(0)
   const waiting = computed(() => currentSeconds.value > 0)
 

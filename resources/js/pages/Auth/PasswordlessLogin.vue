@@ -27,7 +27,7 @@ const form = useForm({
   email: props.email,
 })
 
-const { currentSeconds, waiting } = useButtonWaiting(() => props.seconds)
+const { currentSeconds, waiting } = useWaitingCountdown(() => props.seconds)
 
 function submit() {
   form.post('/login/send', {
