@@ -54,6 +54,7 @@
 * Mailgun (或是其他送信的 driver 都可以)
 * Pusher
 * FFMpeg
+* Redis - ***選擇性***
 * DigitalOcean Spaces (S3 兼容儲存空間) - ***選擇性***
 
 ## 本地安裝
