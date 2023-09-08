@@ -81,7 +81,7 @@ const avatarPreviewSrc = ref<string | undefined>(undefined)
 
 function submit() {
   form.put('/user/profile-information', {
-    only: [...globalOnly, 'user'],
+    only: [...globalOnly, 'user', 'auth'],
     preserveScroll: true,
     onSuccess: () => form.reset('current_password', 'password', 'password_confirmation'),
     onError: () => form.reset('current_password', 'password', 'password_confirmation'),
