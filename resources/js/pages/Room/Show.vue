@@ -111,7 +111,10 @@
 
           <HeroiconsChevronUp
             class="w-6 h-6 transition-transform"
-            :class="{ 'rotate-180': !showMobilePlaylist }"
+            :class="{
+              '-rotate-0': showMobilePlaylist,
+              '-rotate-180': !showMobilePlaylist,
+            }"
           />
         </button>
       </div>
