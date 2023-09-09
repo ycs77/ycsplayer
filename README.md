@@ -231,7 +231,7 @@ DO_USE_PATH_STYLE_ENDPOINT=false
 
 `DO_ACCESS_KEY_ID` 跟 `DO_SECRET_ACCESS_KEY` 到 [Spaces access keys](https://cloud.digitalocean.com/account/api/spaces) 新增，新增完一短一長的就是這兩個 KEY。
 
-最後是 CDN 的設定，因為要在刪除完檔案之後順便也清掉 Cache 的檔案，需要設定清 CDN Cache 的 API 網址，網址取得方式為：
+最後是 CDN 的設定，因為要在刪除完檔案之後順便也清掉 Cache 的檔案，需要 CDN endpoint 的 ID，再把 ID 組成網址後就可以打清 CDN Cache 的 API。`API_TOKEN` 可以到 [Personal access tokens](https://cloud.digitalocean.com/account/api/tokens) 新增，取得完之後就可以刪掉了。而 ID 取得方式為：
 
 ```bash
 $ curl -X GET -H "Content-Type: application/json" \
@@ -239,7 +239,23 @@ $ curl -X GET -H "Content-Type: application/json" \
     "https://api.digitalocean.com/v2/cdn/endpoints"
 ```
 
-而 `API_TOKEN` 可以到 [Personal access tokens](https://cloud.digitalocean.com/account/api/tokens) 新增，取得完之後就可以刪掉了。在回傳的資料中可以看到 CDN Endpoint 的 ID，填到 `DO_CDN_ENDPOINT` 後面即可。因為使用了 CDN，就可以在 `DO_URL` 配置 CDN 專屬的網址了。
+然後就會回傳以下 JSON 格式：
+
+```json
+{
+  "endpoints": [
+    {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "origin": "[你的bucket].[你的region].digitaloceanspaces.com",
+      "endpoint": "[你的bucket].[你的region].cdn.digitaloceanspaces.com",
+      "created_at": "2023-00-00T00:00:00Z",
+      "ttl": 3600
+    }
+  ]
+}
+```
+
+找到剛才新增的 endpoint 物件的 ID，填到 `DO_CDN_ENDPOINT` 後面即可。因為使用了 CDN，就可以在 `DO_URL` 配置 CDN 專屬的網址了。
 
 #### 上傳 Vite 資產到 DigitalOcean Spaces
 
