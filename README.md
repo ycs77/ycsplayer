@@ -108,12 +108,23 @@ php artisan db:seed DummySeeder
 php artisan queue:work --timeout=1800
 ```
 
+當然這個時間都可以再修改，只是要保證比 `config/queue.php` 的 `retry_after` 設定還短。
+
 ### Laravel Homestead 開發環境相關
 
-啟動 Vite dev server 記得要轉發 Homestead 的 5173 port：
+在 Homestead 中啟動 Vite dev server：
 
 ```bash
 yarn dev
+```
+
+記得要轉發 Homestead 的 5173 port：
+
+<!-- eslint-disable-next-line yml/indent -->
+```yaml
+ports:
+    - send: 5173 # for vite server
+      to: 5173
 ```
 
 以及在 Homestead 裡要建立 Vite 開發伺服器的 HTTPS 證書的話，可以執行創建指令：
@@ -172,7 +183,7 @@ yarn
 yarn build
 ```
 
-如果想要讓上傳任務在背景執行，可以開啟 Redis 的 Queue，`QUEUE_CONNECTION` 要改成 `redis`。為了要讓 Queue 可以持續上傳約 1-2G 的大檔案，可以在建立 Worker 時設定 30 分鐘 (1800秒) 的 timeout (Job 的最長執行時間)，但要記得每次更新完程式碼後都必須重啟。
+如果想要讓上傳任務在背景執行，可以開啟 Redis 的 Queue，`QUEUE_CONNECTION` 要改成 `redis`。為了要讓 Queue 可以持續上傳約 1-2G 的大檔案，可以在建立 Worker 時設定 30 分鐘 (1800秒) 的 timeout (Job 的最長執行時間)，但要記得每次更新完程式碼後都必須重啟。當然這個時間都可以再修改，只是要保證比 `config/queue.php` 的 `retry_after` 設定還短。
 
 如果覺得影片太慢常常 lag，可以試試 [在 DigitalOcean Spaces 儲存影片檔案](#digitalocean-spaces-s3-兼容儲存空間)，還有 CDN 加速來讓讀取速度變快。
 
