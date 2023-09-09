@@ -1,6 +1,5 @@
 import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
-import { tailwindcssOriginSafelist } from '@headlessui-float/vue'
 import Forms from '@tailwindcss/forms'
 
 export default {
@@ -8,7 +7,6 @@ export default {
     './resources/views/app.blade.php',
     './resources/js/**/*.vue',
   ],
-  safelist: [...tailwindcssOriginSafelist],
   theme: {
     screens: {
       'sm': '640px',

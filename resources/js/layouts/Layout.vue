@@ -44,27 +44,24 @@
           </template>
 
           <template v-else>
-            <Menu v-slot="{ close }">
-              <Float
-                placement="bottom-end"
-                :offset="8"
-                enter="transition-[transform,opacity] duration-200 origin-top-right ease-out"
-                enter-from="scale-95 opacity-0"
-                enter-to="scale-100 opacity-100"
-                leave="transition-[transform,opacity] duration-150 origin-top-right ease-in"
-                leave-from="scale-100 opacity-100"
-                leave-to="scale-95 opacity-0"
-                :transform="false"
-              >
-                <MenuButton class="w-full flex items-center -my-0.5 max-w-[160px]">
-                  <Avatar class="w-9 h-9 mr-2" :src="user.avatar" />
-                  <div class="tracking-wide whitespace-nowrap truncate min-w-0">
-                    {{ user.name }}
-                  </div>
-                </MenuButton>
+            <Menu v-slot="{ close }" as="div" class="relative">
+              <MenuButton class="w-full flex items-center -my-0.5 max-w-[160px]">
+                <Avatar class="w-9 h-9 mr-2" :src="user.avatar" />
+                <div class="tracking-wide whitespace-nowrap truncate min-w-0">
+                  {{ user.name }}
+                </div>
+              </MenuButton>
 
+              <Transition
+                enter-active-class="transition-[transform,opacity] duration-200 origin-top-right ease-out"
+                enter-from-class="scale-95 opacity-0"
+                enter-to-class="scale-100 opacity-100"
+                leave-active-class="transition-[transform,opacity] duration-150 origin-top-right ease-in"
+                leave-from-class="scale-100 opacity-100"
+                leave-to-class="scale-95 opacity-0"
+              >
                 <MenuItems
-                  class="w-40 p-1.5 space-y-1.5 bg-blue-900/50 rounded-md shadow-md shadow-blue-950/50 backdrop-blur-md overflow-hidden focus:outline-none"
+                  class="absolute top-full right-0 w-40 p-1.5 mt-1.5 space-y-1.5 bg-blue-900/50 rounded-md shadow-md shadow-blue-950/50 backdrop-blur-md overflow-hidden focus:outline-none"
                   @click="close"
                 >
                   <MenuItem
@@ -83,7 +80,7 @@
                     </component>
                   </MenuItem>
                 </MenuItems>
-              </Float>
+              </Transition>
             </Menu>
           </template>
         </div>
