@@ -303,7 +303,7 @@ VITE_S3_UPLOAD_VITE_ASSETS_ENABLED=true
 | 功能                   | 指令                              | 說明                                                         |
 | ---------------------- | --------------------------------- | ------------------------------------------------------------ |
 | 新增管理員角色         | php artisan app:admin 1           | 讓 User ID 1 增加管理員角色。                                |
-| 刪除管理員角色         | php artisan app:admin 1 --remove  | 刪除 User ID 1 管理員的管理員角色。                          |
+| 刪除管理員角色         | php artisan app:admin 1 --remove  | 刪除 User ID 1 的管理員角色。                          |
 | 同步房間權限資料       | php artisan room:sync-permissions | 如果有新增或刪除權限時，可以執行當前指令來同步。             |
 | 清除過時的上傳暫存檔案 | php artisan room:queue-file:purge | 清除過時的上傳暫存檔案，設定 Schedule 之後會每天固定清一次。 |
 
