@@ -35,11 +35,16 @@ class UserController extends Controller
                 'avatar' => $user->avatar_url,
             ],
             'passwordLess' => config('ycsplayer.password_less'),
+            'can' => [
+                'uploadAvatar' => config('ycsplayer.upload_avatar'),
+            ],
         ])->title('帳號設定');
     }
 
     public function uploadAvatar(Request $request)
     {
+        abort_unless(config('ycsplayer.upload_avatar'), 404);
+
         $request->validate([
             'avatar' => [
                 'nullable',
@@ -67,6 +72,8 @@ class UserController extends Controller
 
     public function removeAvatar()
     {
+        abort_unless(config('ycsplayer.upload_avatar'), 404);
+
         /** @var \App\Models\User */
         $user = Auth::user();
 

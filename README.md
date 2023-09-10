@@ -290,6 +290,10 @@ VITE_S3_UPLOAD_VITE_ASSETS_ENABLED=true
 
 `YCSPLAYER_OPEN_ROOM_CREATION` 會決定是否要讓全部使用者都可以建立房間，開啟之後所有使用者不論是不是管理員都可以建立，而關閉之後就僅限管理員才能建立房間。
 
+### 上傳用戶頭像
+
+`YCSPLAYER_UPLOAD_AVATAR` 會決定用戶是否可以自行上傳頭像圖片。
+
 ### 播放器 Log 紀錄
 
 `YCSPLAYER_LOG_ENABLED` 會決定是否開啟播放器 Log 紀錄的功能，開啟之後在播放器的播放、暫停、拖曳進度條等操作時會記錄到 Log 中，用於排查錯誤時使用。

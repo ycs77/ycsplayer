@@ -5,6 +5,7 @@ use Database\Seeders\RoomSeeder;
 use Database\Seeders\UserSeeder;
 use Grosv\LaravelPasswordlessLogin\UserClass;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -63,6 +64,8 @@ test('should save user settings with password', function () {
 });
 
 test('should upload custom user avatar', function () {
+    Config::set('ycsplayer.upload_avatar', true);
+
     Storage::fake();
 
     $avatar = UploadedFile::fake()
@@ -80,6 +83,8 @@ test('should upload custom user avatar', function () {
 });
 
 test('should remove custom user avatar', function () {
+    Config::set('ycsplayer.upload_avatar', true);
+
     Storage::fake();
 
     $avatarPath = UploadedFile::fake()

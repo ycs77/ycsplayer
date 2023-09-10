@@ -4,6 +4,7 @@
       <form @submit.prevent="submit">
         <div class="grid gap-x-4 gap-y-6 sm:grid-cols-2">
           <ImageUpload
+            v-if="can.uploadAvatar"
             id="avatar"
             v-model="avataForm.avatar"
             :loading="avataForm.processing"
@@ -15,6 +16,12 @@
             @selected="selectedAvatar"
             @remove="removeAvatar"
           />
+          <div v-else class="sm:col-span-2">
+            <img
+              :src="user.avatar ?? userPlaceholderSrc"
+              class="object-cover w-32 h-32 rounded-full mx-auto"
+            >
+          </div>
           <TextInput id="name" v-model="form.name" label="姓名" />
           <TextInput id="email" v-model="form.email" label="E-mail" type="email" />
           <template v-if="!passwordLess">
@@ -61,6 +68,9 @@ const props = defineProps<{
     avatar: string | null
   }
   passwordLess: boolean
+  can: {
+    uploadAvatar: boolean
+  }
 }>()
 
 const showCropImageModal = ref(false)
@@ -98,6 +108,8 @@ function selectedAvatar(file: File, dataUrl: string) {
 function croppedAvatar(blob: Blob) {
   avataForm.avatar = blob as any
 
+  if (!props.can.uploadAvatar) return
+
   avataForm.post('/user/avatar', {
     only: [...globalOnly, 'user', 'auth'],
     preserveScroll: true,
@@ -107,6 +119,8 @@ function croppedAvatar(blob: Blob) {
 }
 
 function removeAvatar() {
+  if (!props.can.uploadAvatar) return
+
   avataForm.delete('/user/avatar', {
     only: [...globalOnly, 'user', 'auth'],
     preserveScroll: true,
