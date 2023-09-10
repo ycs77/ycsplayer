@@ -123,10 +123,14 @@
     <main>
       <slot />
     </main>
+
+    <ModalsContainer />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ModalsContainer } from 'vue-final-modal'
+
 const { user } = useAuth()
 
 const showMenu = ref(false)

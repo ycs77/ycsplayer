@@ -1,10 +1,11 @@
 import { createApp, h } from 'vue'
 import { Link, createInertiaApp } from '@inertiajs/vue3'
 import InertiaTitle from 'inertia-title/vue3'
-import { vfmPlugin as VueFinalModal } from 'vue-final-modal'
+import { createVfm } from 'vue-final-modal'
 import Toast from 'vue-toastification'
 import Layout from './layouts/Layout.vue'
 import { Notification } from '@/plugins/notification'
+import 'vue-final-modal/style.css'
 import '../css/app.css'
 
 declare global {
@@ -30,10 +31,12 @@ createInertiaApp({
     return page
   },
   setup({ el, App, props, plugin }) {
+    const VueFinalModal = createVfm()
+
     createApp({ render: () => h(App, props) })
       .use(plugin)
       .use(InertiaTitle)
-      .use(VueFinalModal())
+      .use(VueFinalModal)
       .use(Toast)
       .use(Notification)
       .component('Link', Link)

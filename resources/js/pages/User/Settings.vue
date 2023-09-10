@@ -51,6 +51,7 @@
       title="剪裁頭像"
       :src="avatarPreviewSrc"
       :aspect-ratio="1 / 1"
+      circle
       :loading="avataForm.processing"
       @cropped="croppedAvatar"
     />
@@ -133,16 +134,3 @@ function deleteAccount() {
   }
 }
 </script>
-
-<style scoped>
-:deep(.cropper-view-box),
-:deep(.cropper-face) {
-  border-radius: 50%;
-}
-
-/* The css styles for `outline` do not follow `border-radius` on iOS/Safari (cropperjs#979). */
-:deep(.cropper-view-box) {
-  outline: 0;
-  box-shadow: 0 0 0 1px #39f;
-}
-</style>

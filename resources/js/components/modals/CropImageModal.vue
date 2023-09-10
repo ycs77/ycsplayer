@@ -9,7 +9,7 @@
     </template>
 
     <div class="mt-4 relative">
-      <div>
+      <div class="cropper-circle">
         <img ref="imgRef" :src="src ?? ''">
       </div>
 
@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import { promiseTimeout } from '@vueuse/core'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
 
@@ -30,11 +31,13 @@ const props = withDefaults(defineProps<{
   title?: string
   src: string | undefined
   aspectRatio: number
+  circle?: boolean
   mimeType?: string
-  options?: Cropper.Options<HTMLImageElement>
   loading?: boolean
+  options?: Cropper.Options<HTMLImageElement>
 }>(), {
   title: '剪裁圖片',
+  circle: false,
   mimeType: 'auto',
   loading: false,
 })
@@ -68,7 +71,8 @@ async function cropped() {
   }
 }
 
-watch(show, (show, oldShow, invalidate) => {
+watch(show, async (show, oldShow, invalidate) => {
+  await promiseTimeout(10)
   if (props.src && imgRef.value) {
     cropper = new Cropper(imgRef.value, {
       aspectRatio: props.aspectRatio,
@@ -118,3 +122,16 @@ watch(() => props.src, src => {
   }
 })
 </script>
+
+<style scoped>
+.cropper-circle :deep(.cropper-view-box),
+.cropper-circle :deep(.cropper-face) {
+  border-radius: 50%;
+}
+
+/* The css styles for `outline` do not follow `border-radius` on iOS/Safari (cropperjs#979). */
+.cropper-circle :deep(.cropper-view-box) {
+  outline: 0;
+  box-shadow: 0 0 0 1px #39f;
+}
+</style>
