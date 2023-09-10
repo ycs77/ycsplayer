@@ -292,7 +292,7 @@ VITE_S3_UPLOAD_VITE_ASSETS_ENABLED=true
 
 ### 上傳用戶頭像
 
-`YCSPLAYER_UPLOAD_AVATAR` 會決定用戶是否可以自行上傳頭像圖片。
+`YCSPLAYER_UPLOAD_AVATAR` 會決定用戶是否可以上傳頭像圖片。
 
 ### 播放器 Log 紀錄
 
