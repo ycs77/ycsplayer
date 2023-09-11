@@ -29,7 +29,7 @@
   }
 
   .btn-secondary {
-    @apply bg-white text-gray-700;
+    @apply bg-white text-blue-950;
   }
   a.btn-secondary {
     @apply hover:bg-gray-50;

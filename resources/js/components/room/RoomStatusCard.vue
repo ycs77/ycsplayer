@@ -13,16 +13,34 @@
       <div>成員數：{{ membersCount }}人</div>
 
       <div>
-        <TextareaInput
-          v-if="form.editing"
-          id="note"
-          ref="inputRef"
-          v-model="form.note"
-          rows="3"
-          class="mt-2"
-          @keydown.enter.prevent="endEditingNote"
-          @blur="endEditingNote"
-        />
+        <div v-if="editing" class="mt-2">
+          <TextareaInput
+            id="note"
+            ref="inputRef"
+            v-model="form.note"
+            rows="3"
+            @keydown.enter.prevent="saveNote"
+            @keydown.esc="cancelEditNote"
+          />
+
+          <div class="mt-2 flex justify-end items-center space-x-2">
+            <button
+              type="button"
+              class="btn btn-sm btn-secondary"
+              @click="cancelEditNote"
+            >
+              取消
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-sm btn-primary"
+              @click="saveNote"
+            >
+              保存
+            </button>
+          </div>
+        </div>
 
         <div v-else class="flex items-center">
           <div
@@ -69,8 +87,11 @@ const showFull = ref(false)
 
 const form = useForm({
   note: props.room.note ?? '',
-  editing: false,
 })
+
+let originalNote = ''
+
+const editing = ref(false)
 
 function focusNoteInput() {
   nextTick(() => {
@@ -79,21 +100,28 @@ function focusNoteInput() {
 }
 
 function startEditingNote() {
-  form.editing = true
+  editing.value = true
+  originalNote = form.note
   focusNoteInput()
 }
 
-function endEditingNote() {
+function saveNote() {
   form.put(`/rooms/${props.room.id}/note`, {
     only: [...globalOnly, 'room'],
     preserveScroll: true,
     onSuccess() {
+      editing.value = false
+      originalNote = ''
       emit('submitNote')
-      form.editing = false
     },
     onError() {
       focusNoteInput()
     },
   })
+}
+
+function cancelEditNote() {
+  editing.value = false
+  form.note = originalNote
 }
 </script>
