@@ -14,19 +14,27 @@
 
       <div>
         <div v-if="editing" class="mt-2">
-          <TextareaInput
-            id="note"
-            ref="inputRef"
-            v-model="form.note"
-            rows="3"
-            @keydown.enter.prevent="saveNote"
-            @keydown.esc="cancelEditNote"
-          />
+          <div class="relative">
+            <TextareaInput
+              id="note"
+              ref="inputRef"
+              v-model="noteForm.note"
+              rows="3"
+              class="block"
+              @keydown.enter.prevent="saveNote"
+              @keydown.esc="cancelEditNote"
+            />
+
+            <div v-if="noteForm.processing" class="absolute inset-0 flex justify-center items-center bg-blue-900/75 rounded-md">
+              <Loading class="w-10 h-10" />
+            </div>
+          </div>
 
           <div class="mt-2 flex justify-end items-center space-x-2">
             <button
               type="button"
               class="btn btn-sm btn-secondary"
+              :disabled="noteForm.processing"
               @click="cancelEditNote"
             >
               取消
@@ -35,6 +43,7 @@
             <button
               type="button"
               class="btn btn-sm btn-primary"
+              :disabled="noteForm.processing"
               @click="saveNote"
             >
               保存
@@ -44,13 +53,13 @@
 
         <div v-else class="flex items-center">
           <div
-            v-if="form.note"
+            v-if="noteForm.note"
             class="break-all"
             :class="{ 'line-clamp-3': !showFull }"
             :title="showFull ? '顯示部分' : '顯示全部'"
             @click="showFull = !showFull"
           >
-            {{ form.note }}
+            {{ noteForm.note }}
           </div>
           <div v-else class="text-blue-400/50">
             記事本可以紀錄一些內容...
@@ -85,10 +94,9 @@ const inputRef = ref<{ $el: HTMLDivElement }>()
 
 const showFull = ref(false)
 
-const form = useForm({
+const noteForm = useForm({
   note: props.room.note ?? '',
 })
-
 let originalNote = ''
 
 const editing = ref(false)
@@ -101,12 +109,12 @@ function focusNoteInput() {
 
 function startEditingNote() {
   editing.value = true
-  originalNote = form.note
+  originalNote = noteForm.note
   focusNoteInput()
 }
 
 function saveNote() {
-  form.put(`/rooms/${props.room.id}/note`, {
+  noteForm.put(`/rooms/${props.room.id}/note`, {
     only: [...globalOnly, 'room'],
     preserveScroll: true,
     onSuccess() {
@@ -122,6 +130,6 @@ function saveNote() {
 
 function cancelEditNote() {
   editing.value = false
-  form.note = originalNote
+  noteForm.note = originalNote
 }
 </script>
