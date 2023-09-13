@@ -3,7 +3,6 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -37,9 +36,9 @@ class CreateNewUser implements CreatesNewUsers
             'name' => $input['name'],
             'email' => $input['email'],
         ], config('ycsplayer.password_less') ? [
-            'password' => Hash::make(Str::random(16)),
+            'password' => Str::random(16),
         ] : [
-            'password' => Hash::make($input['password']),
+            'password' => $input['password'],
         ]));
     }
 }

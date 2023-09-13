@@ -5,7 +5,6 @@ namespace App\Actions\Fortify;
 use App\Facades\Flash;
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
@@ -40,7 +39,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         $user->email = $input['email'];
 
         if (! config('ycsplayer.password_less') && $input['password']) {
-            $user->password = Hash::make($input['password']);
+            $user->password = $input['password'];
         }
 
         $user->save();
