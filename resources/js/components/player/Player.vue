@@ -253,11 +253,13 @@ onMounted(() => {
     }
   }
 
-  const posterImage = player.getChild('posterImage')!
-  const bigPlayButton = player.getChild('bigPlayButton')!
-  const controlBar = player.getChild('controlBar')!
-  const playToggle = controlBar.getChild('playToggle')!
-  const pictureInPictureToggle = controlBar.getChild('pictureInPictureToggle')!
+  const posterImage = player.getChild('PosterImage')!
+  const bigPlayButton = player.getChild('BigPlayButton')!
+  const controlBar = player.getChild('ControlBar')!
+  const playToggle = controlBar.getChild('PlayToggle')!
+  const durationDisplay = controlBar.getChild('DurationDisplay')!
+  const remainingTimeDisplay = controlBar.getChild('RemainingTimeDisplay')!
+  const pictureInPictureToggle = controlBar.getChild('PictureInPictureToggle')!
   const progressControl = controlBar.getChild('ProgressControl')!
   const seekBar = progressControl.getChild('SeekBar')!
   const playProgressBar = seekBar.getChild('PlayProgressBar')!
@@ -267,6 +269,8 @@ onMounted(() => {
   player.removeChild(posterImage)
   player.removeChild(bigPlayButton)
   controlBar.removeChild(playToggle)
+  controlBar.removeChild(durationDisplay)
+  controlBar.removeChild(remainingTimeDisplay)
   controlBar.removeChild(pictureInPictureToggle)
   if (hasTimeTooltip && timeTooltip) {
     playProgressBar.removeChild(timeTooltip)
@@ -281,6 +285,7 @@ onMounted(() => {
   player.addChild('PosterImage', {}, 1)
   player.addChild('BigPlayButton', {}, 2)
   controlBar.addChild('PlayToggle', {}, 0)
+  controlBar.addChild('DurationDisplay', {}, 7)
   progressControl.addChild('SeekBar', {}, 0)
 
   player.ready(() => {
@@ -405,8 +410,8 @@ defineExpose({
 </script>
 
 <style>
-.vjs-youtube iframe {
-  pointer-events: none !important;
+.video-js .vjs-duration {
+  display: block !important;
 }
 
 .vjs-control-bar::before {
@@ -419,5 +424,9 @@ defineExpose({
   height: 80px;
   background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAADGCAYAAAAT+OqFAAAAdklEQVQoz42QQQ7AIAgEF/T/D+kbq/RWAlnQyyazA4aoAB4FsBSA/bFjuF1EOL7VbrIrBuusmrt4ZZORfb6ehbWdnRHEIiITaEUKa5EJqUakRSaEYBJSCY2dEstQY7AuxahwXFrvZmWl2rh4JZ07z9dLtesfNj5q0FU3A5ObbwAAAABJRU5ErkJggg==') bottom / auto 200% repeat-x;
   pointer-events: none;
+}
+
+.vjs-youtube iframe {
+  pointer-events: none !important;
 }
 </style>
