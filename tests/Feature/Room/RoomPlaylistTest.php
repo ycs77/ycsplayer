@@ -9,6 +9,7 @@ use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 use function Pest\Laravel\delete;
+use function Pest\Laravel\get;
 use function Pest\Laravel\post;
 use function Pest\Laravel\seed;
 
@@ -91,6 +92,21 @@ test('should add youtube playlist item', function () {
     expect($item->type)->toBe(PlayerType::YouTube);
     expect($item->title)->toBe('迷星叫');
     expect($item->url)->toBe('https://www.youtube.com/watch?v=B8k6JtF6WrU');
+});
+
+test('expect throw url invalid error on add youtube playlist item', function () {
+    $room = room('動漫觀影室');
+
+    get("/rooms/{$room->hash_id}");
+
+    post("/rooms/{$room->hash_id}/playlist", [
+        'type' => PlayerType::YouTube->value,
+        'title' => '迷星叫',
+        'url' => 'https://not-youtube.com/watch?v=B8k6JtF6WrU',
+        'media_id' => null,
+    ])->assertRedirect("/rooms/{$room->hash_id}");
+
+    expect(session('errors')->first('url'))->toBe('YouTube 的網址請輸入 https://www.youtube.com/watch?v=<id> 或 https://www.youtube.com/embed/<id> 格式');
 });
 
 test('should click playlist item', function () {
