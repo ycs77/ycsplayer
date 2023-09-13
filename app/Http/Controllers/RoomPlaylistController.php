@@ -71,10 +71,17 @@ class RoomPlaylistController extends Controller
                     : null,
             ]);
         } elseif ($type === PlayerType::YouTube) {
-            if (preg_match('/^https?:\/\/www\.youtube\.com\/watch\?v\=([\w-]+)$/', $request->input('url'), $m)) {
-                $youtubeId = $m[1];
-            } elseif (preg_match('/^https?:\/\/www\.youtube\.com\/embed\/([\w-]+)$/', $request->input('url'), $m)) {
-                $youtubeId = $m[1];
+            $url = $request->input('url');
+
+            foreach ([
+                '/^https?:\/\/(?:www|music)\.youtube\.com\/watch\?v\=([\w-]+)$/',
+                '/^https?:\/\/(?:www|music)\.youtube\.com\/watch\?.+&v\=([\w-]+)(?:&.+)?$/',
+                '/^https?:\/\/www\.youtube\.com\/embed\/([\w-]+)$/',
+            ] as $pattern) {
+                if (preg_match($pattern, $url, $m)) {
+                    $youtubeId = $m[1];
+                    break;
+                }
             }
 
             if (! isset($youtubeId)) {
@@ -83,10 +90,12 @@ class RoomPlaylistController extends Controller
                 ]);
             }
 
+            $url = "https://www.youtube.com/watch?v={$youtubeId}";
+
             $room->playlist_items()->create([
                 'type' => $type,
                 'title' => $request->input('title'),
-                'url' => $request->input('url'),
+                'url' => $url,
                 'thumbnail' => "https://img.youtube.com/vi/{$youtubeId}/default.jpg",
             ]);
         }
