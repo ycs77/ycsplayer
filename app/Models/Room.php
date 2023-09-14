@@ -161,14 +161,18 @@ class Room extends Model implements HasMedia
 
     public function leave(User $user): void
     {
-        $user->getRoleNames()->each(fn (string $role) => $user->removeRole($role));
+        $user->getRoleNames()
+            ->filter(fn (string $role) => str_starts_with($role, 'rooms.'.$this->id.'.'))
+            ->each(fn (string $role) => $user->removeRole($role));
 
         $this->members()->detach($user);
     }
 
     public function changeMemberRole(User $user, string $role): void
     {
-        $user->getRoleNames()->each(fn (string $role) => $user->removeRole($role));
+        $user->getRoleNames()
+            ->filter(fn (string $role) => str_starts_with($role, 'rooms.'.$this->id.'.'))
+            ->each(fn (string $role) => $user->removeRole($role));
 
         $user->assignRole('rooms.'.$this->id.'.'.$role);
     }
