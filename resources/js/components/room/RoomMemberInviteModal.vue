@@ -121,6 +121,8 @@ function inviteMember() {
     only: [...globalOnly, 'members'],
     preserveScroll: true,
     onSuccess() {
+      form.reset('email')
+      member.value = null
       emit('invite')
     },
   })
