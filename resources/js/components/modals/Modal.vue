@@ -1,11 +1,11 @@
 <template>
   <VueFinalModal
     v-model="show"
+    :click-to-close="false"
+    :esc-to-close="false"
     content-class="absolute inset-0 px-4 py-10 lg:py-20 overflow-y-auto"
     content-transition="vfm-fade"
     overlay-transition="vfm-fade"
-    :click-to-close="false"
-    :esc-to-close="false"
   >
     <div
       class="relative mx-auto bg-gray-950 rounded-md"
