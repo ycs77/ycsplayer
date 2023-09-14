@@ -74,7 +74,7 @@ class RoomPlaylistController extends Controller
             $url = $request->input('url');
 
             foreach ([
-                '/^https?:\/\/(?:www|music)\.youtube\.com\/watch\?v\=([\w-]+)$/',
+                '/^https?:\/\/(?:www|music)\.youtube\.com\/watch\?v\=([\w-]+)(?:&.+)?$/',
                 '/^https?:\/\/(?:www|music)\.youtube\.com\/watch\?.+&v\=([\w-]+)(?:&.+)?$/',
                 '/^https?:\/\/www\.youtube\.com\/embed\/([\w-]+)$/',
             ] as $pattern) {
