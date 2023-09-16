@@ -41,7 +41,7 @@ test('should upload file', function () {
 
     $room = room('動漫觀影室');
 
-    $file = fakeFileFromPath('tests/fixtures/mov_bbb.mp3');
+    $file = fakeFileFromPath('tests/Feature/Room/fixtures/mov_bbb.mp3');
 
     $resumable = [
         'resumableChunkNumber' => '1',
@@ -82,7 +82,7 @@ test('should convert media files', function () {
 
     $room = room('動漫觀影室');
 
-    $file = fakeFileFromPath('tests/fixtures/mov_bbb.mp3');
+    $file = fakeFileFromPath('tests/Feature/Room/fixtures/mov_bbb.mp3');
 
     $queueFile = QueueRoomFile::create([
         'name' => 'mov_bbb',
@@ -107,7 +107,7 @@ test('should remove a media', function () {
 
     $room = room('動漫觀影室');
 
-    $file = fakeFileFromPath('tests/fixtures/mov_bbb.mp3');
+    $file = fakeFileFromPath('tests/Feature/Room/fixtures/mov_bbb.mp3');
 
     /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media */
     $media = $room

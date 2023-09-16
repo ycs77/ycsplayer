@@ -25,7 +25,7 @@ test('should add video playlist item', function () {
 
     $room = room('動漫觀影室');
 
-    $file = fakeFileFromPath('tests/fixtures/mov_bbb.mp4');
+    $file = fakeFileFromPath('tests/Feature/Room/fixtures/mov_bbb.mp4');
 
     /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media */
     $media = $room
@@ -54,7 +54,7 @@ test('should add audio playlist item', function () {
 
     $room = room('動漫觀影室');
 
-    $file = fakeFileFromPath('tests/fixtures/mov_bbb.mp3');
+    $file = fakeFileFromPath('tests/Feature/Room/fixtures/mov_bbb.mp3');
 
     /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media */
     $media = $room
