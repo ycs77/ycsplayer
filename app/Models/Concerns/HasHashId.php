@@ -7,10 +7,17 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Vinkla\Hashids\Facades\Hashids;
 
 /**
- * @property-read string $hash_id
+ * @property string $hash_id
  */
 trait HasHashId
 {
+    /**
+     * The model hash id.
+     *
+     * @var string
+     */
+    protected $hashId;
+
     /**
      * Get model hash id connection name.
      *
@@ -42,8 +49,18 @@ trait HasHashId
      */
     protected function hashId(): Attribute
     {
-        return Attribute::make(fn (mixed $value, array $attributes) => $this->hashids()->encode($attributes['id'])
-        )->shouldCache();
+        return Attribute::make(
+            get: function (mixed $value, array $attributes) {
+                if ($this->hashId) {
+                    return $this->hashId;
+                }
+
+                return $this->hashId = $this->hashids()->encode($attributes['id']);
+            },
+            set: function (mixed $value) {
+                $this->hashId = $value;
+            },
+        );
     }
 
     /**
