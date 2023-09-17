@@ -109,5 +109,21 @@ export default defineConfig(({ mode }) => {
         '@': fileURLToPath(new URL('./resources/js', import.meta.url)),
       },
     },
+    optimizeDeps: {
+      include: [
+        '@headlessui/vue',
+        '@inertiajs/vue3',
+        '@vueuse/core',
+        'axios',
+        'body-scroll-lock',
+        'inertia-title/vue3',
+        'laravel-echo',
+        'lodash-es',
+        'pusher-js',
+        'vue',
+        'vue-final-modal',
+        'vue-toastification',
+      ],
+    },
   }
 })
