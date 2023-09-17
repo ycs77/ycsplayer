@@ -56,7 +56,7 @@ test('should visit room page with no playing', function () {
                 ->where('type', RoomType::Video->value)
                 ->where('name', '動漫觀影室')
                 ->where('auto_play', false)
-                ->where('auto_remove', false)
+                ->where('auto_remove', true)
                 ->where('note', '記事本文字欄...')
             )
             ->where('currentPlaying', null)

@@ -27,7 +27,7 @@ class RoomSeeder extends Seeder
         ], [
             'type' => RoomType::Video,
             'auto_play' => false,
-            'auto_remove' => false,
+            'auto_remove' => true,
             'note' => '記事本文字欄...',
         ]);
         if ($videoRoom->doesntMember($user)) {
@@ -94,7 +94,7 @@ class RoomSeeder extends Seeder
             'name' => '動漫音樂廳',
         ], [
             'type' => RoomType::Audio,
-            'auto_play' => false,
+            'auto_play' => true,
             'auto_remove' => false,
             'note' => '記事本文字欄...',
         ]);
