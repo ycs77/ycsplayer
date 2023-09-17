@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss'
-import defaultTheme from 'tailwindcss/defaultTheme'
+import { fontFamily } from 'tailwindcss/defaultTheme'
 import Forms from '@tailwindcss/forms'
 
 export default {
@@ -17,7 +17,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['"jf open 粉圓"', ...defaultTheme.fontFamily.sans],
+        sans: ['"jf open 粉圓"', ...fontFamily.sans],
       },
     },
   },
