@@ -26,7 +26,7 @@
             />
 
             <div v-if="noteForm.processing" class="absolute inset-0 flex justify-center items-center bg-blue-900/75 rounded-md">
-              <Loading class="w-10 h-10" />
+              <Loading class="w-10 h-10 text-blue-600/50" />
             </div>
           </div>
 
