@@ -61,13 +61,15 @@
                 leave-to-class="scale-95 opacity-0"
               >
                 <MenuItems
+                  as="ul"
                   class="absolute top-full right-0 w-40 p-1.5 mt-1.5 space-y-1.5 bg-blue-900/50 rounded-md shadow-md shadow-blue-950/50 backdrop-blur-md overflow-hidden focus:outline-none"
-                  @click="close"
                 >
                   <MenuItem
                     v-for="item in userMenu"
                     v-slot="{ active }"
                     :key="item.href"
+                    as="li"
+                    @click.capture="close"
                   >
                     <component
                       :is="item.is ?? 'Link'"
