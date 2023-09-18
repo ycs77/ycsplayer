@@ -10,7 +10,7 @@
       />
 
       <div class="col-span-12 md:col-span-8 lg:col-span-9">
-        <div>
+        <div class="relative">
           <!-- 播放器 -->
           <div v-if="currentPlaying" class="rounded-lg overflow-hidden">
             <Player
@@ -31,6 +31,8 @@
               請選擇播放項目
             </div>
           </div>
+
+          <PlayerDebugger v-if="debug" :room-id="room.id" />
         </div>
       </div>
 
@@ -140,6 +142,7 @@ import { type Media, PlayerType, type PlaylistItem, type PlaylistItemForm, type 
 
 const props = defineProps<{
   room: Required<Room>
+  debug: boolean
   currentPlaying: PlaylistItem | null
   playlistItems: PlaylistItem[]
   medias: Media[]

@@ -201,6 +201,9 @@ test('should update-time player', function () {
 test('should end player', function () {
     $room = room('動漫觀影室');
 
+    app(PlayStatusCacheRepository::class)
+        ->store($room->hash_id, new PlayStatus());
+
     post('/player/end', [
         'room_id' => $room->hash_id,
     ])->assertNoContent();

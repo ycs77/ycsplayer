@@ -19,12 +19,37 @@ class PlayStatus implements JsonSerializable, Arrayable
     /** 當前影片暫停狀態 */
     public bool $paused = true;
 
+    /** 當前播放器日誌紀錄 */
+    public array $logs = [];
+
     public function __construct(array $data = [])
     {
         $this->timestamp = $data['timestamp'] ?? $this->timestamp;
         $this->currentTime = $data['current_time'] ?? $this->currentTime;
         $this->isClickedBigButton = $data['is_clicked_big_button'] ?? $this->isClickedBigButton;
         $this->paused = $data['paused'] ?? $this->paused;
+        $this->logs = $data['logs'] ?? $this->logs;
+    }
+
+    public function log(string $message, array $context = [])
+    {
+        $log = [
+            'message' => $message,
+            'context' => $context,
+        ];
+
+        $this->logs[] = $log;
+
+        logger($log['message'], $log['context']);
+
+        return $this;
+    }
+
+    public function clearLogs()
+    {
+        $this->logs = [];
+
+        return $this;
     }
 
     public function jsonSerialize(): array
@@ -39,6 +64,7 @@ class PlayStatus implements JsonSerializable, Arrayable
             'current_time' => $this->currentTime,
             'is_clicked_big_button' => $this->isClickedBigButton,
             'paused' => $this->paused,
+            'logs' => $this->logs,
         ];
     }
 }

@@ -29,6 +29,7 @@ const props = defineProps<{
   type: PlayerType
   poster?: string
   autoplay?: boolean
+  debug?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -332,7 +333,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
     player.currentTime(newCurrentTime)
   }
 
-  if (import.meta.env.DEV) {
+  if (props.debug) {
     console.log('PlayerPlayed', newCurrentTime)
   }
 
@@ -351,7 +352,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
 function onPlayerPaused(e: PlayerPausedEvent) {
   if (!player) return
 
-  if (import.meta.env.DEV) {
+  if (props.debug) {
     console.log('PlayerPaused', e.status.current_time)
   }
 
@@ -369,7 +370,7 @@ function onPlayerPaused(e: PlayerPausedEvent) {
 function onPlayerSeeked(e: PlayerSeekedEvent) {
   if (!player) return
 
-  if (import.meta.env.DEV) {
+  if (props.debug) {
     console.log('PlayerSeeked', e.status.current_time)
   }
 

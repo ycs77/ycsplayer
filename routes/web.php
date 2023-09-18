@@ -45,6 +45,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/player/seeked', [PlayerController::class, 'seeked'])->name('player.seeked');
     Route::post('/player/time-update', [PlayerController::class, 'timeUpdate'])->name('player.time-update');
     Route::post('/player/end', [PlayerController::class, 'end'])->name('player.end');
+    if (config('ycsplayer.debug')) {
+        Route::post('/player/debug', [PlayerController::class, 'debug'])->name('player.debug');
+    }
 
     Route::get('/user/settings', [UserController::class, 'show'])->name('user.settings');
     Route::post('/user/avatar', [UserController::class, 'uploadAvatar'])->name('user.avatar.store');

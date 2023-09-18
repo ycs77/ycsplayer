@@ -31,12 +31,6 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
-        if (config('ycsplayer.log_enabled')) {
-            logger('player play: '.$roomId, [
-                'user_id' => auth()->id(),
-            ]);
-        }
-
         $socketId = $request->header('X-Socket-Id');
 
         $status = $this->statusCache->get($roomId);
@@ -56,6 +50,14 @@ class PlayerController extends Controller
             $status->currentTime = $request->input('current_time');
         } elseif (is_null($status->currentTime)) {
             $status->currentTime = 0.0;
+        }
+
+        if (config('ycsplayer.debug')) {
+            $status->log('player play', [
+                'roomId' => $roomId,
+                'mode' => 'play',
+                'user' => auth()->user()->name,
+            ]);
         }
 
         // 只有以下條件之一的才能儲存當前播放進度:
@@ -83,18 +85,20 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
-        if (config('ycsplayer.log_enabled')) {
-            logger('player pause: '.$roomId, [
-                'user_id' => auth()->id(),
-            ]);
-        }
-
         $socketId = $request->header('X-Socket-Id');
 
         $status = $this->statusCache->get($roomId) ?? new PlayStatus();
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
         $status->paused = true;
+
+        if (config('ycsplayer.debug')) {
+            $status->log('player pause', [
+                'roomId' => $roomId,
+                'mode' => 'pause',
+                'user' => auth()->user()->name,
+            ]);
+        }
 
         $this->statusCache->store($roomId, $status);
 
@@ -114,18 +118,20 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
-        if (config('ycsplayer.log_enabled')) {
-            logger('player seek: '.$roomId, [
-                'user_id' => auth()->id(),
-            ]);
-        }
-
         $socketId = $request->header('X-Socket-Id');
 
         $status = $this->statusCache->get($roomId) ?? new PlayStatus();
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
         $status->paused = $request->input('paused');
+
+        if (config('ycsplayer.debug')) {
+            $status->log('player seek', [
+                'roomId' => $roomId,
+                'mode' => 'seek',
+                'user' => auth()->user()->name,
+            ]);
+        }
 
         $this->statusCache->store($roomId, $status);
 
@@ -145,20 +151,22 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
-        if (! $this->statusCache->get($roomId, false)) {
+        if (! $this->statusCache->get($roomId)) {
             return response()->noContent();
-        }
-
-        if (config('ycsplayer.log_enabled')) {
-            logger('player time update: '.$roomId, [
-                'user_id' => auth()->id(),
-            ]);
         }
 
         $status = $this->statusCache->get($roomId);
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
         $status->paused = $request->input('paused');
+
+        if (config('ycsplayer.debug')) {
+            $status->log('player time update', [
+                'roomId' => $roomId,
+                'mode' => 'time update',
+                'user' => auth()->user()->name,
+            ]);
+        }
 
         $this->statusCache->store($roomId, $status);
 
@@ -173,15 +181,44 @@ class PlayerController extends Controller
 
         $roomId = $this->getRoomId($request);
 
-        if (config('ycsplayer.log_enabled')) {
-            logger('player end: '.$roomId, [
-                'user_id' => auth()->id(),
+        if (config('ycsplayer.debug')) {
+            $status = $this->statusCache->get($roomId);
+            $status->log('player end', [
+                'roomId' => $roomId,
+                'mode' => 'end',
+                'user' => auth()->user()->name,
             ]);
         }
 
         $this->statusCache->delete($roomId);
 
         return response()->noContent();
+    }
+
+    public function debug(Request $request)
+    {
+        $request->validate([
+            'room_id' => ['required', 'string', 'max:12'],
+        ]);
+
+        $roomId = $this->getRoomId($request);
+
+        $status = $this->statusCache->get($roomId);
+
+        return response()->json([
+            'status' => [
+                'timestamp' => $status?->timestamp
+                    ? (int) floor($status->timestamp / 1000)
+                    : null,
+                'datetime' => $status?->timestamp
+                    ? date('Y-m-d H:i:s', (int) floor($status->timestamp / 1000))
+                    : null,
+                'current_time' => $status?->currentTime ?? null,
+                'is_clicked_big_button' => $status?->isClickedBigButton ?? null,
+                'paused' => $status?->paused ?? null,
+            ],
+            'logs' => $status?->logs ?? [],
+        ]);
     }
 
     protected function getRoomId(Request $request): string

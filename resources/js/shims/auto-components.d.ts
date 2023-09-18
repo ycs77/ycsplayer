@@ -61,6 +61,7 @@ declare module '@vue/runtime-core' {
     Modal: typeof import('./../components/modals/Modal.vue')['default']
     Pagination: typeof import('./../components/general/Pagination.vue')['default']
     Player: typeof import('./../components/player/Player.vue')['default']
+    PlayerDebugger: typeof import('./../components/player/PlayerDebugger.vue')['default']
     Playlist: typeof import('./../components/player/Playlist.vue')['default']
     PlaylistItem: typeof import('./../components/player/PlaylistItem.vue')['default']
     RadioGroup: typeof import('@headlessui/vue')['RadioGroup']

@@ -294,9 +294,9 @@ VITE_S3_UPLOAD_VITE_ASSETS_ENABLED=true
 
 `YCSPLAYER_UPLOAD_AVATAR` 會決定用戶是否可以上傳頭像圖片。
 
-### 播放器 Log 紀錄
+### 播放器偵錯模式
 
-`YCSPLAYER_LOG_ENABLED` 會決定是否開啟播放器 Log 紀錄的功能，開啟之後在播放器的播放、暫停、拖曳進度條等操作時會記錄到 Log 中，用於排查錯誤時使用。
+`YCSPLAYER_DEBUG` 會決定是否開啟播放器偵錯模式，開啟之後會在播放器顯示當前播放器的狀態資訊，以及會將播放、暫停、拖曳進度條等操作時會記錄到 Log 中，用於排查錯誤時使用。
 
 ### 無密碼登入
 

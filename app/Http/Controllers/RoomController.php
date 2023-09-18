@@ -66,6 +66,7 @@ class RoomController extends Controller
 
         return Inertia::render('Room/Show', [
             'room' => fn () => RoomPresenter::make($room)->preset('show'),
+            'debug' => fn () => config('ycsplayer.debug', false),
             'currentPlaying' => fn () => PlaylistItemPresenter::make($room->current_playing)->preset('play'),
             'playlistItems' => fn () => PlaylistItemPresenter::collection($room->playlist_items),
             'medias' => fn () => $user->can('operatePlaylistItem', $room)
