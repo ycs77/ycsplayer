@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Fortify\Features;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -93,5 +94,14 @@ class User extends Authenticatable implements MustVerifyEmail
     public function rooms(): BelongsToMany
     {
         return $this->belongsToMany(Room::class, 'room_member', 'member_id', 'room_id');
+    }
+
+    public function hasVerifiedEmail()
+    {
+        if (Features::enabled(Features::emailVerification())) {
+            return parent::hasVerifiedEmail();
+        }
+
+        return true;
     }
 }

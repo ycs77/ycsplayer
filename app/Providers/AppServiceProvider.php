@@ -22,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        if (! config('ycsplayer.mail') && config('ycsplayer.password_less')) {
+            config()->set('ycsplayer.password_less', false);
+        }
+
         // CDN
         $this->app->bind(CdnService::class, DOCdnService::class);
 

@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'landing-page')->middleware('guest')->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware([
+    'auth',
+    ...(config('ycsplayer.mail') ? ['verified'] : []),
+])->group(function () {
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
     Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
     Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');

@@ -43,6 +43,7 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::loginView(function () {
             return Inertia::render('Auth/Login', [
+                'mail' => config('ycsplayer.mail', true),
                 'passwordLess' => config('ycsplayer.password_less'),
             ])->title('登入');
         });

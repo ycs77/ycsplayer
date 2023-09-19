@@ -298,9 +298,13 @@ VITE_S3_UPLOAD_VITE_ASSETS_ENABLED=true
 
 `YCSPLAYER_DEBUG` 會決定是否開啟播放器偵錯模式，開啟之後會在播放器顯示當前播放器的狀態資訊，以及會將播放、暫停、拖曳進度條等操作時會記錄到 Log 中，用於排查錯誤時使用。
 
+### 寄送 E-mail
+
+`YCSPLAYER_MAIL` 會決定是否要寄送 E-mail 的功能，開啟後會在註冊成功時寄送認證的 E-mail，以及在「無密碼登入」模式中寄送登入、刪除帳號前的確認 E-mail。
+
 ### 無密碼登入
 
-`YCSPLAYER_PASSWORD_LESS` 會決定是否開啟「無密碼登入」的功能，開啟之後登入時不需輸入密碼，取而代之會以收 E-mail 來登入網站。
+`YCSPLAYER_PASSWORD_LESS` 會決定是否開啟「無密碼登入」的功能，開啟之後登入時不需輸入密碼，取而代之會以收 E-mail 來登入網站。需要注意的是，如果要使用「無密碼登入」請必須開啟寄送 E-mail 的設定。
 
 ## 專案 Artisan 指令
 

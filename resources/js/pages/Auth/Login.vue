@@ -11,7 +11,7 @@
           {{ passwordLess ? '下一步' : '登入' }}
         </button>
 
-        <Link v-if="!passwordLess" href="/forgot-password" class="underline">
+        <Link v-if="!passwordLess && mail" href="/forgot-password" class="underline">
           忘記密碼?
         </Link>
       </div>
@@ -21,6 +21,7 @@
 
 <script setup lang="ts">
 const props = defineProps<{
+  mail: boolean
   passwordLess: boolean
 }>()
 
