@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RoomType;
-use App\Events\RoomNoteUpdated;
+use App\Events\RoomNoteCanceled;
 use App\Facades\Flash;
 use App\Models\Room;
 use App\Presenters\MediaPresenter;
 use App\Presenters\PlaylistItemPresenter;
 use App\Presenters\RoomMemberPresenter;
 use App\Presenters\RoomPresenter;
+use App\Room\RoomNoteEditorRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
@@ -57,18 +58,24 @@ class RoomController extends Controller
         return redirect()->route('rooms.show', $room);
     }
 
-    public function show(Room $room)
+    public function show(Room $room, RoomNoteEditorRepository $noteEditor)
     {
         $this->authorize('view', $room);
 
         /** @var \App\Models\User */
         $user = Auth::user();
 
+        $noteEditor->resetWhenCurrentEditingUserRefreshPage(
+            $room->hash_id, $user->hash_id,
+            fn () => RoomNoteCanceled::broadcast($room->hash_id)->toOthers(),
+        );
+
         return Inertia::render('Room/Show', [
             'room' => fn () => RoomPresenter::make($room)->preset('show'),
             'debug' => fn () => config('ycsplayer.debug', false),
             'currentPlaying' => fn () => PlaylistItemPresenter::make($room->current_playing)->preset('play'),
             'playlistItems' => fn () => PlaylistItemPresenter::collection($room->playlist_items),
+            'editingUser' => fn () => $noteEditor->get($room->hash_id),
             'medias' => fn () => $user->can('operatePlaylistItem', $room)
                 ? MediaPresenter::collection($room->getMedia()->where('converting', false))
                 : [],
@@ -82,23 +89,6 @@ class RoomController extends Controller
                 'settings' => $user->can('settings', $room),
             ],
         ])->title($room->name);
-    }
-
-    public function note(Request $request, Room $room)
-    {
-        $this->authorize('view', $room);
-
-        $request->validate([
-            'note' => ['nullable', 'string', 'max:500'],
-        ], [], [
-            'note' => '記事本',
-        ]);
-
-        $room->update($request->only('note'));
-
-        RoomNoteUpdated::broadcast($room->hash_id)->toOthers();
-
-        Flash::success('記事本更新成功');
     }
 
     public function members(Room $room)

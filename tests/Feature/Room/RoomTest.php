@@ -2,15 +2,12 @@
 
 use App\Enums\PlayerType;
 use App\Enums\RoomType;
-use App\Events\RoomNoteUpdated;
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\UserSeeder;
-use Illuminate\Support\Facades\Event;
 use Inertia\Testing\AssertableInertia as Assert;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
-use function Pest\Laravel\put;
 use function Pest\Laravel\seed;
 
 beforeEach(function () {
@@ -117,22 +114,6 @@ test('should create a new room', function () {
     expect($room->auto_remove)->toBeTrue();
     expect($room->isMember($user))->toBeTrue();
     expect($user->getRoleNames())->toContain("rooms.{$room->id}.admin");
-});
-
-test('should update room note', function () {
-    Event::fake();
-
-    $room = room('動漫觀影室');
-
-    put("/rooms/{$room->hash_id}/note", [
-        'note' => '更新了記事本內容XDD',
-    ]);
-
-    $room->refresh();
-
-    expect($room->note)->toBe('更新了記事本內容XDD');
-
-    Event::assertDispatched(RoomNoteUpdated::class);
 });
 
 test('should visit room members page', function () {

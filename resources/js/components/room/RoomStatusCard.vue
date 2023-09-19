@@ -9,11 +9,11 @@
       <h1 class="text-xl">{{ room.name }}</h1>
     </div>
 
-    <div class="mt-2 text-blue-300 space-y-2">
+    <div class="mt-3 text-blue-300 space-y-2">
       <div>成員數：{{ membersCount }}人</div>
 
       <div>
-        <div v-if="editing" class="mt-2">
+        <div v-if="editing">
           <div class="relative">
             <TextareaInput
               id="note"
@@ -51,27 +51,34 @@
           </div>
         </div>
 
-        <div v-else class="flex items-center">
-          <div
-            v-if="noteForm.note"
-            class="break-all"
-            :class="{ 'line-clamp-3': !showFull }"
-            :title="showFull ? '顯示部分' : '顯示全部'"
-            @click="showFull = !showFull"
-          >
-            {{ noteForm.note }}
-          </div>
-          <div v-else class="text-blue-400/50">
-            記事本可以紀錄一些內容...
+        <div v-else>
+          <div class="flex items-center">
+            <div
+              v-if="noteForm.note"
+              class="break-all"
+              :class="{ 'line-clamp-3': !showFull }"
+              :title="showFull ? '顯示部分' : '顯示全部'"
+              @click="showFull = !showFull"
+            >
+              {{ noteForm.note }}
+            </div>
+            <div v-else class="text-blue-400/50">
+              記事本可以紀錄一些內容...
+            </div>
+
+            <button
+              type="button"
+              class="link disabled:text-blue-400/50"
+              :disabled="!!editingUser"
+              @click="startEditingNote"
+            >
+              <HeroiconsPencilSquare class="w-5 h-5 ml-1" />
+            </button>
           </div>
 
-          <button
-            type="button"
-            class="link"
-            @click="startEditingNote"
-          >
-            <HeroiconsPencilSquare class="w-5 h-5 ml-1" />
-          </button>
+          <div v-if="editingUser" class="mt-1 text-blue-400/50 text-sm">
+            <span class="text-blue-400">{{ editingUser.name }}</span> 編輯中...
+          </div>
         </div>
       </div>
     </div>
@@ -79,11 +86,16 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios'
 import type { Room } from '@/types'
 
 const props = defineProps<{
   room: Room
   membersCount: number
+  editingUser: {
+    id: string
+    name: string
+  } | null
 }>()
 
 const emit = defineEmits<{
@@ -111,11 +123,13 @@ function startEditingNote() {
   editing.value = true
   originalNote = noteForm.note
   focusNoteInput()
+
+  axios.post(`/rooms/${props.room.id}/note`)
 }
 
 function saveNote() {
   noteForm.put(`/rooms/${props.room.id}/note`, {
-    only: [...globalOnly, 'room'],
+    only: [...globalOnly, 'room', 'editingUser'],
     preserveScroll: true,
     onSuccess() {
       editing.value = false
@@ -131,5 +145,11 @@ function saveNote() {
 function cancelEditNote() {
   editing.value = false
   noteForm.note = originalNote
+
+  axios.delete(`/rooms/${props.room.id}/note`)
 }
+
+watch(() => props.room, () => {
+  noteForm.note = props.room.note ?? ''
+})
 </script>

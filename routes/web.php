@@ -5,6 +5,7 @@ use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomMediaController;
 use App\Http\Controllers\RoomMemberController;
+use App\Http\Controllers\RoomNoteController;
 use App\Http\Controllers\RoomPlaylistController;
 use App\Http\Controllers\RoomUploadMediaController;
 use App\Http\Controllers\UserController;
@@ -16,11 +17,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
     Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
     Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
-    Route::put('/rooms/{room}/note', [RoomController::class, 'note'])->name('rooms.note.update');
     Route::get('/rooms/{room}/members', [RoomController::class, 'members'])->name('rooms.members');
     Route::get('/rooms/{room}/settings', [RoomController::class, 'edit'])->name('rooms.edit');
     Route::post('/rooms/{room}/settings', [RoomController::class, 'update'])->name('rooms.update');
     Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('rooms.destroy');
+
+    Route::post('/rooms/{room}/note', [RoomNoteController::class, 'edit'])->name('rooms.note.edit');
+    Route::put('/rooms/{room}/note', [RoomNoteController::class, 'update'])->name('rooms.note.update');
+    Route::delete('/rooms/{room}/note', [RoomNoteController::class, 'destroy'])->name('rooms.note.destroy');
 
     Route::post('/rooms/{room}/playlist', [RoomPlaylistController::class, 'store'])->name('rooms.playlist.store');
     Route::post('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'click'])->name('rooms.playlist.click');

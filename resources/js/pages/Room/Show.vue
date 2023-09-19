@@ -43,6 +43,7 @@
             <RoomStatusCard
               :room="room"
               :members-count="members.length"
+              :editing-user="editingUser"
             />
           </div>
 
@@ -145,6 +146,10 @@ const props = defineProps<{
   debug: boolean
   currentPlaying: PlaylistItem | null
   playlistItems: PlaylistItem[]
+  editingUser: {
+    id: string
+    name: string
+  } | null
   medias: Media[]
   members: RoomMember[]
   can: {
@@ -256,10 +261,24 @@ function onPlayerlistItemRemoved() {
   })
 }
 
-// 監聽當有其他人更新記事本時的事件
+// 監聽當有其他人開始更新記事本時的事件
+function onNoteUpdating() {
+  router.reload({
+    only: [...globalOnly, 'editingUser'],
+  })
+}
+
+// 監聽當有其他人更新了記事本時的事件
 function onNoteUpdated() {
   router.reload({
-    only: [...globalOnly, 'room'],
+    only: [...globalOnly, 'room', 'editingUser'],
+  })
+}
+
+// 監聽當有其他人取消更新記事本時的事件
+function onNoteCanceled() {
+  router.reload({
+    only: [...globalOnly, 'editingUser'],
   })
 }
 
@@ -309,7 +328,9 @@ watch(player, (v, ov, onInvalidate) => {
     .listen('PlayerlistItemClicked', onPlayerlistItemClicked)
     .listen('PlayerlistItemNexted', onPlayerlistItemNexted)
     .listen('PlayerlistItemRemoved', onPlayerlistItemRemoved)
+    .listen('RoomNoteUpdating', onNoteUpdating)
     .listen('RoomNoteUpdated', onNoteUpdated)
+    .listen('RoomNoteCanceled', onNoteCanceled)
     .listen('RoomMediaConverted', onRoomMediaConverted)
     .listen('RoomMediaRemoved', onRoomMediaRemoved)
     .listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)
