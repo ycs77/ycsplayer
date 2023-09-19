@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('playlist_items', function (Blueprint $table) {
             $table->id();
-            $table->char('type', 10);
+            $table->string('type', 10);
             $table->string('title');
             $table->string('url');
             $table->string('thumbnail')->nullable();
