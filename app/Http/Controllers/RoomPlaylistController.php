@@ -108,7 +108,7 @@ class RoomPlaylistController extends Controller
     {
         $this->authorize('view', $room);
 
-        $this->playItem($room, $item);
+        $this->updateCurrentPlayingItem($room, $item);
 
         PlayerlistItemClicked::broadcast($room->hash_id)->toOthers();
     }
@@ -187,7 +187,7 @@ class RoomPlaylistController extends Controller
                     $item = $room->playlist_items[$itemIndex + 1] ?? null;
                 }
 
-                $this->playItem($room, $item);
+                $this->updateCurrentPlayingItem($room, $item);
 
                 if (is_callable($callback)) {
                     $callback();
@@ -196,7 +196,7 @@ class RoomPlaylistController extends Controller
         });
     }
 
-    protected function playItem(Room $room, ?PlaylistItem $item)
+    protected function updateCurrentPlayingItem(Room $room, ?PlaylistItem $item)
     {
         $room->update(['current_playing_id' => $item?->id]);
 

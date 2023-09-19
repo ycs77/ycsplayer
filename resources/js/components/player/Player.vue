@@ -190,7 +190,6 @@ onMounted(() => {
 
       if (this.player_.paused()) {
         this.player_.handleTechWaiting_()
-        silencePromise(this.player_.play())
         play(() => {
           this.player_?.play()
         }, false)
@@ -208,7 +207,6 @@ onMounted(() => {
     handleClick(event: KeyboardEvent) {
       if (this.player_.paused()) {
         this.player_.handleTechWaiting_()
-        silencePromise(this.player_.play())
         play(() => {
           super.handleClick(event)
           emit('play', currentTime())

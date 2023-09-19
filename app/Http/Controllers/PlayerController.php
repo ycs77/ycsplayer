@@ -90,6 +90,7 @@ class PlayerController extends Controller
         $status = $this->statusCache->get($roomId) ?? new PlayStatus();
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
+        $status->isClickedBigButton = true;
         $status->paused = true;
 
         if (config('ycsplayer.debug')) {
@@ -123,6 +124,7 @@ class PlayerController extends Controller
         $status = $this->statusCache->get($roomId) ?? new PlayStatus();
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
+        $status->isClickedBigButton = true;
         $status->paused = $request->input('paused');
 
         if (config('ycsplayer.debug')) {
@@ -158,6 +160,7 @@ class PlayerController extends Controller
         $status = $this->statusCache->get($roomId);
         $status->timestamp = $request->input('timestamp');
         $status->currentTime = $request->input('current_time');
+        $status->isClickedBigButton = true;
         $status->paused = $request->input('paused');
 
         if (config('ycsplayer.debug')) {
@@ -183,7 +186,7 @@ class PlayerController extends Controller
 
         if (config('ycsplayer.debug')) {
             $status = $this->statusCache->get($roomId);
-            $status->log('player end', [
+            $status?->log('player end', [
                 'roomId' => $roomId,
                 'mode' => 'end',
                 'user' => auth()->user()->name,
