@@ -203,12 +203,12 @@ function removePlaylistItem(item: PlaylistItem) {
 }
 
 function openAddPlaylistItemModal() {
-  playlistItemForm.type = props.room.type === RoomType.Audio
-    ? PlayerType.Audio
-    : PlayerType.Video
-
   if (props.playlistItems.length) {
     playlistItemForm.type = props.playlistItems.slice(-1)[0].type
+  } else if (props.room.type === RoomType.Audio) {
+    playlistItemForm.type = PlayerType.Audio
+  } else {
+    playlistItemForm.type = PlayerType.Video
   }
 
   playlistItemForm.title = ''
