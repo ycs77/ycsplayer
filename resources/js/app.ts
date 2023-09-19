@@ -20,13 +20,15 @@ createInertiaApp({
   resolve: async name => {
     const pages = import.meta.glob('./pages/**/*.vue')
     const page = await pages[`./pages/${name}.vue`]() as any
-    page.default.layout = page.default.layout
-      ? Array.isArray(page.default.layout)
-        ? page.default.layout
-        : [page.default.layout]
-      : []
-    if (!page.default.layout.includes(Layout)) {
-      page.default.layout.unshift(Layout)
+    if (page.default.layout !== false) {
+      page.default.layout = page.default.layout
+        ? Array.isArray(page.default.layout)
+          ? page.default.layout
+          : [page.default.layout]
+        : []
+      if (!page.default.layout.includes(Layout)) {
+        page.default.layout.unshift(Layout)
+      }
     }
     return page
   },

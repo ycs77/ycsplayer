@@ -21,4 +21,6 @@ defineProps<{
   code: number
   message: string
 }>()
+
+defineOptions({ layout: false })
 </script>
