@@ -94,22 +94,6 @@ test('should add youtube playlist item', function () {
     expect($item->url)->toBe('https://www.youtube.com/watch?v=B8k6JtF6WrU');
 });
 
-test('should auto format shortened youtube playlist item url', function () {
-    $room = room('動漫觀影室');
-
-    post("/rooms/{$room->hash_id}/playlist", [
-        'type' => PlayerType::YouTube->value,
-        'title' => '迷星叫',
-        'url' => 'https://youtu.be/B8k6JtF6WrU',
-        'media_id' => null,
-    ]);
-
-    $item = $room->playlist_items()->latest('id')->first();
-    expect($item->type)->toBe(PlayerType::YouTube);
-    expect($item->title)->toBe('迷星叫');
-    expect($item->url)->toBe('https://www.youtube.com/watch?v=B8k6JtF6WrU');
-});
-
 test('should auto format youtube playlist item url with more query string', function () {
     $room = room('動漫觀影室');
 
@@ -121,8 +105,6 @@ test('should auto format youtube playlist item url with more query string', func
     ]);
 
     $item = $room->playlist_items()->latest('id')->first();
-    expect($item->type)->toBe(PlayerType::YouTube);
-    expect($item->title)->toBe('迷星叫');
     expect($item->url)->toBe('https://www.youtube.com/watch?v=B8k6JtF6WrU');
 });
 
@@ -137,8 +119,6 @@ test('should auto format youtube playlist item url with standard youtube music u
     ]);
 
     $item = $room->playlist_items()->latest('id')->first();
-    expect($item->type)->toBe(PlayerType::YouTube);
-    expect($item->title)->toBe('迷星叫');
     expect($item->url)->toBe('https://www.youtube.com/watch?v=DhGsNjooWl8');
 });
 
@@ -153,9 +133,35 @@ test('should auto format youtube playlist item url with youtube music url and mo
     ]);
 
     $item = $room->playlist_items()->latest('id')->first();
-    expect($item->type)->toBe(PlayerType::YouTube);
-    expect($item->title)->toBe('迷星叫');
     expect($item->url)->toBe('https://www.youtube.com/watch?v=DhGsNjooWl8');
+});
+
+test('should auto format shortened youtube playlist item url', function () {
+    $room = room('動漫觀影室');
+
+    post("/rooms/{$room->hash_id}/playlist", [
+        'type' => PlayerType::YouTube->value,
+        'title' => '迷星叫',
+        'url' => 'https://youtu.be/B8k6JtF6WrU',
+        'media_id' => null,
+    ]);
+
+    $item = $room->playlist_items()->latest('id')->first();
+    expect($item->url)->toBe('https://www.youtube.com/watch?v=B8k6JtF6WrU');
+});
+
+test('should auto format shortened youtube playlist item url and more query string', function () {
+    $room = room('動漫觀影室');
+
+    post("/rooms/{$room->hash_id}/playlist", [
+        'type' => PlayerType::YouTube->value,
+        'title' => '迷星叫',
+        'url' => 'https://youtu.be/B8k6JtF6WrU?s=xxxxxxxxxx',
+        'media_id' => null,
+    ]);
+
+    $item = $room->playlist_items()->latest('id')->first();
+    expect($item->url)->toBe('https://www.youtube.com/watch?v=B8k6JtF6WrU');
 });
 
 test('expect throw url invalid error on add youtube playlist item', function () {

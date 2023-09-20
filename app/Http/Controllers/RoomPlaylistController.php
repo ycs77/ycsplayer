@@ -76,8 +76,8 @@ class RoomPlaylistController extends Controller
             foreach ([
                 '/^https?:\/\/(?:www|music)\.youtube\.com\/watch\?v\=([\w-]+)(?:&.+)?$/',
                 '/^https?:\/\/(?:www|music)\.youtube\.com\/watch\?.+&v\=([\w-]+)(?:&.+)?$/',
-                '/^https?:\/\/www\.youtube\.com\/embed\/([\w-]+)$/',
-                '/^https?:\/\/youtu\.be\/([\w-]+)$/',
+                '/^https?:\/\/www\.youtube\.com\/embed\/([\w-]+)(?:\?.+)?$/',
+                '/^https?:\/\/youtu\.be\/([\w-]+)(?:\?.+)?$/',
             ] as $pattern) {
                 if (preg_match($pattern, $url, $m)) {
                     $youtubeId = $m[1];
