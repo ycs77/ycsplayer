@@ -1,6 +1,8 @@
 <template>
   <CardAuth title="登入">
     <form @submit.prevent="form.post('/login')">
+      <Message v-if="status" :content="status" class="mb-4" />
+
       <div class="space-y-6">
         <TextInput id="email" v-model="form.email" label="E-mail" type="email" />
         <TextInput v-if="!passwordLess" id="password" v-model="form.password" label="密碼" type="password" />
@@ -23,6 +25,7 @@
 const props = defineProps<{
   mail: boolean
   passwordLess: boolean
+  status: string | null
 }>()
 
 const form = useForm({

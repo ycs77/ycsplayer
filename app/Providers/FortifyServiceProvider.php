@@ -16,6 +16,7 @@ use Laravel\Fortify\Actions\AttemptToAuthenticate;
 use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
 use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
+use Laravel\Fortify\Contracts\LockoutResponse;
 use Laravel\Fortify\Contracts\LogoutResponse;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
@@ -45,6 +46,7 @@ class FortifyServiceProvider extends ServiceProvider
             return Inertia::render('Auth/Login', [
                 'mail' => config('ycsplayer.mail', true),
                 'passwordLess' => config('ycsplayer.password_less'),
+                'status' => session('status'),
             ])->title('登入');
         });
 
@@ -98,7 +100,9 @@ class FortifyServiceProvider extends ServiceProvider
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
-            return Limit::perMinute(5)->by($throttleKey);
+            return Limit::perMinute(5)
+                ->by($throttleKey)
+                ->response(fn (Request $request) => app(LockoutResponse::class)->toResponse($request));
         });
     }
 }

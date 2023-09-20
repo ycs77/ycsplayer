@@ -5,12 +5,11 @@
         請先開啟您的信箱點擊 E-mail 驗證連結。
       </div>
 
-      <div
+      <Message
         v-if="verificationLinkSent"
-        class="mt-4 bg-blue-950/75 px-3 py-2 text-sm text-blue-400 border border-blue-400 rounded-md"
-      >
-        新的驗證連結已經重新發送了，請到您的信箱確認信件。
-      </div>
+        content="新的驗證連結已經重新發送了，請到您的信箱確認信件。"
+        class="mt-4"
+      />
 
       <div class="mt-6">
         <button type="submit" class="btn btn-primary" :disabled="form.processing">

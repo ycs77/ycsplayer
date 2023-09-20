@@ -58,6 +58,7 @@ declare module '@vue/runtime-core' {
     MenuButton: typeof import('@headlessui/vue')['MenuButton']
     MenuItem: typeof import('@headlessui/vue')['MenuItem']
     MenuItems: typeof import('@headlessui/vue')['MenuItems']
+    Message: typeof import('./../components/general/Message.vue')['default']
     Modal: typeof import('./../components/modals/Modal.vue')['default']
     Pagination: typeof import('./../components/general/Pagination.vue')['default']
     Player: typeof import('./../components/player/Player.vue')['default']
