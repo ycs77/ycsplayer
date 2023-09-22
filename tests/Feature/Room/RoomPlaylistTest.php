@@ -156,7 +156,7 @@ test('should auto format shortened youtube playlist item url and more query stri
     post("/rooms/{$room->hash_id}/playlist", [
         'type' => PlayerType::YouTube->value,
         'title' => '迷星叫',
-        'url' => 'https://youtu.be/B8k6JtF6WrU?s=xxxxxxxxxx',
+        'url' => 'https://youtu.be/B8k6JtF6WrU?si=xxxxxxxxxx',
         'media_id' => null,
     ]);
 
