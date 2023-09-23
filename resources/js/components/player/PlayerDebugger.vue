@@ -92,7 +92,9 @@ function fetchDebugStatus() {
     status.value = data.status
     logs.value = data.logs
     nextTick(() => {
-      logsRef.value.scrollTo(0, logsRef.value.scrollHeight)
+      if (logsRef.value) {
+        logsRef.value.scrollTo(0, logsRef.value.scrollHeight)
+      }
     })
   })
 }
