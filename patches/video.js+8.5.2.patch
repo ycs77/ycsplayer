@@ -1,0 +1,124 @@
+diff --git a/node_modules/video.js/dist/video.es.js b/node_modules/video.js/dist/video.es.js
+index a5ff244..6a5b4c6
+--- a/node_modules/video.js/dist/video.es.js
++++ b/node_modules/video.js/dist/video.es.js
+@@ -11646,7 +11646,9 @@ class Slider extends Component$1 {
+     if (this.enabled()) {
+       return;
+     }
+-    this.on('mousedown', this.handleMouseDown_);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.on('mousedown', this.handleMouseDown_);
++    }
+     this.on('touchstart', this.handleMouseDown_);
+     this.on('keydown', this.handleKeyDown_);
+     this.on('click', this.handleClick_);
+@@ -11669,13 +11671,17 @@ class Slider extends Component$1 {
+       return;
+     }
+     const doc = this.bar.el_.ownerDocument;
+-    this.off('mousedown', this.handleMouseDown_);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.off('mousedown', this.handleMouseDown_);
++    }
+     this.off('touchstart', this.handleMouseDown_);
+     this.off('keydown', this.handleKeyDown_);
+     this.off('click', this.handleClick_);
+     this.off(this.player_, 'controlsvisible', this.update_);
+-    this.off(doc, 'mousemove', this.handleMouseMove_);
+-    this.off(doc, 'mouseup', this.handleMouseUp_);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.off(doc, 'mousemove', this.handleMouseMove_);
++      this.off(doc, 'mouseup', this.handleMouseUp_);
++    }
+     this.off(doc, 'touchmove', this.handleMouseMove_);
+     this.off(doc, 'touchend', this.handleMouseUp_);
+     this.removeAttribute('tabindex');
+@@ -11747,8 +11753,10 @@ class Slider extends Component$1 {
+      * @type {MouseEvent}
+      */
+     this.trigger('slideractive');
+-    this.on(doc, 'mousemove', this.handleMouseMove_);
+-    this.on(doc, 'mouseup', this.handleMouseUp_);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.on(doc, 'mousemove', this.handleMouseMove_);
++      this.on(doc, 'mouseup', this.handleMouseUp_);
++    }
+     this.on(doc, 'touchmove', this.handleMouseMove_);
+     this.on(doc, 'touchend', this.handleMouseUp_);
+     this.handleMouseMove(event, true);
+@@ -11791,8 +11799,10 @@ class Slider extends Component$1 {
+      * @type {Event}
+      */
+     this.trigger('sliderinactive');
+-    this.off(doc, 'mousemove', this.handleMouseMove_);
+-    this.off(doc, 'mouseup', this.handleMouseUp_);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.off(doc, 'mousemove', this.handleMouseMove_);
++      this.off(doc, 'mouseup', this.handleMouseUp_);
++    }
+     this.off(doc, 'touchmove', this.handleMouseMove_);
+     this.off(doc, 'touchend', this.handleMouseUp_);
+     this.update();
+@@ -12909,8 +12919,12 @@ class ProgressControl extends Component$1 {
+     if (!this.enabled()) {
+       return;
+     }
+-    this.off(['mousedown', 'touchstart'], this.handleMouseDownHandler_);
+-    this.off(this.el_, 'mousemove', this.handleMouseMove);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.off(['mousedown', 'touchstart'], this.handleMouseDownHandler_);
++      this.off(this.el_, 'mousemove', this.handleMouseMove);
++    } else {
++      this.off('touchstart', this.handleMouseDownHandler_);
++    }
+     this.removeListenersAddedOnMousedownAndTouchstart();
+     this.addClass('disabled');
+     this.enabled_ = false;
+@@ -12933,8 +12947,12 @@ class ProgressControl extends Component$1 {
+     if (this.enabled()) {
+       return;
+     }
+-    this.on(['mousedown', 'touchstart'], this.handleMouseDownHandler_);
+-    this.on(this.el_, 'mousemove', this.handleMouseMove);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.on(['mousedown', 'touchstart'], this.handleMouseDownHandler_);
++      this.on(this.el_, 'mousemove', this.handleMouseMove);
++    } else {
++      this.on(['touchstart'], this.handleMouseDownHandler_);
++    }
+     this.removeClass('disabled');
+     this.enabled_ = true;
+   }
+@@ -12944,9 +12962,13 @@ class ProgressControl extends Component$1 {
+    */
+   removeListenersAddedOnMousedownAndTouchstart() {
+     const doc = this.el_.ownerDocument;
+-    this.off(doc, 'mousemove', this.throttledHandleMouseSeek);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.off(doc, 'mousemove', this.throttledHandleMouseSeek);
++    }
+     this.off(doc, 'touchmove', this.throttledHandleMouseSeek);
+-    this.off(doc, 'mouseup', this.handleMouseUpHandler_);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.off(doc, 'mouseup', this.handleMouseUpHandler_);
++    }
+     this.off(doc, 'touchend', this.handleMouseUpHandler_);
+   }
+ 
+@@ -12965,9 +12987,13 @@ class ProgressControl extends Component$1 {
+     if (seekBar) {
+       seekBar.handleMouseDown(event);
+     }
+-    this.on(doc, 'mousemove', this.throttledHandleMouseSeek);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.on(doc, 'mousemove', this.throttledHandleMouseSeek);
++    }
+     this.on(doc, 'touchmove', this.throttledHandleMouseSeek);
+-    this.on(doc, 'mouseup', this.handleMouseUpHandler_);
++    if (!IS_IOS && !IS_ANDROID) {
++      this.on(doc, 'mouseup', this.handleMouseUpHandler_);
++    }
+     this.on(doc, 'touchend', this.handleMouseUpHandler_);
+   }
+ 
