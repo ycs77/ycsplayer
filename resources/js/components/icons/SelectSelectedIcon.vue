@@ -1,7 +1,7 @@
 <template>
   <span
     class="absolute inset-y-0 right-0 flex items-center"
-    :class="[active ? 'text-white' : 'text-sky-500', paddingClass]"
+    :class="[active ? 'text-white' : 'text-blue-500', paddingClass]"
   >
     <HeroiconsCheck class="h-5 w-5" />
   </span>

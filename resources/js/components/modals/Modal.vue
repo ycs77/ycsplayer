@@ -31,7 +31,7 @@
         <button
           v-if="closeButton"
           type="button"
-          class="absolute top-0 right-0 mt-4 mr-4 rounded transition-colors duration-100 disabled:text-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+          class="absolute top-0 right-0 mt-4 mr-4 rounded transition-colors duration-100 disabled:text-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
           :disabled="closeButtonDisabled"
           @click="show = false"
         >
