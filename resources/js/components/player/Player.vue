@@ -52,7 +52,7 @@ function isClickedBigButton() {
 
 function currentTime() {
   return player
-    ? Math.round(player.currentTime() * 100) / 100
+    ? Math.round((player.currentTime() || 0) * 100) / 100
     : 0
 }
 
@@ -327,7 +327,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
     newCurrentTime = adjustmentCurrentTime(e.status.timestamp, e.status.current_time)
   }
 
-  if (newCurrentTime < player.duration()) {
+  if (newCurrentTime < (player.duration() || 0)) {
     player.currentTime(newCurrentTime)
   }
 
