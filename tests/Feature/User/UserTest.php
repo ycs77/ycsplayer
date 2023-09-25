@@ -27,7 +27,7 @@ beforeEach(function () {
 
 test('should visit user settings page', function () {
     get('/user/settings')
-        ->assertStatus(200);
+        ->assertSuccessful();
 });
 
 test('should save user settings only name & email', function () {
@@ -112,7 +112,7 @@ test('should destroy user with password confirm', function () {
         ->assertRedirect('/user/confirm-password');
 
     get('/user/confirm-password')
-        ->assertStatus(200);
+        ->assertSuccessful();
 
     post('/user/confirm-password', ['password' => 'password'])
         ->assertRedirect('/user/destroy/confirm');
@@ -133,7 +133,7 @@ test('should destroy user with password-less', function () {
     $user = user(email: 'admin@example.com');
 
     get('/user/destroy/confirm')
-        ->assertStatus(200);
+        ->assertSuccessful();
 
     delete('/user')
         ->assertRedirect('/user/destroy');

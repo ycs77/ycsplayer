@@ -22,7 +22,7 @@ test('should visit rooms page', function () {
     $audioRoom = room('動漫音樂廳');
 
     get('/rooms')
-        ->assertStatus(200)
+        ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->component('Room/Index')
             ->has('rooms.data', 2)
@@ -45,7 +45,7 @@ test('should visit room page with no playing', function () {
     $room = room('動漫觀影室');
 
     get("/rooms/{$room->hash_id}")
-        ->assertStatus(200)
+        ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->component('Room/Show')
             ->has('room', fn (Assert $page) => $page
@@ -83,7 +83,7 @@ test('should visit room page has current playing', function () {
     ]);
 
     get("/rooms/{$room->hash_id}")
-        ->assertStatus(200)
+        ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->component('Room/Show')
             ->has('currentPlaying', fn (Assert $page) => $page
@@ -120,7 +120,7 @@ test('should visit room members page', function () {
     $room = room('動漫觀影室');
 
     get("/rooms/{$room->hash_id}/members")
-        ->assertStatus(200)
+        ->assertSuccessful()
         ->assertInertia(fn (Assert $page) => $page
             ->component('Room/Members')
             ->has('members', 2)
@@ -143,7 +143,7 @@ test('should visit room settings page', function () {
     $room = room('動漫觀影室');
 
     get("/rooms/{$room->hash_id}/settings")
-        ->assertStatus(200);
+        ->assertSuccessful();
 });
 
 test('should update room settings', function () {

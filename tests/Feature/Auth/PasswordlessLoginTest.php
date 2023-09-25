@@ -1,6 +1,7 @@
 <?php
 
 use App\PasswordlessLogin\Notifications\SendPasswordlessLoginLink;
+use App\Providers\RouteServiceProvider;
 use Database\Seeders\UserSeeder;
 use Grosv\LaravelPasswordlessLogin\UserClass;
 use Illuminate\Support\Facades\Notification;
@@ -54,7 +55,7 @@ test('should vist password-less login link to login', function () {
     ]);
 
     get($url)
-        ->assertRedirect('/rooms');
+        ->assertRedirect(RouteServiceProvider::HOME);
 
     assertAuthenticatedAs($user);
 });

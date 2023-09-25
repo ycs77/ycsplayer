@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\RouteServiceProvider;
 use Database\Seeders\UserSeeder;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertAuthenticated;
@@ -13,7 +14,8 @@ beforeEach(function () {
 });
 
 test('should visit login page', function () {
-    get('/login')->assertStatus(200);
+    get('/login')
+        ->assertSuccessful();
 });
 
 test('should submit login form', function () {
@@ -21,7 +23,7 @@ test('should submit login form', function () {
         'email' => 'admin@example.com',
         'password' => 'password',
         'remember' => true,
-    ])->assertRedirect('/rooms');
+    ])->assertRedirect(RouteServiceProvider::HOME);
 
     assertAuthenticated();
 });

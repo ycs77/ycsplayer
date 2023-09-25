@@ -28,7 +28,7 @@ test('should visit room medias page', function () {
     $room = room('動漫觀影室');
 
     get("/rooms/{$room->hash_id}/medias")
-        ->assertStatus(200);
+        ->assertSuccessful();
 });
 
 test('should upload file', function () {
@@ -119,7 +119,7 @@ test('should remove a media', function () {
     Storage::assertExists('1/mov_bbb.mp3');
 
     delete("/rooms/{$room->hash_id}/medias/{$media->uuid}")
-        ->assertStatus(200);
+        ->assertSuccessful();
 
     expect($room->getMedia()->firstWhere('name', 'mov_bbb'))->toBeNull();
 
