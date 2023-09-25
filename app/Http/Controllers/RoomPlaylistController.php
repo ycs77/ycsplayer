@@ -12,6 +12,8 @@ use App\Models\Room;
 use App\Player\PlayStatusCacheRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\ValidationException;
@@ -102,6 +104,22 @@ class RoomPlaylistController extends Controller
         }
 
         PlayerlistItemAdded::broadcast($room->hash_id)->toOthers();
+    }
+
+    public function youtubeTitle(Request $request)
+    {
+        $url = $request->input('url');
+
+        if (Str::startsWith($url, [
+            'https://www.youtube.com/watch?v=',
+            'https://music.youtube.com/watch?v=',
+            'https://youtu.be/',
+        ])) {
+            $oembed = Http::get('https://youtube.com/oembed?type=json&url='.rawurlencode($url))->json();
+            $title = $oembed['title'] ?? '';
+
+            return response($title);
+        }
     }
 
     public function click(Room $room, PlaylistItem $item)

@@ -50,10 +50,12 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios'
 import type { InertiaForm } from '@inertiajs/vue3'
 import { type Media, PlayerType, type PlaylistItemForm } from '@/types'
 
 const props = defineProps<{
+  roomId: string
   form: InertiaForm<PlaylistItemForm>
   medias: Media[]
   submitting: boolean
@@ -94,10 +96,27 @@ watch(media, () => {
   if (media.value) {
     form.media_id = media.value.id
     if ((form.type === PlayerType.Video || form.type === PlayerType.Audio) && !form.title) {
-      form.title = media.value.title.replace(/\.\w+$/, '')
+      form.title = media.value.title.replace(/\.\w+$/, '').slice(0, 50)
     }
   } else {
     form.media_id = null
+  }
+})
+
+watch(() => form.url, () => {
+  if (form.type === PlayerType.YouTube && form.url &&
+    (
+      /^https:\/\/(www|music)\.youtube\.com\/watch\?v=/.test(form.url) ||
+      /^https:\/\/youtu\.be\//.test(form.url)
+    ) && !form.title
+  ) {
+    axios.post(`/rooms/${props.roomId}/playlist/youtube-title`, {
+      url: form.url,
+    }).then(({ data }) => {
+      if (data && !form.title) {
+        form.title = data.slice(0, 50)
+      }
+    })
   }
 })
 

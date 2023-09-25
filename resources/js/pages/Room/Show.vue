@@ -125,6 +125,7 @@
 
     <RoomAddPlaylistItemModal
       v-model="showAddPlaylistItemModal"
+      :room-id="room.id"
       :form="playlistItemForm"
       :medias="medias"
       :submitting="playlistItemForm.processing"

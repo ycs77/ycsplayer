@@ -30,6 +30,7 @@ Route::middleware([
     Route::delete('/rooms/{room}/note', [RoomNoteController::class, 'destroy'])->name('rooms.note.destroy');
 
     Route::post('/rooms/{room}/playlist', [RoomPlaylistController::class, 'store'])->name('rooms.playlist.store');
+    Route::post('/rooms/{room}/playlist/youtube-title', [RoomPlaylistController::class, 'youtubeTitle'])->name('rooms.playlist.youtube-title');
     Route::post('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'click'])->name('rooms.playlist.click');
     Route::delete('/rooms/{room}/playlist/{item}', [RoomPlaylistController::class, 'destroy'])->name('rooms.playlist.destroy');
     Route::post('/rooms/{room}/next', [RoomPlaylistController::class, 'next'])->name('rooms.playlist.next');
