@@ -7,6 +7,7 @@ use App\Events\PlayerlistItemRemoved;
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
@@ -177,6 +178,30 @@ test('expect throw url invalid error on add youtube playlist item', function () 
     ])->assertRedirect("/rooms/{$room->hash_id}");
 
     expect(session('errors')->first('url'))->toBe('YouTube 的網址請輸入 https://www.youtube.com/watch?v=<id> 或 https://www.youtube.com/embed/<id> 格式');
+});
+
+test('should fetch youtube title as string', function () {
+    $room = room('動漫觀影室');
+
+    Http::fake([
+        'youtube.com/oembed?*' => Http::response(['title' => '迷星叫']),
+    ]);
+
+    post("/rooms/{$room->hash_id}/playlist/youtube-title", [
+        'url' => 'https://www.youtube.com/watch?v=B8k6JtF6WrU',
+    ])->assertContent('迷星叫');
+});
+
+test('should fetch youtube title as empty string with invalid url', function () {
+    $room = room('動漫觀影室');
+
+    Http::fake([
+        'youtube.com/oembed?*' => Http::response('Not Found'),
+    ]);
+
+    post("/rooms/{$room->hash_id}/playlist/youtube-title", [
+        'url' => 'https://not-youtube.com/',
+    ])->assertContent('');
 });
 
 test('should click playlist item', function () {
