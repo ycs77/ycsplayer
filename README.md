@@ -61,7 +61,7 @@
 
 需要在 Linux 環境才能裝，我是用 Windows 跑在 Laravel Homestead 裡開發的。
 
-基本的 PHP 8.1、MySQL 8 有了之後，就可以編輯 `.env` 檔：
+首先先編輯 `.env` 檔：
 
 ```bash
 cp .env.example .env
@@ -143,7 +143,7 @@ VITE_DEV_SERVER_CERT=/etc/ssl/certs/localhost.crt
 
 ## 部署專案
 
-基本的 PHP 8.1、MySQL 8 有了之後，就可以編輯 `.env` 檔：
+首先先編輯 `.env` 檔：
 
 ```bash
 cp .env.example .env
