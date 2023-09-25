@@ -14,4 +14,11 @@ abstract class TestCase extends BaseTestCase
      * @var bool
      */
     protected $seed = true;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->withoutVite();
+    }
 }

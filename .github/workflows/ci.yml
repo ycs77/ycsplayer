@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-checks:
+    name: Backend checks - PHP ${{ matrix.php }}
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [8.1, 8.2]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, intl, gd, exif, iconv, imagick, fileinfo
+          tools: phpstan
+          coverage: none
+
+      - name: Setup problem matchers
+        run: |
+          echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+          echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Setup environment key
+        run: |
+          touch .env.testing
+          echo -e "APP_KEY=" > .env.testing
+          php artisan key:generate --env=testing
+
+      - name: Run Pint
+        run: vendor/bin/pint
+
+      - name: Run PHPStan
+        run: phpstan analyse
+
+      - name: Run tests
+        run: vendor/bin/pest
+
+  frontend-checks:
+    name: Frontend checks
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Run lint
+        run: yarn lint
+
+      - name: Run type-check
+        run: yarn type-check

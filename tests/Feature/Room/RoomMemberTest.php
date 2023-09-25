@@ -3,6 +3,7 @@
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Testing\Fluent\AssertableJson;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
@@ -37,11 +38,13 @@ test('new member should join to room', function () {
 test('should generate join link', function () {
     Date::setTestNow('2023-01-01');
 
+    URL::setKeyResolver(fn () => 'testing');
+
     $room = room('動漫觀影室');
 
     post("/rooms/{$room->hash_id}/generate-join-link")
         ->assertJson([
-            'join_link' => "http://localhost/rooms/{$room->hash_id}/join?expires=1672588800&signature=57ac69f616f730d22d04df4b361cd05aa0992134bc781de4f80c2ffa969fdda5",
+            'join_link' => "http://localhost/rooms/{$room->hash_id}/join?expires=1672588800&signature=2737d51f7f8e22522ed94de0cc0de4a5336633ce621f0f8710832daf765780bd",
         ]);
 });
 
