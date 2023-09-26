@@ -104,17 +104,28 @@ const serverLogs = ref([]) as Ref<ServerLog[]>
 
 const { logs: clientLogs } = usePlayerLog()!
 
-watch(clientLogs, () => {
-  if (clientLogsRef.value) {
-    clientLogsRef.value.scrollTo(0, clientLogsRef.value.scrollHeight)
+watch(show, show => {
+  if (show) {
+    nextTick(() => {
+      scrollToBottom(clientLogsRef)
+      scrollToBottom(serverLogsRef)
+    })
   }
+})
+
+watch(clientLogs, () => {
+  scrollToBottom(clientLogsRef)
 }, { immediate: true, flush: 'post', deep: true })
 
 watch(serverLogs, () => {
-  if (serverLogsRef.value) {
-    serverLogsRef.value.scrollTo(0, serverLogsRef.value.scrollHeight)
-  }
+  scrollToBottom(serverLogsRef)
 }, { immediate: true, flush: 'post', deep: true })
+
+function scrollToBottom(el: Ref<HTMLElement>) {
+  if (el.value) {
+    el.value.scrollTo(0, el.value.scrollHeight)
+  }
+}
 
 function fetchDebugStatus() {
   axios.post<{
