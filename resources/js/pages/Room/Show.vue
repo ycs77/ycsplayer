@@ -176,6 +176,8 @@ const playlistItemForm = useForm({
   media_id: null,
 }) as InertiaForm<PlaylistItemForm>
 
+usePlayerLogger({ debug: props.debug })
+
 function ended() {
   router.post(`/rooms/${props.room.id}/next`, {
     current_playing_id: props.currentPlaying?.id,

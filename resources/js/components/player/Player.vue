@@ -29,7 +29,6 @@ const props = defineProps<{
   type: PlayerType
   poster?: string
   autoplay?: boolean
-  debug?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -46,8 +45,10 @@ let player: Player | undefined
 let playCallback = null as (() => void) | null
 let isEnded = false
 
+const { log } = usePlayerLog()!
+
 function isClickedBigButton() {
-  return player?.hasStarted_
+  return player?.hasStarted_ ?? false
 }
 
 function currentTime() {
@@ -71,14 +72,17 @@ function play(handler?: () => void, checkPaused = true) {
     handler?.()
   }
 
-  axios.post('/player/play', {
+  const options = {
     room_id: props.roomId,
     timestamp: Date.now(),
     current_time: clickedBigButton
       ? currentTime()
       : null,
     is_clicked_big_button: clickedBigButton,
-  }).then(() => {
+  }
+  log('[TriggerPlay] options', options)
+
+  axios.post('/player/play', options).then(() => {
     if (!player) return
 
     // 如果 5秒 後還沒有回應，就開始播放當前使用者
@@ -97,11 +101,14 @@ function pause(handler?: () => void) {
 
   handler?.()
 
-  axios.post('/player/pause', {
+  const options = {
     room_id: props.roomId,
     timestamp: Date.now(),
     current_time: currentTime(),
-  }).then()
+  }
+  log('[TriggerPause] options', options)
+
+  axios.post('/player/pause', options).then()
 }
 
 function seeked() {
@@ -110,12 +117,15 @@ function seeked() {
 
   emit('seek', currentTime())
 
-  axios.post('/player/seeked', {
+  const options = {
     room_id: props.roomId,
     timestamp: Date.now(),
     current_time: currentTime(),
     paused: player.paused(),
-  }).then()
+  }
+  log('[TriggerSeeked] options', options)
+
+  axios.post('/player/seeked', options).then()
 }
 
 function end() {
@@ -123,6 +133,8 @@ function end() {
   if (isEnded) return
 
   isEnded = true
+
+  log('[TriggerEnd]')
 
   axios.post('/player/end', {
     room_id: props.roomId,
@@ -189,6 +201,7 @@ onMounted(() => {
       }
 
       if (this.player_.paused()) {
+        log('[YcsPosterImage] start play')
         this.player_.handleTechWaiting_()
         play(() => {
           this.player_?.play()
@@ -206,6 +219,7 @@ onMounted(() => {
   }) {
     handleClick(event: KeyboardEvent) {
       if (this.player_.paused()) {
+        log('[YcsBigPlayButton] start play')
         this.player_.handleTechWaiting_()
         play(() => {
           super.handleClick(event)
@@ -220,12 +234,14 @@ onMounted(() => {
   }) {
     handleClick(event: Event) {
       if (this.player_.paused()) {
+        log('[YcsPlayToggle] play')
         this.player_.handleTechWaiting_()
         play(() => {
           this.player_?.play()
           emit('play', currentTime())
         })
       } else {
+        log('[YcsPlayToggle] pause')
         pause(() => {
           this.player_?.pause()
           emit('pause', currentTime())
@@ -306,11 +322,13 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
   // 同時觸發的播放器不是當前播放器，
   // 同時已經是播放狀態，
   // 就不要執行播放。
-  if (!e.status.is_clicked_big_button &&
-      isClickedBigButton() &&
-      e.socketId !== Echo.socketId() &&
-      !player.paused()
-  ) return
+  const dontTriggerPlay =
+    !e.status.is_clicked_big_button &&
+    isClickedBigButton() &&
+    e.socketId !== Echo.socketId() &&
+    !player.paused()
+  log('[PlayerPlayed] dont trigger play', dontTriggerPlay)
+  if (dontTriggerPlay) return
 
   let newCurrentTime = e.status.current_time ?? 0
 
@@ -319,22 +337,26 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
   // 但需要注意：如果是播放中同時開啟兩個播放器會正常，但是如果播放一段時間後關閉，
   // 再過一會兒重開播放器會發現時間跳過了一段時間，這是因為下面這段的關係。
   // 解決此問題是使用 Pusher 的 Webhook 功能，可以查看 `app/Listeners/PlayerAllConnectionClosed.php`
-  if (!e.isFirst &&
-      !e.status.is_clicked_big_button &&
-      typeof e.status.current_time === 'number' &&
-      e.socketId === Echo.socketId()
+  const shouldAdjustmentCurrentTime =
+    !e.isFirst &&
+    !e.status.is_clicked_big_button &&
+    typeof e.status.current_time === 'number' &&
+    e.socketId === Echo.socketId()
+  log('[PlayerPlayed] should adjustment currentTime', shouldAdjustmentCurrentTime)
+  if (shouldAdjustmentCurrentTime &&
+      typeof e.status.current_time === 'number'
   ) {
     newCurrentTime = adjustmentCurrentTime(e.status.timestamp, e.status.current_time)
   }
 
+  log('[PlayerPlayed] udpate newCurrentTime', newCurrentTime < (player.duration() || 0))
   if (newCurrentTime < (player.duration() || 0)) {
     player.currentTime(newCurrentTime)
   }
 
-  if (props.debug) {
-    console.log('PlayerPlayed', newCurrentTime)
-  }
+  log('[PlayerPlayed] currentTime', newCurrentTime)
 
+  log('[PlayerPlayed] has playCallback', typeof playCallback === 'function')
   if (typeof playCallback === 'function') {
     playCallback()
     playCallback = null
@@ -350,9 +372,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
 function onPlayerPaused(e: PlayerPausedEvent) {
   if (!player) return
 
-  if (props.debug) {
-    console.log('PlayerPaused', e.status.current_time)
-  }
+  log('[PlayerPaused] currentTime', e.status.current_time)
 
   if (typeof e.status.current_time === 'number') {
     player.currentTime(e.status.current_time)
@@ -368,9 +388,7 @@ function onPlayerPaused(e: PlayerPausedEvent) {
 function onPlayerSeeked(e: PlayerSeekedEvent) {
   if (!player) return
 
-  if (props.debug) {
-    console.log('PlayerSeeked', e.status.current_time)
-  }
+  log('[PlayerSeeked] currentTime', e.status.current_time)
 
   if (typeof e.status.current_time === 'number') {
     player.currentTime(e.status.current_time)
