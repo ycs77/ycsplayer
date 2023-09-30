@@ -1,15 +1,7 @@
 <template>
-  <div class="px-[--layout-gap] pb-[calc(var(--layout-gap)+3rem)] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg]">
-    <div class="grid grid-cols-12 gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
-      <!-- 導覽列 -->
-      <RoomNavbar
-        class="col-span-12"
-        :room-id="room.id"
-        :can-upload-medias="can.uploadMedias"
-        :can-settings="can.settings"
-      />
-
-      <div class="col-span-12 md:col-span-8 lg:col-span-9">
+  <div class="px-[--layout-gap] pb-[calc(var(--layout-gap)+3.5rem)] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg] h-full">
+    <div class="flex flex-col gap-[--layout-gap] md:grid md:grid-cols-12 lg:gap-[--layout-gap-lg] h-full">
+      <div class="min-h-0 shrink-0 md:col-span-8 lg:col-span-9">
         <div class="relative">
           <!-- 播放器 -->
           <div v-if="currentPlaying" class="rounded-lg overflow-hidden">
@@ -36,32 +28,27 @@
         </div>
       </div>
 
-      <div class="col-span-12 md:col-span-4 lg:col-span-3">
-        <div class="grid gap-[--layout-gap] lg:gap-[--layout-gap-lg]">
-          <div>
-            <!-- 房間資訊卡 -->
-            <RoomStatusCard
-              :room="room"
-              :members-count="members.length"
-              :editing-user="editingUser"
-            />
-          </div>
+      <div class="min-h-0 flex flex-col gap-y-[--layout-gap] md:col-span-4 lg:col-span-3">
+        <!-- 導覽列 -->
+        <RoomTabs
+          v-model:tab="tab"
+          :can-upload-medias="can.uploadMedias"
+          :can-settings="can.settings"
+          class="shrink-0"
+        />
 
-          <div class="hidden md:block">
-            <!-- 播放清單卡 -->
-            <Playlist
-              class="rounded-lg overflow-hidden"
-              :current-playing="currentPlaying"
-              :playlist-items="playlistItems"
-              :can-add="can.operatePlaylistItem"
-              :can-remove="can.operatePlaylistItem"
-              @open-add-item="openAddPlaylistItemModal"
-              @select-item="selectPlaylistItem"
-              @remove-item="removePlaylistItem"
-            />
-          </div>
+        <div class="flex flex-col gap-y-[--layout-gap] min-h-0 overflow-y-auto">
+          <!-- 首頁分頁 -->
+          <template v-if="tab === 'main'">
+            <div>
+              <!-- 房間資訊卡 -->
+              <RoomStatusCard
+                :room="room"
+                :members-count="members.length"
+                :editing-user="editingUser"
+              />
+            </div>
 
-          <div class="hidden xl:block">
             <!-- 房間成員卡 -->
             <RoomMembers
               :members="members"
@@ -70,7 +57,35 @@
               :can-change-role="can.changeMemberRole"
               :can-remove="can.removeMember"
             />
-          </div>
+
+            <!-- 播放清單卡 -->
+            <Playlist
+              :current-playing="currentPlaying"
+              :playlist-items="playlistItems"
+              :can-add="can.operatePlaylistItem"
+              :can-remove="can.operatePlaylistItem"
+              class="hidden md:block rounded-lg overflow-y-auto min-h-0"
+              @click-add-item="openAddPlaylistItemModal"
+              @select-item="selectPlaylistItem"
+              @remove-item="removePlaylistItem"
+            />
+          </template>
+
+          <!-- 檔案分頁 -->
+          <RoomMedias
+            v-else-if="tab === 'medias'"
+            :room="room"
+            :medias="medias"
+            class="overflow-y-auto min-h-0"
+            @click-upload="showRoomUploadMediaModal = true"
+          />
+
+          <!-- 設定分頁 -->
+          <RoomSettings
+            v-else-if="tab === 'settings'"
+            :room="room"
+            :can-delete-room="can.delete"
+          />
         </div>
       </div>
     </div>
@@ -92,9 +107,10 @@
           class="max-h-[50vh] border-t border-blue-900/50 overflow-y-auto"
           :current-playing="currentPlaying"
           :playlist-items="playlistItems"
+          button-on-bottom
           :can-add="can.operatePlaylistItem"
           :can-remove="can.operatePlaylistItem"
-          @open-add-item="openAddPlaylistItemModal"
+          @click-add-item="openAddPlaylistItemModal"
           @select-item="selectPlaylistItem"
           @remove-item="removePlaylistItem"
         />
@@ -127,23 +143,32 @@
       v-model="showAddPlaylistItemModal"
       :room-id="room.id"
       :form="playlistItemForm"
-      :medias="medias"
+      :medias="medias.filter(media => !media.converting)"
       :submitting="playlistItemForm.processing"
       @submit="submitPlaylistItemForm"
+    />
+
+    <RoomUploadMediaModal
+      v-model="showRoomUploadMediaModal"
+      :room-id="room.id"
+      :csrf-token="csrfToken"
+      @uploaded="onMediaUpload"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { InertiaForm } from '@inertiajs/vue3'
+import { useToast } from 'vue-toastification'
 import { clearAllBodyScrollLocks, disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
 import { Echo, safeListenFn } from '@/echo'
 import Player from '@/components/player/Player.vue'
 import Playlist from '@/components/player/Playlist.vue'
-import { type Media, PlayerType, type PlaylistItem, type PlaylistItemForm, type Room, type RoomMember, RoomType } from '@/types'
+import { type Media, PlayerType, type PlaylistItem, type PlaylistItemForm, type Room, type RoomMediaConvertedEvent, type RoomMember, RoomType } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>
+  csrfToken: string
   debug: boolean
   currentPlaying: PlaylistItem | null
   playlistItems: PlaylistItem[]
@@ -160,14 +185,22 @@ const props = defineProps<{
     removeMember: boolean
     uploadMedias: boolean
     settings: boolean
+    delete: boolean
   }
 }>()
+
+useFullPage(true, ['max-h-full', 'lg:min-h-[700px]'])
 
 const player = ref(null) as Ref<InstanceType<typeof Player> | null>
 const mobilePlaylist = ref(null) as Ref<InstanceType<typeof Playlist> | null>
 
 const showAddPlaylistItemModal = ref(false)
 const showMobilePlaylist = ref(false)
+const showRoomUploadMediaModal = ref(false)
+
+const tab = ref('main')
+
+const toast = useToast()
 
 const playlistItemForm = useForm({
   type: PlayerType.Video,
@@ -236,6 +269,17 @@ function submitPlaylistItemForm(form: PlaylistItemForm) {
   })
 }
 
+function onMediaUpload(message: string | null) {
+  router.reload({
+    only: [...globalOnly, 'csrfToken', 'medias'],
+    onSuccess() {
+      if (message) {
+        toast.success(message)
+      }
+    },
+  })
+}
+
 // 監聽當有其他人新增播放項目時的事件
 function onPlayerlistItemAdded() {
   router.reload({
@@ -285,10 +329,20 @@ function onNoteCanceled() {
   })
 }
 
-// 監聽當上傳並轉換完成檔案時的事件
-function onRoomMediaConverted() {
+// 監聽當檔案上傳完成檔時的事件
+function onRoomMediaCreated() {
   router.reload({
     only: [...globalOnly, 'medias'],
+  })
+}
+
+// 監聽當檔案上傳並轉換完成時的事件
+function onRoomMediaConverted(e: RoomMediaConvertedEvent) {
+  router.reload({
+    only: [...globalOnly, 'medias'],
+    onSuccess() {
+      toast.success(e.message)
+    },
   })
 }
 
@@ -334,6 +388,7 @@ watch(player, (v, ov, onInvalidate) => {
     .listen('RoomNoteUpdating', onNoteUpdating)
     .listen('RoomNoteUpdated', onNoteUpdated)
     .listen('RoomNoteCanceled', onNoteCanceled)
+    .listen('RoomMediaCreated', onRoomMediaCreated)
     .listen('RoomMediaConverted', onRoomMediaConverted)
     .listen('RoomMediaRemoved', onRoomMediaRemoved)
     .listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)

@@ -1,39 +1,35 @@
 <template>
   <div class="bg-blue-950/50 p-4 rounded-lg">
-    <h5>房間成員</h5>
-
-    <ul class="mt-2 space-y-1 -mx-2 -mb-2">
-      <li v-for="member in members" :key="member.id">
-        <button
-          type="button"
-          class="p-2 w-full flex items-center hover:bg-blue-900/50 rounded-lg transition-colors"
-          @click="openMemberModal(member)"
-        >
-          <Avatar class="w-9 h-9 mr-2" :src="member.avatar" />
-          <div class="flex items-center h-10">
-            <div>
-              <div class="tracking-wide">
-                {{ member.name }}
-                <RoomRoleBadge v-if="member.role === 'admin'" role="admin" class="ml-1" />
-              </div>
-              <div v-if="member.online" class="flex items-center text-xs">
-                <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-1" /><span class="text-blue-300">上線</span>
-              </div>
+    <div class="-m-2 overflow-x-auto">
+      <ul class="flex space-x-0.5">
+        <li v-for="member in members" :key="member.id">
+          <button
+            type="button"
+            class="w-[55px] h-[70px] hover:bg-blue-900/50 rounded-lg transition-colors"
+            @click="openMemberModal(member)"
+          >
+            <div class="relative w-9 h-9 mx-auto mb-2">
+              <Avatar class="w-9 h-9" :src="member.avatar" />
+              <div
+                v-if="member.online"
+                class="absolute bottom-0 right-0 w-2 h-2 bg-green-400 rounded-full"
+              />
             </div>
-          </div>
-        </button>
-      </li>
-    </ul>
+            <div class="text-xs tracking-wide truncate">{{ member.name }}</div>
+          </button>
+        </li>
 
-    <div v-if="canInvite" class="mt-4 -mx-2 -mb-2">
-      <button
-        type="button"
-        class="flex justify-center items-center p-2 w-full hover:bg-blue-900/40 text-center rounded-lg transition-colors select-none"
-        @click="openMemberInviteModal"
-      >
-        <HeroiconsUserPlus class="w-4 h-4 mr-2" />
-        邀請新成員
-      </button>
+        <li v-if="canInvite" class="flex justify-center items-center">
+          <button
+            type="button"
+            class="flex justify-center items-center p-2 w-full hover:bg-blue-900/40 text-center rounded-lg transition-colors select-none"
+            title="邀請新成員"
+            @click="openMemberInviteModal"
+          >
+            <HeroiconsUserPlus class="w-4.5 h-4.5" />
+          </button>
+        </li>
+      </ul>
     </div>
 
     <RoomMemberInviteModal

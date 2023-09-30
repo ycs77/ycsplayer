@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-screen-2xl mx-auto">
+  <div class="max-w-screen-2xl flex flex-col mx-auto" :class="{ 'h-full': showFullPage }">
     <header class="p-[--layout-gap] lg:p-[--layout-gap-lg]">
       <div class="px-4 py-2.5 flex justify-between items-center flex-col bg-blue-950/50 rounded-lg md:flex-row lg:px-6">
         <div class="w-full flex justify-between items-center md:w-auto">
@@ -122,7 +122,7 @@
       </div>
     </header>
 
-    <main>
+    <main class="h-full min-h-0">
       <slot />
     </main>
 
@@ -132,6 +132,8 @@
 
 <script setup lang="ts">
 import { ModalsContainer } from 'vue-final-modal'
+
+const showFullPage = useFullPage()
 
 const { user } = useAuth()
 

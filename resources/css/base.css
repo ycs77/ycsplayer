@@ -22,3 +22,9 @@
     }
   }
 }
+
+.full-page,
+.full-page body,
+.full-page #app {
+  @apply h-full;
+}

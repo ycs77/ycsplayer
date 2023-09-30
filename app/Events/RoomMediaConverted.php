@@ -4,7 +4,6 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -32,7 +31,6 @@ class RoomMediaConverted implements ShouldBroadcastNow
     {
         return [
             new PresenceChannel('player.'.$this->roomId),
-            new PrivateChannel('medias.'.$this->roomId),
         ];
     }
 }

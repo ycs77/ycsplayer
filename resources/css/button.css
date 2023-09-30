@@ -5,7 +5,7 @@
     @apply text-sm text-center font-normal tracking-wider;
     @apply transition-colors duration-100;
     @apply shadow-sm select-none focus:outline-none;
-    @apply whitespace-nowrap
+    @apply whitespace-nowrap;
   }
 
   .btn-base {
@@ -56,5 +56,9 @@
   }
   button.btn-outline-danger {
     @apply enabled:hover:bg-red-500 enabled:hover:text-white disabled:text-gray-300;
+  }
+
+  .btn-list-item {
+    @apply flex p-2 w-full bg-blue-950/50 hover:bg-blue-900/50 text-base text-center tracking-normal rounded-none shadow-none;
   }
 }

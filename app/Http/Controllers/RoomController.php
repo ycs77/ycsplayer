@@ -72,12 +72,13 @@ class RoomController extends Controller
 
         return Inertia::render('Room/Show', [
             'room' => fn () => RoomPresenter::make($room)->preset('show'),
+            'csrfToken' => fn () => csrf_token(),
             'debug' => fn () => config('ycsplayer.debug', false),
             'currentPlaying' => fn () => PlaylistItemPresenter::make($room->current_playing)->preset('play'),
             'playlistItems' => fn () => PlaylistItemPresenter::collection($room->playlist_items),
             'editingUser' => fn () => $noteEditor->get($room->hash_id),
-            'medias' => fn () => $user->can('operatePlaylistItem', $room)
-                ? MediaPresenter::collection($room->getMedia()->where('converting', false))
+            'medias' => fn () => $user->can('operatePlaylistItem', $room) || $user->can('uploadMedias', $room)
+                ? MediaPresenter::collection($room->getMedia())
                 : [],
             'members' => fn () => RoomMemberPresenter::collection($room->membersForPresent()),
             'can' => fn () => [
@@ -87,41 +88,6 @@ class RoomController extends Controller
                 'removeMember' => $user->can('removeMember', $room),
                 'uploadMedias' => $user->can('uploadMedias', $room),
                 'settings' => $user->can('settings', $room),
-            ],
-        ])->title($room->name);
-    }
-
-    public function members(Room $room)
-    {
-        $this->authorize('view', $room);
-
-        /** @var \App\Models\User */
-        $user = Auth::user();
-
-        return Inertia::render('Room/Members', [
-            'room' => fn () => RoomPresenter::make($room),
-            'members' => fn () => RoomMemberPresenter::collection($room->membersForPresent()),
-            'can' => fn () => [
-                'inviteMember' => $user->can('inviteMember', $room),
-                'changeMemberRole' => $user->can('inviteMember', $room),
-                'removeMember' => $user->can('removeMember', $room),
-                'uploadMedias' => $user->can('uploadMedias', $room),
-                'settings' => $user->can('settings', $room),
-            ],
-        ])->title($room->name);
-    }
-
-    public function edit(Room $room)
-    {
-        $this->authorize('settings', $room);
-
-        /** @var \App\Models\User */
-        $user = Auth::user();
-
-        return Inertia::render('Room/Settings', [
-            'room' => fn () => RoomPresenter::make($room),
-            'can' => fn () => [
-                'uploadMedias' => $user->can('uploadMedias', $room),
                 'delete' => $user->can('delete', $room),
             ],
         ])->title($room->name);

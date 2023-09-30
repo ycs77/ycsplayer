@@ -173,6 +173,7 @@ declare global {
   const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
   const useForm: typeof import('@inertiajs/vue3')['useForm']
   const useFps: typeof import('@vueuse/core')['useFps']
+  const useFullPage: typeof import('../composables/useFullPage')['default']
   const useFullscreen: typeof import('@vueuse/core')['useFullscreen']
   const useGamepad: typeof import('@vueuse/core')['useGamepad']
   const useGeolocation: typeof import('@vueuse/core')['useGeolocation']

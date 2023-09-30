@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
 use function Pest\Laravel\delete;
-use function Pest\Laravel\get;
 use function Pest\Laravel\post;
 use function Pest\Laravel\seed;
 
@@ -22,13 +21,6 @@ beforeEach(function () {
     seed(RoomSeeder::class);
 
     loginUser();
-});
-
-test('should visit room medias page', function () {
-    $room = room('動漫觀影室');
-
-    get("/rooms/{$room->hash_id}/medias")
-        ->assertSuccessful();
 });
 
 test('should upload file', function () {

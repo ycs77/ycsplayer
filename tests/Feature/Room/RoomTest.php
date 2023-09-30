@@ -8,6 +8,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
+use function Pest\Laravel\put;
 use function Pest\Laravel\seed;
 
 beforeEach(function () {
@@ -116,40 +117,10 @@ test('should create a new room', function () {
     expect($user->getRoleNames())->toContain("rooms.{$room->id}.admin");
 });
 
-test('should visit room members page', function () {
-    $room = room('動漫觀影室');
-
-    get("/rooms/{$room->hash_id}/members")
-        ->assertSuccessful()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Room/Members')
-            ->has('members', 2)
-            ->has('members.0', fn (Assert $page) => $page
-                ->where('name', 'Admin')
-                ->where('email', 'admin@example.com')
-                ->where('role', 'admin')
-                ->etc()
-            )
-            ->has('members.1', fn (Assert $page) => $page
-                ->where('name', 'Soyo')
-                ->where('email', 'soyo@example.com')
-                ->where('role', 'user')
-                ->etc()
-            )
-        );
-});
-
-test('should visit room settings page', function () {
-    $room = room('動漫觀影室');
-
-    get("/rooms/{$room->hash_id}/settings")
-        ->assertSuccessful();
-});
-
 test('should update room settings', function () {
     $room = room('動漫觀影室');
 
-    post("/rooms/{$room->hash_id}/settings", [
+    put("/rooms/{$room->hash_id}", [
         'name' => '為什麼要改房間名字?',
         'type' => RoomType::Audio->value,
         'auto_play' => true,

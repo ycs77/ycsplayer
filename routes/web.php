@@ -20,9 +20,7 @@ Route::middleware([
     Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
     Route::post('/rooms', [RoomController::class, 'store'])->name('rooms.store');
     Route::get('/rooms/{room}', [RoomController::class, 'show'])->name('rooms.show');
-    Route::get('/rooms/{room}/members', [RoomController::class, 'members'])->name('rooms.members');
-    Route::get('/rooms/{room}/settings', [RoomController::class, 'edit'])->name('rooms.edit');
-    Route::post('/rooms/{room}/settings', [RoomController::class, 'update'])->name('rooms.update');
+    Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
     Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('rooms.destroy');
 
     Route::post('/rooms/{room}/note', [RoomNoteController::class, 'edit'])->name('rooms.note.edit');

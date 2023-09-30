@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { type Room, RoomType } from '@/types'
+import { type Room } from '@/types'
 
 defineProps<{
   rooms: Paginator<Room>
