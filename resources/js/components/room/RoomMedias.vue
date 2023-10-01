@@ -58,7 +58,7 @@ defineEmits<{
 function deleteMedia(media: Media) {
   if (confirm(`確定要刪除 ${media.name} 嗎?`)) {
     router.delete(`/rooms/${props.room.id}/medias/${media.id}`, {
-      only: [...globalOnly, 'csrfToken', 'medias'],
+      only: [...globalOnly, 'csrfToken', 'currentPlaying', 'playlistItems', 'medias'],
       preserveScroll: true,
     })
   }
