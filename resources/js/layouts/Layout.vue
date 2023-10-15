@@ -44,7 +44,7 @@
           </template>
 
           <template v-else>
-            <Menu v-slot="{ close }" as="div" class="relative">
+            <Menu v-slot="{ close }" as="div" class="relative z-10">
               <MenuButton class="w-full flex items-center -my-0.5 max-w-[160px]">
                 <Avatar class="w-9 h-9 mr-2" :src="user.avatar" />
                 <div class="tracking-wide whitespace-nowrap truncate min-w-0">
@@ -62,7 +62,7 @@
               >
                 <MenuItems
                   as="ul"
-                  class="absolute top-full right-0 w-40 p-1.5 mt-1.5 space-y-1.5 bg-blue-900/50 rounded-md shadow-md shadow-blue-950/50 backdrop-blur-md overflow-hidden focus:outline-none"
+                  class="absolute top-full right-0 z-10 w-40 p-1.5 mt-1.5 space-y-1.5 bg-blue-900/50 rounded-md shadow-md shadow-blue-950/50 backdrop-blur-md overflow-hidden focus:outline-none"
                 >
                   <MenuItem
                     v-for="item in userMenu"
