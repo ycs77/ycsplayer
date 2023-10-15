@@ -1,5 +1,6 @@
 import { URL, fileURLToPath } from 'node:url'
 import fs from 'node:fs'
+import path from 'node:path'
 import { defineConfig, loadEnv } from 'vite'
 import Laravel from 'laravel-vite-plugin'
 import Vue from '@vitejs/plugin-vue'
@@ -100,7 +101,18 @@ export default defineConfig(({ mode }) => {
         host: 'localhost',
       },
       watch: {
-        ignored: ['**/vendor/**'],
+        ignored: [
+          path.join(__dirname, 'app/**'),
+          path.join(__dirname, 'bootstrap/**'),
+          path.join(__dirname, 'config/**'),
+          path.join(__dirname, 'database/**'),
+          path.join(__dirname, 'lang/**'),
+          path.join(__dirname, 'public/**'),
+          path.join(__dirname, 'routes/**'),
+          path.join(__dirname, 'storage/**'),
+          path.join(__dirname, 'tests/**'),
+          path.join(__dirname, 'vendor/**'),
+        ],
         usePolling: true,
       },
     },
