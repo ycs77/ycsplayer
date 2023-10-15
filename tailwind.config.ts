@@ -5,7 +5,9 @@ import Forms from '@tailwindcss/forms'
 export default {
   content: [
     './resources/views/app.blade.php',
-    './resources/js/**/*.vue',
+    './resources/js/components/**/*.vue',
+    './resources/js/layouts/**/*.vue',
+    './resources/js/pages/**/*.vue',
   ],
   theme: {
     screens: {
