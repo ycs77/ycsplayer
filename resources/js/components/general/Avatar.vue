@@ -9,6 +9,6 @@
 import userPlaceholderSrc from '@/images/user.svg'
 
 defineProps<{
-  src?: string
+  src?: string | null
 }>()
 </script>

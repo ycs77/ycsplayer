@@ -16,9 +16,19 @@ export interface RoomMember {
   id: string
   name: string
   email: string
-  avatar: string
+  avatar: string | null
   role: string
   online: boolean
+}
+
+export interface RoomChatMessage {
+  user: {
+    name: string
+    avatar: string | null
+  }
+  content: string
+  timestamp: number
+  read?: boolean
 }
 
 export interface Media {

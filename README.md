@@ -25,6 +25,7 @@ Demo 環境資源有限，建立的帳號和房間將會於 2 小時後刪除。
 ## 功能
 
 * 房間成員可以**同步觀看和點播影片/聽音樂**
+* 線上聊天室
 * 支援**播放 YouTube 影片**
 * 支援**上傳影片/音樂**
 * 支援**自動播放**功能
@@ -220,7 +221,9 @@ PUSHER_SCHEME=https
 PUSHER_APP_CLUSTER=[你的cluster]
 ```
 
-然後在 Pusher APP 的 Webhooks 設定裡加上兩個 `https://[your-domain]/pusher/webhook` 連結，**Event type** 選擇 *Channel existence* 和 *Presence*。如果在本地需要測試時，可以使用 ngrok 建立臨時網址來測試，但每次測試都需要更新網址到 Pusher 的後台。
+然後因為有使用到 Client event，需要在 Pusher APP 的 App settings 設定開啟 **Enable client events**。
+
+最後在 Pusher APP 的 Webhooks 設定裡加上兩個 `https://[your-domain]/pusher/webhook` 連結，**Event type** 選擇 *Channel existence* 和 *Presence*。如果在本地需要測試時，可以使用 ngrok 建立臨時網址來測試，但每次測試都需要更新網址到 Pusher 的後台。
 
 ### 安裝 FFMpeg
 

@@ -1,4 +1,4 @@
-import LaravelEcho from 'laravel-echo'
+import LaravelEcho, { type Channel, type PresenceChannel } from 'laravel-echo'
 import Pusher from 'pusher-js'
 import axios from 'axios'
 
@@ -21,4 +21,4 @@ function safeListenFn(fn: Function | undefined): Function {
   return fn ?? (() => {})
 }
 
-export { Echo, Pusher, safeListenFn }
+export { Echo, Channel, PresenceChannel, Pusher, safeListenFn }

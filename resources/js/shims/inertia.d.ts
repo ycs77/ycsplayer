@@ -10,7 +10,7 @@ declare module '@inertiajs/core' {
         id: string
         name: string
         email: string
-        avatar: string
+        avatar: string | null
       }
     } | null
     flash: {

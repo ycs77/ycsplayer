@@ -9,6 +9,15 @@
     </RoomNavbarButton>
 
     <RoomNavbarButton
+      :active="tab === 'chat'"
+      @click="tab = 'chat'"
+    >
+      <template #icon><HeroiconsChatBubbleOvalLeftEllipsis class="w-4 h-4" /></template>
+      聊天
+      <RoomNavbarButtonDot v-if="chatUnread" />
+    </RoomNavbarButton>
+
+    <RoomNavbarButton
       v-if="canUploadMedias"
       :active="tab === 'medias'"
       @click="tab = 'medias'"
@@ -30,6 +39,7 @@
 
 <script setup lang="ts">
 withDefaults(defineProps<{
+  chatUnread?: boolean
   canUploadMedias?: boolean
   canSettings?: boolean
 }>(), {

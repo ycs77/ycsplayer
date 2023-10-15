@@ -28,16 +28,17 @@
         </div>
       </div>
 
-      <div class="min-h-0 flex flex-col gap-y-[--layout-gap] md:col-span-4 lg:col-span-3">
+      <div class="grow min-h-0 flex flex-col gap-y-[--layout-gap] md:col-span-4 lg:col-span-3">
         <!-- 導覽列 -->
         <RoomTabs
           v-model:tab="tab"
+          :chat-unread="chatUnread"
           :can-upload-medias="can.uploadMedias"
           :can-settings="can.settings"
           class="shrink-0"
         />
 
-        <div class="flex flex-col gap-y-[--layout-gap] min-h-0 overflow-y-auto">
+        <div class="grow min-h-0 flex flex-col gap-y-[--layout-gap] overflow-y-auto">
           <!-- 首頁分頁 -->
           <template v-if="tab === 'main'">
             <div>
@@ -70,6 +71,15 @@
               @remove-item="removePlaylistItem"
             />
           </template>
+
+          <!-- 聊天室分頁 -->
+          <RoomChat
+            v-else-if="tab === 'chat'"
+            :messages="chatMessages"
+            class="grow min-h-0"
+            @mark-all-read="MarkAllChatMessagesAsRead"
+            @send-message="sendChatMessage"
+          />
 
           <!-- 檔案分頁 -->
           <RoomMedias
@@ -161,10 +171,11 @@
 import type { InertiaForm } from '@inertiajs/vue3'
 import { useToast } from 'vue-toastification'
 import { clearAllBodyScrollLocks, disableBodyScroll, enableBodyScroll } from 'body-scroll-lock'
-import { Echo, safeListenFn } from '@/echo'
+import { Echo, type PresenceChannel, safeListenFn } from '@/echo'
 import Player from '@/components/player/Player.vue'
 import Playlist from '@/components/player/Playlist.vue'
-import { type Media, PlayerType, type PlaylistItem, type PlaylistItemForm, type Room, type RoomMediaConvertedEvent, type RoomMember, RoomType } from '@/types'
+import { PlayerType, RoomType } from '@/types'
+import type { Media, PlaylistItem, PlaylistItemForm, Room, RoomChatMessage, RoomMediaConvertedEvent, RoomMember } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>
@@ -191,6 +202,8 @@ const props = defineProps<{
 
 useFullPage(true, ['max-h-full', 'lg:min-h-[700px]'])
 
+let channel: PresenceChannel | undefined
+
 const player = ref(null) as Ref<InstanceType<typeof Player> | null>
 const mobilePlaylist = ref(null) as Ref<InstanceType<typeof Playlist> | null>
 
@@ -208,6 +221,9 @@ const playlistItemForm = useForm({
   url: '',
   media_id: null,
 }) as InertiaForm<PlaylistItemForm>
+
+const chatMessages = ref([]) as Ref<RoomChatMessage[]>
+const chatUnread = computed(() => chatMessages.value.some(message => !message.read))
 
 usePlayerLogger({ debug: props.debug })
 
@@ -267,6 +283,18 @@ function submitPlaylistItemForm(form: PlaylistItemForm) {
       showAddPlaylistItemModal.value = false
     },
   })
+}
+
+function sendChatMessage(message: RoomChatMessage) {
+  chatMessages.value.push(message)
+
+  channel?.whisper('chat', message)
+}
+
+function MarkAllChatMessagesAsRead() {
+  chatMessages.value
+    .filter(message => !message.read)
+    .forEach(message => message.read = true)
 }
 
 function onMediaUpload(message: string | null) {
@@ -360,6 +388,10 @@ function onOnlineMembersUpdated() {
   })
 }
 
+function onClientChatMessageSended(message: RoomChatMessage) {
+  chatMessages.value.push(message)
+}
+
 watch(showMobilePlaylist, showMobilePlaylist => {
   if (showMobilePlaylist) {
     nextTick(() => {
@@ -377,23 +409,25 @@ watch(player, (v, ov, onInvalidate) => {
   // 但如果是沒有播放，就可以註冊，因為要監聽其他人切換影片時的事件。
   if (props.currentPlaying && !player.value) return
 
-  Echo.join(`player.${props.room.id}`)
-    .listen('PlayerPlayed', safeListenFn(player.value?.onPlayerPlayed))
-    .listen('PlayerPaused', safeListenFn(player.value?.onPlayerPaused))
-    .listen('PlayerSeeked', safeListenFn(player.value?.onPlayerSeeked))
-    .listen('PlayerlistItemAdded', onPlayerlistItemAdded)
-    .listen('PlayerlistItemClicked', onPlayerlistItemClicked)
-    .listen('PlayerlistItemNexted', onPlayerlistItemNexted)
-    .listen('PlayerlistItemRemoved', onPlayerlistItemRemoved)
-    .listen('RoomNoteUpdating', onNoteUpdating)
-    .listen('RoomNoteUpdated', onNoteUpdated)
-    .listen('RoomNoteCanceled', onNoteCanceled)
-    .listen('RoomMediaCreated', onRoomMediaCreated)
-    .listen('RoomMediaConverted', onRoomMediaConverted)
-    .listen('RoomMediaRemoved', onRoomMediaRemoved)
-    .listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)
+  channel = Echo.join(`player.${props.room.id}`)
+  channel.listen('PlayerPlayed', safeListenFn(player.value?.onPlayerPlayed))
+  channel.listen('PlayerPaused', safeListenFn(player.value?.onPlayerPaused))
+  channel.listen('PlayerSeeked', safeListenFn(player.value?.onPlayerSeeked))
+  channel.listen('PlayerlistItemAdded', onPlayerlistItemAdded)
+  channel.listen('PlayerlistItemClicked', onPlayerlistItemClicked)
+  channel.listen('PlayerlistItemNexted', onPlayerlistItemNexted)
+  channel.listen('PlayerlistItemRemoved', onPlayerlistItemRemoved)
+  channel.listen('RoomNoteUpdating', onNoteUpdating)
+  channel.listen('RoomNoteUpdated', onNoteUpdated)
+  channel.listen('RoomNoteCanceled', onNoteCanceled)
+  channel.listen('RoomMediaCreated', onRoomMediaCreated)
+  channel.listen('RoomMediaConverted', onRoomMediaConverted)
+  channel.listen('RoomMediaRemoved', onRoomMediaRemoved)
+  channel.listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)
+  channel.listenForWhisper('chat', onClientChatMessageSended)
 
   onInvalidate(() => {
+    channel = undefined
     Echo.leave(`player.${props.room.id}`)
   })
 }, { immediate: true })
