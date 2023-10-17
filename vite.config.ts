@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       Laravel({
         input: [
-          'resources/css/landing-page.css',
+          'resources/css/home.css',
           'resources/js/app.ts',
         ],
         refresh: true,

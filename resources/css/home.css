@@ -9,4 +9,4 @@
 @import 'button';
 @import 'form';
 
-@config '../../tailwind.landing-page.config.ts';
+@config '../../tailwind.home.config.ts';

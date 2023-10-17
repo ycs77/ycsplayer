@@ -11,7 +11,7 @@ use App\Http\Controllers\RoomUploadMediaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'landing-page')->middleware('guest')->name('home');
+Route::view('/', 'home')->middleware('guest')->name('home');
 
 Route::middleware([
     'auth',

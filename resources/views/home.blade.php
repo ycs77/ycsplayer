@@ -12,7 +12,7 @@
     <meta property="og:image" content="{{ config('app.url') }}/og-20231016.png">
     <meta name="twitter:card" content="summary_large_image">
 
-    @vite('resources/css/landing-page.css')
+    @vite('resources/css/home.css')
 </head>
 
 <body class="font-sans antialiased h-full">
