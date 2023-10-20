@@ -314,7 +314,7 @@ VITE_S3_UPLOAD_VITE_ASSETS_ENABLED=true
 
 ### 播放器偵錯模式
 
-`YCSPLAYER_DEBUG` 會決定是否開啟播放器偵錯模式，開啟之後會在播放器顯示當前播放器的狀態資訊，以及會將播放、暫停、拖曳進度條等操作時會記錄到 Log 中，用於排查錯誤時使用。
+`YCSPLAYER_DEBUG` 會決定是否開啟播放器偵錯模式，用於排查錯誤時使用。
 
 ### 寄送 E-mail
 

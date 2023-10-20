@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Broadcast;
 
 Broadcast::channel('player.{roomId}', function (User $user) {
     return [
-        'id' => $user->id,
+        'id' => $user->hash_id,
         'name' => $user->name,
     ];
 });

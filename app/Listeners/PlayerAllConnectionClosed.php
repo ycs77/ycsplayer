@@ -4,7 +4,6 @@ namespace App\Listeners;
 
 use App\Broadcasting\Events\PusherChannelVacated;
 use App\Models\Room;
-use App\Player\PlayStatusCacheRepository;
 use App\Room\RoomOnlineMembersRepository;
 
 class PlayerAllConnectionClosed
@@ -13,7 +12,6 @@ class PlayerAllConnectionClosed
      * Create the event listener.
      */
     public function __construct(
-        protected PlayStatusCacheRepository $statusCache,
         protected RoomOnlineMembersRepository $onlineMembers,
     ) {
         //
@@ -29,7 +27,6 @@ class PlayerAllConnectionClosed
             $roomId = Room::decodeHashId($roomHashId);
 
             if (Room::find($roomId, ['id'])) {
-                $this->statusCache->delete($roomHashId);
                 $this->onlineMembers->clear($roomHashId);
             }
         }

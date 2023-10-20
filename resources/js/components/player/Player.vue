@@ -6,7 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
 import { debounce } from 'lodash-es'
 import { promiseTimeout } from '@vueuse/core'
 import 'video.js/dist/video-js.css'
@@ -20,8 +19,8 @@ import type BigPlayButton from 'video.js/dist/types/big-play-button'
 import type PlayToggle from 'video.js/dist/types/control-bar/play-toggle'
 import type SeekBar from 'video.js/dist/types/control-bar/progress-control/seek-bar'
 import 'videojs-youtube'
-import { Echo } from '@/echo'
-import { type PlayerPausedEvent, type PlayerPlayedEvent, type PlayerSeekedEvent, PlayerType } from '@/types'
+import { PlayerType } from '@/types'
+import type { PlayerPausedEvent, PlayerPlayedEvent, PlayerSeekedEvent, PlayerTimeUpdateEvent } from '@/types'
 
 const props = defineProps<{
   roomId: string
@@ -32,23 +31,32 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  play: [currentTime: number]
-  pause: [currentTime: number]
-  seek: [currentTime: number]
-  timeupdate: [currentTime: number]
+  play: [event: PlayerPlayedEvent]
+  pause: [event: PlayerPausedEvent]
+  seek: [event: PlayerSeekedEvent]
   end: []
 }>()
 
 const videoRef = ref() as Ref<HTMLVideoElement>
+const startStatus = {
+  paused: false,
+  currentTime: 0,
+  timestamp: 0,
+}
 
 let player: Player | undefined
-let playCallback = null as (() => void) | null
 let isEnded = false
 
-const { log } = usePlayerLog()!
+const { log } = usePlayerLog()
 
 function isClickedBigButton() {
   return player?.hasStarted_ ?? false
+}
+
+function paused() {
+  return player
+    ? player.paused()
+    : true
 }
 
 function currentTime() {
@@ -62,37 +70,33 @@ function adjustmentCurrentTime(timestamp: number, currentTime: number) {
   return Math.round((currentTime + seconds) * 100) / 100
 }
 
+function syncPlayStatus(callback?: () => void) {
+  setTimeout(() => {
+    if (!player) return
+
+    if (startStatus.currentTime > 0) {
+      player.currentTime(adjustmentCurrentTime(
+        startStatus.timestamp, startStatus.currentTime
+      ))
+
+      if (startStatus.paused) {
+        setTimeout(() => player!.pause(), 500)
+      } else {
+        silencePromise(player.play())
+      }
+    }
+
+    callback?.()
+  }, 1)
+}
+
 function play(handler?: () => void, checkPaused = true) {
   if (!player) return
   if (checkPaused && !player.paused()) return
 
-  const clickedBigButton = isClickedBigButton()
+  handler?.()
 
-  playCallback = () => {
-    handler?.()
-  }
-
-  const options = {
-    room_id: props.roomId,
-    timestamp: Date.now(),
-    current_time: clickedBigButton
-      ? currentTime()
-      : null,
-    is_clicked_big_button: clickedBigButton,
-  }
-  log('[TriggerPlay] options', options)
-
-  axios.post('/player/play', options).then(() => {
-    if (!player) return
-
-    // 如果 5秒 後還沒有回應，就開始播放當前使用者
-    setTimeout(() => {
-      if (typeof playCallback === 'function' && player?.paused()) {
-        playCallback()
-        playCallback = null
-      }
-    }, 5000)
-  })
+  log('[TriggerPlay]')
 }
 
 function pause(handler?: () => void) {
@@ -101,31 +105,20 @@ function pause(handler?: () => void) {
 
   handler?.()
 
-  const options = {
-    room_id: props.roomId,
-    timestamp: Date.now(),
-    current_time: currentTime(),
-  }
-  log('[TriggerPause] options', options)
-
-  axios.post('/player/pause', options).then()
+  log('[TriggerPause]')
 }
 
 function seeked() {
   if (!player) return
   if (isEnded) return
 
-  emit('seek', currentTime())
+  log('[TriggerSeeked]')
 
-  const options = {
-    room_id: props.roomId,
-    timestamp: Date.now(),
-    current_time: currentTime(),
+  emit('seek', {
     paused: player.paused(),
-  }
-  log('[TriggerSeeked] options', options)
-
-  axios.post('/player/seeked', options).then()
+    currentTime: currentTime(),
+    timestamp: Date.now(),
+  })
 }
 
 function end() {
@@ -136,11 +129,7 @@ function end() {
 
   log('[TriggerEnd]')
 
-  axios.post('/player/end', {
-    room_id: props.roomId,
-  }).then(() => {
-    emit('end')
-  })
+  emit('end')
 }
 
 onMounted(() => {
@@ -178,12 +167,30 @@ onMounted(() => {
   player.on('ended', end)
 
   player.ready(() => {
-    if (!player) return
-
     if (props.autoplay) {
       play(() => {
-        silencePromise(player?.play())
-        emit('play', currentTime())
+        setTimeout(() => {
+          player?.play()?.then(() => {
+            if (!player) return
+
+            if (startStatus.currentTime > 0) {
+              player.currentTime(adjustmentCurrentTime(
+                startStatus.timestamp, startStatus.currentTime
+              ))
+
+              if (startStatus.paused) {
+                setTimeout(() => player!.pause(), 500)
+              } else {
+                silencePromise(player.play())
+              }
+            } else {
+              emit('play', {
+                currentTime: currentTime(),
+                timestamp: Date.now(),
+              })
+            }
+          }, () => {})
+        }, 300)
       })
     }
   })
@@ -196,20 +203,31 @@ onMounted(() => {
         return
       }
 
-      if (this.player_.tech(true)) {
-        this.player_.tech(true).focus()
-      }
-
       if (this.player_.paused()) {
         log('[YcsPosterImage] start play')
-        this.player_.handleTechWaiting_()
+
         play(() => {
-          this.player_?.play()
+          if (startStatus.currentTime > 0) {
+            this.player_.currentTime(adjustmentCurrentTime(
+              startStatus.timestamp, startStatus.currentTime
+            ))
+          }
+
+          this.player_.play().then(() => {
+            syncPlayStatus(() => {
+              if (this.player_.tech(true)) {
+                this.player_.tech(true).focus()
+              }
+
+              emit('play', {
+                currentTime: currentTime(),
+                timestamp: Date.now(),
+              })
+            })
+          }, () => {})
         }, false)
-        emit('play', currentTime())
       } else {
         this.player_.pause()
-        emit('pause', currentTime())
       }
     }
   }
@@ -218,14 +236,57 @@ onMounted(() => {
     new (player: Player, options?: any): BigPlayButton
   }) {
     handleClick(event: KeyboardEvent) {
-      if (this.player_.paused()) {
-        log('[YcsBigPlayButton] start play')
-        this.player_.handleTechWaiting_()
-        play(() => {
-          super.handleClick(event)
-          emit('play', currentTime())
-        })
-      }
+      log('[YcsBigPlayButton] start play')
+
+      play(() => {
+        if (startStatus.currentTime > 0) {
+          this.player_.currentTime(adjustmentCurrentTime(
+            startStatus.timestamp, startStatus.currentTime
+          ))
+        }
+
+        const playPromise = this.player_.play()
+
+        const playCallback = () => {
+          syncPlayStatus(() => {
+            emit('play', {
+              currentTime: currentTime(),
+              timestamp: Date.now(),
+            })
+          })
+        }
+
+        // exit early if clicked via the mouse
+        if (this.mouseused_ && 'clientX' in event && 'clientY' in event) {
+          if (isPromise(playPromise)) {
+            playPromise.then(playCallback, () => {})
+          } else {
+            setTimeout(playCallback, 1)
+          }
+          if (this.player_.tech(true)) {
+            this.player_.tech(true).focus()
+          }
+          return
+        }
+
+        const playToggle = this.player_.getChild('controlBar')?.getChild('playToggle')
+        if (!playToggle) {
+          this.player_.tech(true).focus()
+          return
+        }
+
+        const playFocus = () => {
+          playCallback()
+
+          playToggle.focus()
+        }
+
+        if (isPromise(playPromise)) {
+          playPromise.then(playFocus, () => {})
+        } else {
+          setTimeout(playFocus, 1)
+        }
+      })
     }
   }
 
@@ -235,16 +296,25 @@ onMounted(() => {
     handleClick(event: Event) {
       if (this.player_.paused()) {
         log('[YcsPlayToggle] play')
-        this.player_.handleTechWaiting_()
+
         play(() => {
-          this.player_?.play()
-          emit('play', currentTime())
+          this.player_.play().then(() => {
+            emit('play', {
+              currentTime: currentTime(),
+              timestamp: Date.now(),
+            })
+          }, () => {})
         })
       } else {
         log('[YcsPlayToggle] pause')
+
         pause(() => {
-          this.player_?.pause()
-          emit('pause', currentTime())
+          this.player_.pause()
+
+          emit('pause', {
+            currentTime: currentTime(),
+            timestamp: Date.now(),
+          })
         })
       }
     }
@@ -264,6 +334,7 @@ onMounted(() => {
 
     handleMouseUp(event: MouseEvent) {
       super.handleMouseUp(event)
+
       this.onSekked_()
     }
   }
@@ -279,7 +350,6 @@ onMounted(() => {
   const seekBar = progressControl.getChild('SeekBar')!
   const playProgressBar = seekBar.getChild('PlayProgressBar')!
   const timeTooltip = playProgressBar.getChild('TimeTooltip')
-  const hasTimeTooltip = typeof timeTooltip !== 'undefined'
 
   player.removeChild(posterImage)
   player.removeChild(bigPlayButton)
@@ -287,7 +357,7 @@ onMounted(() => {
   controlBar.removeChild(durationDisplay)
   controlBar.removeChild(remainingTimeDisplay)
   controlBar.removeChild(pictureInPictureToggle)
-  if (hasTimeTooltip && timeTooltip) {
+  if (timeTooltip) {
     playProgressBar.removeChild(timeTooltip)
   }
   progressControl.removeChild(seekBar)
@@ -316,54 +386,22 @@ onMounted(() => {
 // 監聽播放事件
 function onPlayerPlayed(e: PlayerPlayedEvent) {
   if (!player) return
-
-  // 如果觸發的播放器是正在點擊 bigPlayButton，
-  // 同時當前播放器已經點擊過 bigPlayButton，
-  // 同時觸發的播放器不是當前播放器，
-  // 同時已經是播放狀態，
-  // 就不要執行播放。
-  const dontTriggerPlay =
-    !e.status.is_clicked_big_button &&
-    isClickedBigButton() &&
-    e.socketId !== Echo.socketId() &&
-    !player.paused()
-  log('[PlayerPlayed] dont trigger play', dontTriggerPlay)
-  if (dontTriggerPlay) return
-
-  let newCurrentTime = e.status.current_time ?? 0
-
-  // 如果現在觸發的不是第一個開始播放的，就要校正播放時間。(觸發的當前播放器，正在點擊 bigPlayButton)
-  //
-  // 但需要注意：如果是播放中同時開啟兩個播放器會正常，但是如果播放一段時間後關閉，
-  // 再過一會兒重開播放器會發現時間跳過了一段時間，這是因為下面這段的關係。
-  // 解決此問題是使用 Pusher 的 Webhook 功能，可以查看 `app/Listeners/PlayerAllConnectionClosed.php`
-  const shouldAdjustmentCurrentTime =
-    !e.isFirst &&
-    !e.status.is_clicked_big_button &&
-    typeof e.status.current_time === 'number' &&
-    e.socketId === Echo.socketId()
-  log('[PlayerPlayed] should adjustment currentTime', shouldAdjustmentCurrentTime)
-  if (shouldAdjustmentCurrentTime &&
-      typeof e.status.current_time === 'number'
-  ) {
-    newCurrentTime = adjustmentCurrentTime(e.status.timestamp, e.status.current_time)
+  if (!isClickedBigButton()) {
+    startStatus.paused = false
+    startStatus.currentTime = e.currentTime
+    startStatus.timestamp = e.timestamp
+    return
   }
 
-  log('[PlayerPlayed] udpate newCurrentTime', newCurrentTime < (player.duration() || 0))
+  const newCurrentTime = adjustmentCurrentTime(e.timestamp, e.currentTime)
+
+  log('[PlayerPlayed] currentTime', newCurrentTime)
+
   if (newCurrentTime < (player.duration() || 0)) {
     player.currentTime(newCurrentTime)
   }
 
-  log('[PlayerPlayed] currentTime', newCurrentTime)
-
-  log('[PlayerPlayed] has playCallback', typeof playCallback === 'function')
-  if (typeof playCallback === 'function') {
-    playCallback()
-    playCallback = null
-  } else {
-    silencePromise(player.play())
-    emit('play', currentTime())
-  }
+  silencePromise(player.play())
 
   isEnded = false
 }
@@ -371,39 +409,58 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
 // 監聽暫停事件
 function onPlayerPaused(e: PlayerPausedEvent) {
   if (!player) return
-
-  log('[PlayerPaused] currentTime', e.status.current_time)
-
-  if (typeof e.status.current_time === 'number') {
-    player.currentTime(e.status.current_time)
+  if (!isClickedBigButton()) {
+    startStatus.paused = true
+    startStatus.currentTime = e.currentTime
+    startStatus.timestamp = e.timestamp
+    return
   }
 
-  if (!player.paused()) {
-    player.pause()
-    emit('pause', currentTime())
-  }
+  log('[PlayerPaused] currentTime', e.currentTime)
+
+  player.currentTime(e.currentTime)
+
+  player.pause()
 }
 
-// 監聽改變進度條事件 (只發布給其他播放器)
+// 監聽拖曳進度條事件
 function onPlayerSeeked(e: PlayerSeekedEvent) {
   if (!player) return
-
-  log('[PlayerSeeked] currentTime', e.status.current_time)
-
-  if (typeof e.status.current_time === 'number') {
-    player.currentTime(e.status.current_time)
+  if (!isClickedBigButton()) {
+    startStatus.paused = e.paused
+    startStatus.currentTime = e.currentTime
+    startStatus.timestamp = e.timestamp
+    return
   }
 
-  emit('seek', currentTime())
+  log('[PlayerSeeked] currentTime', e.currentTime)
+
+  player.currentTime(e.currentTime)
 
   // 如果是[播放]但當前使用者是[暫停]，就要執行[播放]
-  if (!e.status.paused && player.paused()) {
+  if (!e.paused && player.paused()) {
     silencePromise(player.play())
   }
 
   // 如果是[暫停]但當前使用者是[播放]，就要執行[暫停]
-  if (e.status.paused && !player.paused()) {
+  if (e.paused && !player.paused()) {
     player.pause()
+  }
+}
+
+// 監聽更新播放進度事件
+function onPlayerTimeUpdate(e: PlayerTimeUpdateEvent) {
+  if (!player) return
+
+  log('[PlayerTimeUpdate] currentTime', e.currentTime)
+
+  if (isClickedBigButton()) {
+    if (e.currentTime < (player.duration() || 0))
+      player.currentTime(e.currentTime)
+  } else {
+    startStatus.paused = e.paused
+    startStatus.currentTime = e.currentTime
+    startStatus.timestamp = e.timestamp
   }
 }
 
@@ -420,9 +477,12 @@ onBeforeUnmount(async () => {
 })
 
 defineExpose({
+  paused,
+  currentTime,
   onPlayerPlayed,
   onPlayerPaused,
   onPlayerSeeked,
+  onPlayerTimeUpdate,
 })
 </script>
 

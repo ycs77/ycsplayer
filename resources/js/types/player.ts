@@ -13,13 +13,6 @@ export interface PlaylistItem {
   preview: string | null
 }
 
-export interface PlayStatus {
-  timestamp: number
-  current_time: number | null
-  is_clicked_big_button: boolean
-  paused: boolean
-}
-
 export interface PlaylistItemForm extends Record<string, any> {
   type: PlayerType
   title: string

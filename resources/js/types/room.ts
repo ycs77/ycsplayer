@@ -21,6 +21,11 @@ export interface RoomMember {
   online: boolean
 }
 
+export interface RoomChannelMember {
+  id: string
+  name: string
+}
+
 export interface RoomChatMessage {
   user: {
     name: string

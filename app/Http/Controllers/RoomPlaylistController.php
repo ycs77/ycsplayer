@@ -9,7 +9,6 @@ use App\Events\PlayerlistItemNexted;
 use App\Events\PlayerlistItemRemoved;
 use App\Models\PlaylistItem;
 use App\Models\Room;
-use App\Player\PlayStatusCacheRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -21,12 +20,6 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class RoomPlaylistController extends Controller
 {
-    public function __construct(
-        protected PlayStatusCacheRepository $statusCache,
-    ) {
-        //
-    }
-
     public function store(Request $request, Room $room)
     {
         $this->authorize('operatePlaylistItem', $room);
@@ -217,7 +210,5 @@ class RoomPlaylistController extends Controller
     protected function updateCurrentPlayingItem(Room $room, ?PlaylistItem $item)
     {
         $room->update(['current_playing_id' => $item?->id]);
-
-        $this->statusCache->delete($room->hash_id);
     }
 }

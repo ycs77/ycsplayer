@@ -5,8 +5,6 @@ namespace App\Providers;
 use App\Broadcasting\Events\PusherChannelVacated;
 use App\Broadcasting\Events\PusherMemberAdded;
 use App\Broadcasting\Events\PusherMemberRemoved;
-use App\Events\PlayerPaused;
-use App\Events\PlayerPlayed;
 use App\Listeners\PlayerAllConnectionClosed;
 use App\Listeners\PlayerMemberOffline;
 use App\Listeners\PlayerMemberOnline;
@@ -26,8 +24,6 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        PlayerPlayed::class => [],
-        PlayerPaused::class => [],
         PusherChannelVacated::class => [
             PlayerAllConnectionClosed::class,
         ],

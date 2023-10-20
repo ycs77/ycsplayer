@@ -1,22 +1,23 @@
-import type { PlayStatus } from './player'
-
 export interface PlayerPlayedEvent {
-  socketId: string
-  roomId: string
-  status: PlayStatus
-  isFirst: boolean
+  currentTime: number
+  timestamp: number
 }
 
 export interface PlayerPausedEvent {
-  socketId: string
-  roomId: string
-  status: PlayStatus
+  currentTime: number
+  timestamp: number
 }
 
 export interface PlayerSeekedEvent {
-  socketId: string
-  roomId: string
-  status: PlayStatus
+  paused: boolean
+  currentTime: number
+  timestamp: number
+}
+
+export interface PlayerTimeUpdateEvent {
+  paused: boolean
+  currentTime: number
+  timestamp: number
 }
 
 export interface PlayerlistItemAddedEvent {

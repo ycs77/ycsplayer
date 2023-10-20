@@ -1,7 +1,6 @@
 <?php
 
 use App\Broadcasting\Http\Controllers\PusherWebhookController;
-use App\Http\Controllers\PlayerController;
 use App\Http\Controllers\RoomController;
 use App\Http\Controllers\RoomMediaController;
 use App\Http\Controllers\RoomMemberController;
@@ -45,15 +44,6 @@ Route::middleware([
     Route::delete('/rooms/{room}/medias/{media:uuid}', [RoomMediaController::class, 'destroy'])->name('rooms.medias.destroy');
 
     Route::post('/rooms/{room}/upload', RoomUploadMediaController::class)->name('rooms.medias.upload');
-
-    Route::post('/player/play', [PlayerController::class, 'play'])->name('player.play');
-    Route::post('/player/pause', [PlayerController::class, 'pause'])->name('player.pause');
-    Route::post('/player/seeked', [PlayerController::class, 'seeked'])->name('player.seeked');
-    Route::post('/player/time-update', [PlayerController::class, 'timeUpdate'])->name('player.time-update');
-    Route::post('/player/end', [PlayerController::class, 'end'])->name('player.end');
-    if (config('ycsplayer.debug')) {
-        Route::post('/player/debug', [PlayerController::class, 'debug'])->name('player.debug');
-    }
 
     Route::get('/user/settings', [UserController::class, 'show'])->name('user.settings');
     Route::post('/user/avatar', [UserController::class, 'uploadAvatar'])->name('user.avatar.store');

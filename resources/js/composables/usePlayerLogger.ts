@@ -31,5 +31,5 @@ export function usePlayerLogger(options: PlayerLoggerOptions = {}) {
 }
 
 export function usePlayerLog() {
-  return inject(PlayerLoggerKey)
+  return inject(PlayerLoggerKey)!
 }

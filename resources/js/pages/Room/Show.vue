@@ -13,7 +13,10 @@
               :type="currentPlaying.type"
               :poster="currentPlaying.preview ?? undefined"
               :autoplay="room.auto_play"
-              @end="ended"
+              @play="onPlayerPlayed"
+              @pause="onPlayerPaused"
+              @seek="onPlayerSeeked"
+              @end="onPlayerEnded"
             />
           </div>
 
@@ -24,7 +27,7 @@
             </div>
           </div>
 
-          <PlayerDebugger v-if="debug" :room-id="room.id" />
+          <PlayerDebugger v-if="debug" />
         </div>
       </div>
 
@@ -175,7 +178,7 @@ import { Echo, type PresenceChannel, safeListenFn } from '@/echo'
 import Player from '@/components/player/Player.vue'
 import Playlist from '@/components/player/Playlist.vue'
 import { PlayerType, RoomType } from '@/types'
-import type { Media, PlaylistItem, PlaylistItemForm, Room, RoomChatMessage, RoomMediaConvertedEvent, RoomMember } from '@/types'
+import type { Media, PlayerPausedEvent, PlayerPlayedEvent, PlayerSeekedEvent, PlaylistItem, PlaylistItemForm, Room, RoomChannelMember, RoomChatMessage, RoomMediaConvertedEvent, RoomMember } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>
@@ -227,7 +230,23 @@ const chatUnread = computed(() => chatMessages.value.some(message => !message.re
 
 usePlayerLogger({ debug: props.debug })
 
-function ended() {
+// 廣播播放事件
+function onPlayerPlayed(e: PlayerPlayedEvent) {
+  channel?.whisper('play', e)
+}
+
+// 廣播暫停事件
+function onPlayerPaused(e: PlayerPausedEvent) {
+  channel?.whisper('pause', e)
+}
+
+// 廣播拖曳進度條事件
+function onPlayerSeeked(e: PlayerSeekedEvent) {
+  channel?.whisper('seek', e)
+}
+
+// 結束事件
+function onPlayerEnded() {
   router.post(`/rooms/${props.room.id}/next`, {
     current_playing_id: props.currentPlaying?.id,
   })
@@ -305,6 +324,16 @@ function onMediaUpload(message: string | null) {
         toast.success(message)
       }
     },
+  })
+}
+
+function onMemberJoining(user: RoomChannelMember) {
+  if (!player.value) return
+  channel?.whisper('currenttime', {
+    user,
+    paused: player.value.paused(),
+    currentTime: player.value.currentTime(),
+    timestamp: Date.now(),
   })
 }
 
@@ -388,7 +417,28 @@ function onOnlineMembersUpdated() {
   })
 }
 
-function onClientChatMessageSended(message: RoomChatMessage) {
+// 監聽當更新當前播放進度的事件
+const currentTimeLock = new Set<number>()
+const expiredTimestamp = Date.now() - 10 * 1000 // 10秒前的就算過期
+function onClientUpdateCurrentTime({ user, paused, currentTime, timestamp }: {
+  user: RoomChannelMember
+  paused: boolean
+  currentTime: number
+  timestamp: number
+}) {
+  if (user.id !== useAuth().user.value?.id) return
+  if (currentTimeLock.has(timestamp)) return
+
+  // 清除過期的數值
+  currentTimeLock.forEach(_timestamp => {
+    if (_timestamp <= expiredTimestamp)
+      currentTimeLock.delete(_timestamp)
+  })
+
+  player.value?.onPlayerTimeUpdate({ paused, currentTime, timestamp })
+}
+
+function onClientChatMessageSent(message: RoomChatMessage) {
   chatMessages.value.push(message)
 }
 
@@ -404,15 +454,13 @@ watch(showMobilePlaylist, showMobilePlaylist => {
   }
 })
 
-watch(player, (v, ov, onInvalidate) => {
+watch(player, (player, _, onInvalidate) => {
   // 如果當前有播放影片，就要擋掉第一次監聽，因為 `player` 還沒載入。
   // 但如果是沒有播放，就可以註冊，因為要監聽其他人切換影片時的事件。
-  if (props.currentPlaying && !player.value) return
+  if (props.currentPlaying && !player) return
 
   channel = Echo.join(`player.${props.room.id}`)
-  channel.listen('PlayerPlayed', safeListenFn(player.value?.onPlayerPlayed))
-  channel.listen('PlayerPaused', safeListenFn(player.value?.onPlayerPaused))
-  channel.listen('PlayerSeeked', safeListenFn(player.value?.onPlayerSeeked))
+  channel.joining(onMemberJoining)
   channel.listen('PlayerlistItemAdded', onPlayerlistItemAdded)
   channel.listen('PlayerlistItemClicked', onPlayerlistItemClicked)
   channel.listen('PlayerlistItemNexted', onPlayerlistItemNexted)
@@ -424,7 +472,11 @@ watch(player, (v, ov, onInvalidate) => {
   channel.listen('RoomMediaConverted', onRoomMediaConverted)
   channel.listen('RoomMediaRemoved', onRoomMediaRemoved)
   channel.listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)
-  channel.listenForWhisper('chat', onClientChatMessageSended)
+  channel.listenForWhisper('play', safeListenFn(player?.onPlayerPlayed))
+  channel.listenForWhisper('pause', safeListenFn(player?.onPlayerPaused))
+  channel.listenForWhisper('seek', safeListenFn(player?.onPlayerSeeked))
+  channel.listenForWhisper('currenttime', onClientUpdateCurrentTime)
+  channel.listenForWhisper('chat', onClientChatMessageSent)
 
   onInvalidate(() => {
     channel = undefined
