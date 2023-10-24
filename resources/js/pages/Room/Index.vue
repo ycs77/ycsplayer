@@ -29,7 +29,7 @@
         現在還沒有加入房間喔！<br>趕快加入跟朋友一起看影片、聽音樂吧~
       </div>
 
-      <Pagination :collection="rooms" />
+      <Pagination :collection="rooms" class="mt-4" />
     </div>
 
     <RoomFormModal v-if="can.create" v-model="showRoomModal" />

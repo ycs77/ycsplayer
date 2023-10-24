@@ -1,5 +1,5 @@
 <template>
-  <div v-if="((props.collection.links?.length ?? 0) - 2) > 1" class="font-medium">
+  <div v-if="pages.length > 1" class="font-medium">
     <div class="flex justify-between md:hidden">
       <template v-for="link in [previous, next]" :key="link.label">
         <template v-if="link">
@@ -26,5 +26,5 @@ const props = defineProps<{
   collection: Paginator<Record<string, any>>
 }>()
 
-const { items, previous, next } = usePaginator(props.collection)
+const { pages, items, previous, next } = usePaginator(props.collection)
 </script>
