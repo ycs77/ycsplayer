@@ -32,6 +32,10 @@
       <Pagination :collection="rooms" class="mt-4" />
     </div>
 
+    <!-- Footer -->
+    <div class="pb-[88px] sm:pb-[72px]" />
+    <Footer class="absolute inset-x-[--layout-gap] bottom-[--layout-gap] lg:inset-x-[--layout-gap-lg] lg:bottom-[--layout-gap-lg]" />
+
     <RoomFormModal v-if="can.create" v-model="showRoomModal" />
   </div>
 </template>

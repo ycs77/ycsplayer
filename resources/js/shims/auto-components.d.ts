@@ -16,6 +16,7 @@ declare module '@vue/runtime-core' {
     CropImageModal: typeof import('./../components/modals/CropImageModal.vue')['default']
     Field: typeof import('./../components/form/Field.vue')['default']
     FileUpload: typeof import('./../components/form/FileUpload.vue')['default']
+    Footer: typeof import('./../components/application/Footer.vue')['default']
     FormError: typeof import('./../components/form/FormError.vue')['default']
     FormLabel: typeof import('./../components/form/FormLabel.vue')['default']
     FormTip: typeof import('./../components/form/FormTip.vue')['default']
