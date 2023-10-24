@@ -25,6 +25,7 @@
 
 .full-page,
 .full-page body,
-.full-page #app {
+.full-page #app,
+.full-page .full-page-container {
   @apply h-full;
 }

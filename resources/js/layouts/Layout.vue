@@ -1,5 +1,8 @@
 <template>
-  <div class="max-w-screen-2xl flex flex-col mx-auto" :class="{ 'h-full': showFullPage }">
+  <div
+    class="max-w-screen-2xl flex flex-col mx-auto"
+    :class="{ 'full-page-container': showFullPage }"
+  >
     <header class="p-[--layout-gap] lg:p-[--layout-gap-lg]">
       <div class="px-4 py-2.5 flex justify-between items-center flex-col bg-blue-950/50 rounded-lg md:flex-row lg:px-6">
         <div class="w-full flex justify-between items-center md:w-auto">

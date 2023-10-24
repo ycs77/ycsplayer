@@ -203,7 +203,9 @@ const props = defineProps<{
   }
 }>()
 
-useFullPage(true, ['max-h-full', 'lg:min-h-[700px]'])
+useFullPage(true, {
+  moreClass: ['max-h-full', 'lg:min-h-[700px]'],
+})
 
 let channel: PresenceChannel | undefined
 
