@@ -14,10 +14,10 @@ import videojs from 'video.js'
 import videojsZhTW from 'video.js/dist/lang/zh-TW.json'
 import type Player from 'video.js/dist/types/player'
 import type Component from 'video.js/dist/types/component'
-import type PosterImage from 'video.js/dist/types/poster-image'
-import type BigPlayButton from 'video.js/dist/types/big-play-button'
-import type PlayToggle from 'video.js/dist/types/control-bar/play-toggle'
-import type SeekBar from 'video.js/dist/types/control-bar/progress-control/seek-bar'
+import type VideojsPosterImage from 'video.js/dist/types/poster-image'
+import type VideojsBigPlayButton from 'video.js/dist/types/big-play-button'
+import type VideojsPlayToggle from 'video.js/dist/types/control-bar/play-toggle'
+import type VideojsSeekBar from 'video.js/dist/types/control-bar/progress-control/seek-bar'
 import 'videojs-youtube'
 import { PlayerType } from '@/types'
 import type { PlayerPausedEvent, PlayerPlayedEvent, PlayerSeekedEvent, PlayerTimeUpdateEvent } from '@/types'
@@ -195,8 +195,8 @@ onMounted(() => {
     }
   })
 
-  class YcsPosterImage extends (videojs.getComponent('PosterImage') as unknown as {
-    new (player: Player, options?: any): PosterImage
+  class PosterImage extends (videojs.getComponent('PosterImage') as unknown as {
+    new (player: Player, options?: any): VideojsPosterImage
   }) {
     handleClick(event: Event) {
       if (!this.player_.controls()) {
@@ -232,8 +232,8 @@ onMounted(() => {
     }
   }
 
-  class YcsBigPlayButton extends (videojs.getComponent('BigPlayButton') as unknown as {
-    new (player: Player, options?: any): BigPlayButton
+  class BigPlayButton extends (videojs.getComponent('BigPlayButton') as unknown as {
+    new (player: Player, options?: any): VideojsBigPlayButton
   }) {
     handleClick(event: KeyboardEvent) {
       log('[YcsBigPlayButton] start play')
@@ -290,8 +290,8 @@ onMounted(() => {
     }
   }
 
-  class YcsPlayToggle extends (videojs.getComponent('PlayToggle') as unknown as {
-    new (player: Player, options?: any): PlayToggle
+  class PlayToggle extends (videojs.getComponent('PlayToggle') as unknown as {
+    new (player: Player, options?: any): VideojsPlayToggle
   }) {
     handleClick(event: Event) {
       if (this.player_.paused()) {
@@ -362,10 +362,10 @@ onMounted(() => {
   }
   progressControl.removeChild(seekBar)
 
-  videojs.registerComponent('PosterImage', YcsPosterImage as unknown as Component)
-  videojs.registerComponent('BigPlayButton', YcsBigPlayButton as unknown as Component)
-  videojs.registerComponent('PlayToggle', YcsPlayToggle as unknown as Component)
-  videojs.registerComponent('SeekBar', YcsSeekBar as unknown as Component)
+  videojs.registerComponent('PosterImage', PosterImage as unknown as Component)
+  videojs.registerComponent('BigPlayButton', BigPlayButton as unknown as Component)
+  videojs.registerComponent('PlayToggle', PlayToggle as unknown as Component)
+  videojs.registerComponent('SeekBar', SeekBar as unknown as Component)
 
   player.addChild('PosterImage', {}, 1)
   player.addChild('BigPlayButton', {}, 2)
