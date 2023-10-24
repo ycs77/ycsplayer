@@ -12,11 +12,11 @@
               :src="currentPlaying.url"
               :type="currentPlaying.type"
               :poster="currentPlaying.preview ?? undefined"
-              :autoplay="room.auto_play"
               @play="onPlayerPlayed"
               @pause="onPlayerPaused"
               @seek="onPlayerSeeked"
-              @end="onPlayerEnded"
+              @next="onPlayerNext"
+              @end="onPlayerEnd"
             />
           </div>
 
@@ -247,11 +247,20 @@ function onPlayerSeeked(e: PlayerSeekedEvent) {
   channel?.whisper('seek', e)
 }
 
-// 結束事件
-function onPlayerEnded() {
+// 點擊播放下一首按鈕事件
+function onPlayerNext() {
   router.post(`/rooms/${props.room.id}/next`, {
     current_playing_id: props.currentPlaying?.id,
   })
+}
+
+// 結束播放事件
+function onPlayerEnd() {
+  if (props.room.auto_play) {
+    router.post(`/rooms/${props.room.id}/next`, {
+      current_playing_id: props.currentPlaying?.id,
+    })
+  }
 }
 
 function selectPlaylistItem(item: PlaylistItem) {

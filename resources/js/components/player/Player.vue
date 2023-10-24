@@ -17,6 +17,7 @@ import type Component from 'video.js/dist/types/component'
 import type VideojsPosterImage from 'video.js/dist/types/poster-image'
 import type VideojsBigPlayButton from 'video.js/dist/types/big-play-button'
 import type VideojsPlayToggle from 'video.js/dist/types/control-bar/play-toggle'
+import type VideojsButton from 'video.js/dist/types/button'
 import type VideojsSeekBar from 'video.js/dist/types/control-bar/progress-control/seek-bar'
 import 'videojs-youtube'
 import { PlayerType } from '@/types'
@@ -27,7 +28,6 @@ const props = defineProps<{
   src: string
   type: PlayerType
   poster?: string
-  autoplay?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -35,6 +35,7 @@ const emit = defineEmits<{
   pause: [event: PlayerPausedEvent]
   seek: [event: PlayerSeekedEvent]
   end: []
+  next: []
 }>()
 
 const videoRef = ref() as Ref<HTMLVideoElement>
@@ -133,6 +134,9 @@ function end() {
 }
 
 onMounted(() => {
+  Object.assign(videojsZhTW, {
+    Next: '下一項',
+  })
   videojs.addLanguage('zh-TW', videojsZhTW)
 
   const sourceType =
@@ -167,32 +171,30 @@ onMounted(() => {
   player.on('ended', end)
 
   player.ready(() => {
-    if (props.autoplay) {
-      play(() => {
-        setTimeout(() => {
-          player?.play()?.then(() => {
-            if (!player) return
+    play(() => {
+      setTimeout(() => {
+        player?.play()?.then(() => {
+          if (!player) return
 
-            if (startStatus.currentTime > 0) {
-              player.currentTime(adjustmentCurrentTime(
-                startStatus.timestamp, startStatus.currentTime
-              ))
+          if (startStatus.currentTime > 0) {
+            player.currentTime(adjustmentCurrentTime(
+              startStatus.timestamp, startStatus.currentTime
+            ))
 
-              if (startStatus.paused) {
-                setTimeout(() => player!.pause(), 500)
-              } else {
-                silencePromise(player.play())
-              }
+            if (startStatus.paused) {
+              setTimeout(() => player!.pause(), 500)
             } else {
-              emit('play', {
-                currentTime: currentTime(),
-                timestamp: Date.now(),
-              })
+              silencePromise(player.play())
             }
-          }, () => {})
-        }, 300)
-      })
-    }
+          } else {
+            emit('play', {
+              currentTime: currentTime(),
+              timestamp: Date.now(),
+            })
+          }
+        }, () => {})
+      }, 300)
+    })
   })
 
   class PosterImage extends (videojs.getComponent('PosterImage') as unknown as {
@@ -320,8 +322,28 @@ onMounted(() => {
     }
   }
 
-  class YcsSeekBar extends (videojs.getComponent('SeekBar') as unknown as {
-    new (player: Player, options?: any): SeekBar
+  class NextButton extends (videojs.getComponent('Button') as unknown as {
+    new (player: Player, options?: any): VideojsButton
+  }) {
+    constructor(player: Player, options?: any) {
+      // eslint-disable-next-line constructor-super
+      super(player, options)
+
+      this.setIcon('next-item')
+      this.controlText('Next')
+    }
+
+    buildCSSClass() {
+      return `vjs-next-control ${super.buildCSSClass()}`
+    }
+
+    handleClick(event: Event) {
+      emit('next')
+    }
+  }
+
+  class SeekBar extends (videojs.getComponent('SeekBar') as unknown as {
+    new (player: Player, options?: any): VideojsSeekBar
   }) {
     onSekked_: () => void
 
@@ -365,11 +387,13 @@ onMounted(() => {
   videojs.registerComponent('PosterImage', PosterImage as unknown as Component)
   videojs.registerComponent('BigPlayButton', BigPlayButton as unknown as Component)
   videojs.registerComponent('PlayToggle', PlayToggle as unknown as Component)
+  videojs.registerComponent('NextButton', NextButton as unknown as Component)
   videojs.registerComponent('SeekBar', SeekBar as unknown as Component)
 
   player.addChild('PosterImage', {}, 1)
   player.addChild('BigPlayButton', {}, 2)
   controlBar.addChild('PlayToggle', {}, 0)
+  controlBar.addChild('NextButton', {}, 1)
   controlBar.addChild('DurationDisplay', {}, 7)
   progressControl.addChild('SeekBar', {}, 0)
 

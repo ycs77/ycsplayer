@@ -13,7 +13,7 @@
         <div class="space-y-6">
           <TextInput id="name" v-model="form.name" label="房間名稱" />
           <RoomTypeSelectField id="type" v-model="form.type" />
-          <SwitchField id="auto_play" v-model="form.auto_play" label="自動播放" />
+          <SwitchField id="auto_play" v-model="form.auto_play" label="連續播放" />
           <SwitchField id="auto_remove" v-model="form.auto_remove" label="播放完畢自動刪除" />
         </div>
 
