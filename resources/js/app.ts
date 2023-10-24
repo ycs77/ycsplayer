@@ -1,4 +1,4 @@
-import { createApp, h } from 'vue'
+import { type DefineComponent, createApp, h } from 'vue'
 import { Link, createInertiaApp } from '@inertiajs/vue3'
 import InertiaTitle from 'inertia-title/vue3'
 import { createVfm } from 'vue-final-modal'
@@ -18,15 +18,15 @@ window.HELP_IMPROVE_VIDEOJS = false
 
 createInertiaApp({
   resolve: async name => {
-    const pages = import.meta.glob('./pages/**/*.vue')
-    const page = await pages[`./pages/${name}.vue`]() as any
+    const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue')
+    const page = await pages[`./pages/${name}.vue`]()
     if (page.default.layout !== false) {
       page.default.layout = page.default.layout
         ? Array.isArray(page.default.layout)
           ? page.default.layout
           : [page.default.layout]
         : []
-      if (!page.default.layout.includes(Layout)) {
+      if (!page.default.layout.some((c: DefineComponent) => c.__name === 'Layout')) {
         page.default.layout.unshift(Layout)
       }
     }
