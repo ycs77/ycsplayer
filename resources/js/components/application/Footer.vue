@@ -1,7 +1,7 @@
 <template>
   <footer class="py-4 text-blue-300/50 text-center flex justify-between items-center flex-col space-y-2 sm:py-6 sm:flex-row sm:space-y-0">
     <div>
-      ✨ Created by <a href="https://twitter.com/ycs77_lucas" target="_blank" class="text-blue-300/75 hover:text-white font-bold">Lucas Yang</a>
+      ✨ Created by <a href="https://star-note-lucas.vercel.app" target="_blank" class="text-blue-300/75 hover:text-white font-bold">Lucas Yang</a>
     </div>
 
     <div class="flex space-x-4">
