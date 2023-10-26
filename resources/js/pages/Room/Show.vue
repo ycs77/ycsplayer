@@ -1,5 +1,5 @@
 <template>
-  <div class="px-[--layout-gap] pb-[calc(var(--layout-gap)+3.5rem)] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg] h-full">
+  <div class="px-[--layout-gap] pb-[calc(var(--layout-gap)+3.5rem)] md:pb-[--layout-gap] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg] h-full">
     <div class="flex flex-col gap-[--layout-gap] md:grid md:grid-cols-12 lg:gap-[--layout-gap-lg] h-full">
       <div class="min-h-0 shrink-0 md:col-span-8 lg:col-span-9">
         <div class="relative">
@@ -213,7 +213,12 @@ const props = defineProps<{
 }>()
 
 useFullPage(true, {
-  moreClass: ['max-h-full', 'lg:min-h-[700px]'],
+  moreClass: [
+    'max-h-full',
+    'min-h-[600px]',
+    'max-md:landscape:min-h-[800px]', // 手機版橫式時套用
+    'lg:min-h-[700px]',
+  ],
 })
 
 let channel: PresenceChannel | undefined
