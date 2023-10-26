@@ -105,51 +105,59 @@
     </div>
 
     <!-- 手機底部播放清單按鈕層 -->
-    <div class="fixed z-10 inset-x-0 bottom-0 max-h-screen flex flex-col backdrop-blur-lg md:hidden">
-      <!-- 播放清單卡 -->
-      <Transition
-        enter-active-class="duration-300 ease-out"
-        enter-from-class="opacity-0 translate-y-2"
-        enter-to-class="opacity-100 translate-y-0"
-        leave-active-class="duration-200 ease-in"
-        leave-from-class="opacity-100 translate-y-0"
-        leave-to-class="opacity-0 translate-y-2"
-      >
-        <Playlist
-          v-if="showMobilePlaylist"
-          ref="mobilePlaylist"
-          class="max-h-[50vh] border-t border-blue-900/50 overflow-y-auto"
-          :current-playing="currentPlaying"
-          :playlist-items="playlistItems"
-          button-on-bottom
-          :can-add="can.operatePlaylistItem"
-          :can-remove="can.operatePlaylistItem"
-          @click-add-item="openAddPlaylistItemModal"
-          @select-item="selectPlaylistItem"
-          @remove-item="removePlaylistItem"
-        />
-      </Transition>
+    <div class="md:hidden">
+      <div
+        v-if="showMobilePlaylist"
+        class="fixed inset-0 z-20"
+        @click="showMobilePlaylist = false"
+      />
 
-      <!-- 手機底部播放清單按鈕 -->
-      <div class="bg-gray-950 grow-0">
-        <button
-          type="button"
-          class="w-full p-3 flex justify-between items-center bg-blue-950/50 border-t border-blue-900/50"
-          @click="showMobilePlaylist = !showMobilePlaylist"
+      <div class="fixed inset-x-0 bottom-0 z-20 max-h-screen flex flex-col backdrop-blur-lg">
+        <!-- 播放清單卡 -->
+        <Transition
+          enter-active-class="duration-300 ease-out"
+          enter-from-class="opacity-0 translate-y-2"
+          enter-to-class="opacity-100 translate-y-0"
+          leave-active-class="duration-200 ease-in"
+          leave-from-class="opacity-100 translate-y-0"
+          leave-to-class="opacity-0 translate-y-2"
         >
-          <div class="flex items-center">
-            <HeroiconsPlayCircle class="w-8 h-8 mr-1" />
-            播放清單
-          </div>
-
-          <HeroiconsChevronUp
-            class="w-6 h-6 transition-transform"
-            :class="{
-              '-rotate-0': showMobilePlaylist,
-              '-rotate-180': !showMobilePlaylist,
-            }"
+          <Playlist
+            v-if="showMobilePlaylist"
+            ref="mobilePlaylist"
+            class="max-h-[50vh] border-t border-blue-900/50 overflow-y-auto"
+            :current-playing="currentPlaying"
+            :playlist-items="playlistItems"
+            button-on-bottom
+            :can-add="can.operatePlaylistItem"
+            :can-remove="can.operatePlaylistItem"
+            @click-add-item="openAddPlaylistItemModal"
+            @select-item="selectPlaylistItem"
+            @remove-item="removePlaylistItem"
           />
-        </button>
+        </Transition>
+
+        <!-- 手機底部播放清單按鈕 -->
+        <div class="bg-gray-950 grow-0">
+          <button
+            type="button"
+            class="w-full p-3 flex justify-between items-center bg-blue-950/50 border-t border-blue-900/50"
+            @click="showMobilePlaylist = !showMobilePlaylist"
+          >
+            <div class="flex items-center">
+              <HeroiconsPlayCircle class="w-8 h-8 mr-1" />
+              播放清單
+            </div>
+
+            <HeroiconsChevronUp
+              class="w-6 h-6 transition-transform"
+              :class="{
+                '-rotate-0': showMobilePlaylist,
+                '-rotate-180': !showMobilePlaylist,
+              }"
+            />
+          </button>
+        </div>
       </div>
     </div>
 
