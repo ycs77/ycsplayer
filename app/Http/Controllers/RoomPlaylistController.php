@@ -130,10 +130,11 @@ class RoomPlaylistController extends Controller
 
         if ($item->id === $room->current_playing_id) {
             $this->changeToNextPlaylistItem(
-                $room, $room->current_playing_id, true
+                room: $room,
+                requestedCurrentPlayingId: $room->current_playing_id,
+                autoRemove: true,
+                callback: fn () => PlayerlistItemNexted::broadcast($room->hash_id)->toOthers(),
             );
-
-            PlayerlistItemNexted::broadcast($room->hash_id)->toOthers();
         } else {
             $item->delete();
 
@@ -157,8 +158,10 @@ class RoomPlaylistController extends Controller
 
             if ($room->current_playing_id === $requestedCurrentPlayingId) {
                 $this->changeToNextPlaylistItem(
-                    $room, $requestedCurrentPlayingId, $room->auto_remove,
-                    fn () => PlayerlistItemNexted::broadcast($room->hash_id)->toOthers()
+                    room: $room,
+                    requestedCurrentPlayingId: $requestedCurrentPlayingId,
+                    autoRemove: $room->auto_remove,
+                    callback: fn () => PlayerlistItemNexted::broadcast($room->hash_id)->toOthers(),
                 );
             }
         }
