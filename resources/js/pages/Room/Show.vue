@@ -22,8 +22,9 @@
 
           <!-- 無播放項目時的提示 -->
           <div v-else>
-            <div class="flex justify-center items-center bg-blue-950/50 text-blue-300 text-lg rounded-lg aspect-video">
-              請選擇播放項目
+            <div class="flex justify-center items-center bg-blue-950/50 text-blue-300 text-lg text-center rounded-lg aspect-video">
+              <span class="md:hidden">請點選下方播放清單<br>新增播放項目 或 選擇播放項目</span>
+              <span class="hidden md:inline">請新增播放項目 或 選擇播放項目</span>
             </div>
           </div>
 
