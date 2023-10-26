@@ -5,8 +5,8 @@
         <div class="flex gap-2">
           <Avatar class="w-9 h-9 mt-1" :src="message.user.avatar" />
           <div class="grow min-w-0">
-            <div class="text-sm truncate">{{ message.user.name }}</div>
-            <div class="text-gray-400 break-all">{{ message.content }}</div>
+            <div class="text-sm text-gray-400 truncate">{{ message.user.name }}</div>
+            <div class="break-all">{{ message.content }}</div>
           </div>
         </div>
       </li>
@@ -14,6 +14,7 @@
 
     <form @submit.prevent="sendMessage">
       <div class="flex items-center gap-2">
+        <Avatar v-if="user" :src="user.avatar" class="w-9 h-9 shrink-0" />
         <input ref="inputEl" v-model="input" type="text" class="form-input grow min-w-0" maxlength="1000">
         <button type="submit" class="shrink-0 btn btn-primary w-9 h-9 p-0 rounded-md">
           <HeroiconsPaperAirplane class="w-5 h-5" />
@@ -44,11 +45,12 @@ const input = ref('')
 
 function sendMessage() {
   if (!input.value) return
+  if (!user.value) return
 
   const message = {
     user: {
-      name: user.value!.name,
-      avatar: user.value!.avatar,
+      name: user.value.name,
+      avatar: user.value.avatar,
     },
     content: input.value,
     timestamp: Date.now(),
