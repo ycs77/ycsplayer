@@ -70,6 +70,7 @@
               :current-playing="currentPlaying"
               :playlist-items="playlistItems"
               :can-add="can.operatePlaylistItem"
+              :can-select="can.operatePlaylistItem"
               :can-remove="can.operatePlaylistItem"
               class="hidden md:block rounded-lg overflow-y-auto min-h-0"
               @click-add-item="openAddPlaylistItemModal"
@@ -132,6 +133,7 @@
             :playlist-items="playlistItems"
             button-on-bottom
             :can-add="can.operatePlaylistItem"
+            :can-select="can.operatePlaylistItem"
             :can-remove="can.operatePlaylistItem"
             @click-add-item="openAddPlaylistItemModal"
             @select-item="selectPlaylistItem"

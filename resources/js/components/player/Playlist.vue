@@ -15,7 +15,14 @@
       <li v-for="item in playlistItems" :key="item.id" ref="itemRefs">
         <PlaylistItem
           is="div"
-          v-if="item.id === currentPlaying?.id"
+          v-if="!canSelect"
+          :item="item"
+          :can-remove="false"
+        />
+
+        <PlaylistItem
+          is="div"
+          v-else-if="item.id === currentPlaying?.id"
           active
           :item="item"
           :can-remove="canRemove"
@@ -55,9 +62,11 @@ const props = withDefaults(defineProps<{
   playlistItems: PlaylistItem[]
   buttonOnBottom?: boolean
   canAdd?: boolean
+  canSelect?: boolean
   canRemove?: boolean
 }>(), {
   canAdd: true,
+  canSelect: true,
   canRemove: true,
 })
 
