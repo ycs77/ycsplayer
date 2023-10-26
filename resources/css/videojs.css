@@ -41,3 +41,8 @@
   opacity: 1 !important;
   pointer-events: unset !important;
 }
+
+.video-js .vjs-progress-control:hover .vjs-time-tooltip,
+.video-js .vjs-progress-control:hover .vjs-progress-holder:focus .vjs-time-tooltip {
+  font-size: 1em !important;
+}
