@@ -15,7 +15,7 @@
 
           <button
             type="button"
-            class="relative z-10 p-0.5 ml-auto text-white md:hidden focus:outline-none"
+            class="p-0.5 ml-auto text-white md:hidden focus:outline-none"
             @click="showMenu = !showMenu"
           >
             <div class="relative w-8 h-8">
