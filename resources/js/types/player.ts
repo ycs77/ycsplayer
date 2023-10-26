@@ -4,6 +4,12 @@ export enum PlayerType {
   YouTube = 'youtube',
 }
 
+export enum PlayerTrigger {
+  Normal = 'normal',
+  Click = 'click',
+  Next = 'next',
+}
+
 export interface PlaylistItem {
   id: string
   type: PlayerType

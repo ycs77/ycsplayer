@@ -28,6 +28,7 @@ const props = defineProps<{
   src: string
   type: PlayerType
   poster?: string
+  forcePlayFromStart?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -106,7 +107,15 @@ function ready() {
           .then(() => {
             if (!player) return
 
-            if (startStatus.otherPlayerIsStarted) {
+            if (props.forcePlayFromStart) {
+              // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
+              silencePromise(player.play())
+
+              emit('play', {
+                currentTime: currentTime(),
+                timestamp: Date.now(),
+              })
+            } else if (startStatus.otherPlayerIsStarted) {
               player.currentTime(adjustmentCurrentTime(
                 startStatus.timestamp, startStatus.currentTime
               ))
@@ -118,6 +127,7 @@ function ready() {
                 silencePromise(player.play())
               }
             } else {
+              // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
               silencePromise(player.play())
 
               emit('play', {
@@ -453,6 +463,7 @@ onMounted(() => {
 function onPlayerPlayed(e: PlayerPlayedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
+    log('[PlayerPlayed] unclicked start button')
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = false
     startStatus.currentTime = e.currentTime
@@ -477,6 +488,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
 function onPlayerPaused(e: PlayerPausedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
+    log('[PlayerPaused] unclicked start button')
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = true
     startStatus.currentTime = e.currentTime
@@ -495,6 +507,7 @@ function onPlayerPaused(e: PlayerPausedEvent) {
 function onPlayerSeeked(e: PlayerSeekedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
+    log('[PlayerSeeked] unclicked start button')
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = e.paused
     startStatus.currentTime = e.currentTime
@@ -527,6 +540,7 @@ function onPlayerTimeUpdate(e: PlayerTimeUpdateEvent) {
     if (e.currentTime < (player.duration() || 0))
       player.currentTime(e.currentTime)
   } else {
+    log('[PlayerTimeUpdate] unclicked start button')
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = e.paused
     startStatus.currentTime = e.currentTime

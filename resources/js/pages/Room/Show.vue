@@ -12,6 +12,7 @@
               :src="currentPlaying.url"
               :type="currentPlaying.type"
               :poster="currentPlaying.preview ?? undefined"
+              :force-play-from-start="forcePlayFromStart"
               @play="onPlayerPlayed"
               @pause="onPlayerPaused"
               @seek="onPlayerSeeked"
@@ -186,8 +187,8 @@ import { clearAllBodyScrollLocks, disableBodyScroll, enableBodyScroll } from 'bo
 import { Echo, type PresenceChannel, safeListenFn } from '@/echo'
 import Player from '@/components/player/Player.vue'
 import Playlist from '@/components/player/Playlist.vue'
-import { PlayerType, RoomType } from '@/types'
 import type { Media, PlayerPausedEvent, PlayerPlayedEvent, PlayerSeekedEvent, PlaylistItem, PlaylistItemForm, Room, RoomChannelMember, RoomChatMessage, RoomMediaConvertedEvent, RoomMember } from '@/types'
+import { PlayerTrigger, PlayerType, RoomType } from '@/types'
 
 const props = defineProps<{
   room: Required<Room>
@@ -230,6 +231,9 @@ const showAddPlaylistItemModal = ref(false)
 const showMobilePlaylist = ref(false)
 const showRoomUploadMediaModal = ref(false)
 
+const trigger = ref(PlayerTrigger.Normal)
+const forcePlayFromStart = computed(() => [PlayerTrigger.Click, PlayerTrigger.Next].includes(trigger.value))
+
 const tab = ref('main')
 
 const toast = useToast()
@@ -263,18 +267,26 @@ function onPlayerSeeked(e: PlayerSeekedEvent) {
 
 // 點擊播放下一首按鈕事件
 function onPlayerNext() {
-  router.post(`/rooms/${props.room.id}/next`, {
-    current_playing_id: props.currentPlaying?.id,
-  })
+  nextPlaylistItem()
 }
 
 // 結束播放事件
 function onPlayerEnd() {
   if (props.room.auto_play) {
-    router.post(`/rooms/${props.room.id}/next`, {
-      current_playing_id: props.currentPlaying?.id,
-    })
+    nextPlaylistItem()
   }
+}
+
+function nextPlaylistItem() {
+  router.post(`/rooms/${props.room.id}/next`, {
+    current_playing_id: props.currentPlaying?.id,
+  }, {
+    only: [...globalOnly, 'currentPlaying', 'playlistItems'],
+    preserveScroll: true,
+    onSuccess() {
+      trigger.value = PlayerTrigger.Next
+    },
+  })
 }
 
 function selectPlaylistItem(item: PlaylistItem) {
@@ -282,19 +294,27 @@ function selectPlaylistItem(item: PlaylistItem) {
   router.post(`/rooms/${props.room.id}/playlist/${item.id}`, {}, {
     only: [...globalOnly, 'currentPlaying', 'playlistItems'],
     preserveScroll: true,
+    onSuccess() {
+      trigger.value = PlayerTrigger.Click
+    },
   })
 }
 
 function removePlaylistItem(item: PlaylistItem) {
+  const isRemoveCurrentPlaying = item.id === props.currentPlaying?.id
+
   router.delete(`/rooms/${props.room.id}/playlist/${item.id}`, {
     only: [
       ...globalOnly,
-      ...(item.id === props.currentPlaying?.id
-        ? ['currentPlaying']
-        : []),
+      ...(isRemoveCurrentPlaying ? ['currentPlaying'] : []),
       'playlistItems',
     ],
     preserveScroll: true,
+    onSuccess() {
+      if (isRemoveCurrentPlaying) {
+        trigger.value = PlayerTrigger.Next
+      }
+    },
   })
 }
 
@@ -373,6 +393,9 @@ function onPlayerlistItemAdded() {
 function onPlayerlistItemClicked() {
   router.reload({
     only: [...globalOnly, 'currentPlaying', 'playlistItems'],
+    onSuccess() {
+      trigger.value = PlayerTrigger.Click
+    },
   })
 }
 
@@ -380,6 +403,9 @@ function onPlayerlistItemClicked() {
 function onPlayerlistItemNexted() {
   router.reload({
     only: [...globalOnly, 'currentPlaying', 'playlistItems'],
+    onSuccess() {
+      trigger.value = PlayerTrigger.Next
+    },
   })
 }
 
