@@ -29,3 +29,12 @@
 .full-page .full-page-container {
   @apply h-full;
 }
+
+.min-full-page,
+.min-full-page body,
+.min-full-page #app {
+  @apply h-full;
+}
+.min-full-page .full-page-container {
+  @apply h-0 min-h-full;
+}

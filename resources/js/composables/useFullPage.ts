@@ -1,18 +1,22 @@
 const showFullPage = ref(false)
+const pageCanScroll = ref(true)
 
 interface useFullPageOptions {
   baseClass?: string
   moreClass?: string | string[]
+  scroll?: boolean
 }
 
 export default function useFullPage(show?: boolean, options: useFullPageOptions = {}) {
   const {
     baseClass = 'full-page',
     moreClass,
+    scroll = false,
   } = options
 
   if (typeof show === 'boolean') {
     showFullPage.value = show
+    pageCanScroll.value = scroll
 
     if (show) {
       const classes = typeof moreClass === 'string' ? [moreClass] : moreClass ?? []
@@ -31,5 +35,5 @@ export default function useFullPage(show?: boolean, options: useFullPageOptions 
     }
   }
 
-  return showFullPage
+  return { showFullPage, pageCanScroll }
 }

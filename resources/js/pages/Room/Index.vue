@@ -1,5 +1,5 @@
 <template>
-  <div class="px-[--layout-gap] pb-[--layout-gap] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg]">
+  <div class="relative h-full px-[--layout-gap] pb-[--layout-gap] lg:px-[--layout-gap-lg] lg:pb-[--layout-gap-lg]">
     <div class="flex justify-between items-center">
       <h1 class="text-2xl">房間列表</h1>
       <div>
@@ -33,6 +33,7 @@
     </div>
 
     <!-- Footer -->
+    <!-- <Footer class="mt-10" /> -->
     <div class="pb-[88px] sm:pb-[72px]" />
     <Footer class="absolute inset-x-[--layout-gap] bottom-[--layout-gap] lg:inset-x-[--layout-gap-lg] lg:bottom-[--layout-gap-lg]" />
 
@@ -49,6 +50,11 @@ defineProps<{
     create: boolean
   }
 }>()
+
+useFullPage(true, {
+  baseClass: 'min-full-page',
+  scroll: true,
+})
 
 const showRoomModal = ref(false)
 </script>

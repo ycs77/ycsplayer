@@ -125,7 +125,7 @@
       </div>
     </header>
 
-    <main class="h-full min-h-0">
+    <main class="grow" :class="{ 'min-h-0': !pageCanScroll }">
       <slot />
     </main>
 
@@ -136,7 +136,7 @@
 <script setup lang="ts">
 import { ModalsContainer } from 'vue-final-modal'
 
-const showFullPage = useFullPage()
+const { showFullPage, pageCanScroll } = useFullPage()
 
 const { user } = useAuth()
 
