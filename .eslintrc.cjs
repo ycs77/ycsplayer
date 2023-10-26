@@ -11,5 +11,6 @@ module.exports = {
     'no-alert': 'off',
     'no-console': 'off',
     'vue/no-template-shadow': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
   },
 }

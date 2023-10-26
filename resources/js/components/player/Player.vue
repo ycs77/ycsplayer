@@ -39,7 +39,13 @@ const emit = defineEmits<{
 }>()
 
 const videoRef = ref() as Ref<HTMLVideoElement>
+
+/**
+ * 當開啟播放器，且尚未開始播放時才會更新。
+ * 在點擊開始播放的按鈕時，會根據此時間來更新。
+ */
 const startStatus = {
+  otherPlayerIsStarted: false,
   paused: false,
   currentTime: 0,
   timestamp: 0,
@@ -71,11 +77,11 @@ function adjustmentCurrentTime(timestamp: number, currentTime: number) {
   return Math.round((currentTime + seconds) * 100) / 100
 }
 
-function syncPlayStatus(callback?: () => void) {
+function syncPlayStatusOnStart(callback?: () => void) {
   setTimeout(() => {
     if (!player) return
 
-    if (startStatus.currentTime > 0) {
+    if (startStatus.otherPlayerIsStarted) {
       player.currentTime(adjustmentCurrentTime(
         startStatus.timestamp, startStatus.currentTime
       ))
@@ -89,6 +95,45 @@ function syncPlayStatus(callback?: () => void) {
 
     callback?.()
   }, 1)
+}
+
+function ready() {
+  play(() => {
+    setTimeout(() => {
+      const playPromise = player?.play()
+      if (playPromise) {
+        playPromise
+          .then(() => {
+            if (!player) return
+
+            if (startStatus.otherPlayerIsStarted) {
+              player.currentTime(adjustmentCurrentTime(
+                startStatus.timestamp, startStatus.currentTime
+              ))
+
+              if (startStatus.paused) {
+                setTimeout(() => player!.pause(), 500)
+              } else {
+                // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
+                silencePromise(player.play())
+              }
+            } else {
+              silencePromise(player.play())
+
+              emit('play', {
+                currentTime: currentTime(),
+                timestamp: Date.now(),
+              })
+            }
+          })
+          .catch(() => {
+            player?.removeClass('vjs-waiting')
+          })
+      } else {
+        player?.removeClass('vjs-waiting')
+      }
+    }, 300)
+  })
 }
 
 function play(handler?: () => void, checkPaused = true) {
@@ -168,34 +213,31 @@ onMounted(() => {
 
   player = videojs(videoRef.value, videojsOptions)
 
-  player.on('ended', end)
+  // @ts-expect-error
+  player.handleTechWaiting_()
 
   player.ready(() => {
-    play(() => {
-      setTimeout(() => {
-        player?.play()?.then(() => {
-          if (!player) return
-
-          if (startStatus.currentTime > 0) {
-            player.currentTime(adjustmentCurrentTime(
-              startStatus.timestamp, startStatus.currentTime
-            ))
-
-            if (startStatus.paused) {
-              setTimeout(() => player!.pause(), 500)
-            } else {
-              silencePromise(player.play())
-            }
-          } else {
-            emit('play', {
-              currentTime: currentTime(),
-              timestamp: Date.now(),
-            })
-          }
-        }, () => {})
-      }, 300)
-    })
+    if (props.type === PlayerType.YouTube)
+      ready()
   })
+
+  if (props.type === PlayerType.Video ||
+      props.type === PlayerType.Audio
+  ) {
+    player.on('canplay', () => {
+      // @ts-expect-error
+      player.handleTechWaiting_()
+    })
+
+    player.on('canplaythrough', () => {
+      // @ts-expect-error
+      player.handleTechWaiting_()
+
+      ready()
+    })
+  }
+
+  player.on('ended', end)
 
   class PosterImage extends (videojs.getComponent('PosterImage') as unknown as {
     new (player: Player, options?: any): VideojsPosterImage
@@ -209,14 +251,14 @@ onMounted(() => {
         log('[YcsPosterImage] start play')
 
         play(() => {
-          if (startStatus.currentTime > 0) {
+          if (startStatus.otherPlayerIsStarted) {
             this.player_.currentTime(adjustmentCurrentTime(
               startStatus.timestamp, startStatus.currentTime
             ))
           }
 
           this.player_.play().then(() => {
-            syncPlayStatus(() => {
+            syncPlayStatusOnStart(() => {
               if (this.player_.tech(true)) {
                 this.player_.tech(true).focus()
               }
@@ -241,7 +283,7 @@ onMounted(() => {
       log('[YcsBigPlayButton] start play')
 
       play(() => {
-        if (startStatus.currentTime > 0) {
+        if (startStatus.otherPlayerIsStarted) {
           this.player_.currentTime(adjustmentCurrentTime(
             startStatus.timestamp, startStatus.currentTime
           ))
@@ -250,7 +292,7 @@ onMounted(() => {
         const playPromise = this.player_.play()
 
         const playCallback = () => {
-          syncPlayStatus(() => {
+          syncPlayStatusOnStart(() => {
             emit('play', {
               currentTime: currentTime(),
               timestamp: Date.now(),
@@ -411,6 +453,7 @@ onMounted(() => {
 function onPlayerPlayed(e: PlayerPlayedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
+    startStatus.otherPlayerIsStarted = true
     startStatus.paused = false
     startStatus.currentTime = e.currentTime
     startStatus.timestamp = e.timestamp
@@ -434,6 +477,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
 function onPlayerPaused(e: PlayerPausedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
+    startStatus.otherPlayerIsStarted = true
     startStatus.paused = true
     startStatus.currentTime = e.currentTime
     startStatus.timestamp = e.timestamp
@@ -451,6 +495,7 @@ function onPlayerPaused(e: PlayerPausedEvent) {
 function onPlayerSeeked(e: PlayerSeekedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
+    startStatus.otherPlayerIsStarted = true
     startStatus.paused = e.paused
     startStatus.currentTime = e.currentTime
     startStatus.timestamp = e.timestamp
@@ -482,6 +527,7 @@ function onPlayerTimeUpdate(e: PlayerTimeUpdateEvent) {
     if (e.currentTime < (player.duration() || 0))
       player.currentTime(e.currentTime)
   } else {
+    startStatus.otherPlayerIsStarted = true
     startStatus.paused = e.paused
     startStatus.currentTime = e.currentTime
     startStatus.timestamp = e.timestamp
