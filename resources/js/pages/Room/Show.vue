@@ -12,6 +12,7 @@
               :src="currentPlaying.url"
               :type="currentPlaying.type"
               :poster="currentPlaying.preview ?? undefined"
+              :operate="can.operatePlayer"
               :force-play-from-start="forcePlayFromStart"
               @play="onPlayerPlayed"
               @pause="onPlayerPaused"
@@ -203,6 +204,7 @@ const props = defineProps<{
   medias: Media[]
   members: RoomMember[]
   can: {
+    operatePlayer: boolean
     operatePlaylistItem: boolean
     inviteMember: boolean
     changeMemberRole: boolean
@@ -252,17 +254,23 @@ usePlayerLogger({ debug: props.debug })
 
 // 廣播播放事件
 function onPlayerPlayed(e: PlayerPlayedEvent) {
-  channel?.whisper('play', e)
+  if (props.can.operatePlayer) {
+    channel?.whisper('play', e)
+  }
 }
 
 // 廣播暫停事件
 function onPlayerPaused(e: PlayerPausedEvent) {
-  channel?.whisper('pause', e)
+  if (props.can.operatePlayer) {
+    channel?.whisper('pause', e)
+  }
 }
 
 // 廣播拖曳進度條事件
 function onPlayerSeeked(e: PlayerSeekedEvent) {
-  channel?.whisper('seek', e)
+  if (props.can.operatePlayer) {
+    channel?.whisper('seek', e)
+  }
 }
 
 // 點擊播放下一首按鈕事件
@@ -374,6 +382,7 @@ function onMediaUpload(message: string | null) {
 
 function onMemberJoining(user: RoomChannelMember) {
   if (!player.value) return
+  if (!player.value.canStartPlay()) return
   channel?.whisper('currenttime', {
     user,
     paused: player.value.paused(),

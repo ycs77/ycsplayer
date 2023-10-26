@@ -82,6 +82,7 @@ class RoomController extends Controller
                 : [],
             'members' => fn () => RoomMemberPresenter::collection($room->membersForPresent()),
             'can' => fn () => [
+                'operatePlayer' => $user->can('operatePlayer', $room),
                 'operatePlaylistItem' => $user->can('operatePlaylistItem', $room),
                 'inviteMember' => $user->can('inviteMember', $room),
                 'changeMemberRole' => $user->can('removeMember', $room),

@@ -76,3 +76,16 @@
 .vjs-youtube iframe {
   pointer-events: none !important;
 }
+
+.vjs-play-only .vjs-poster,
+.vjs-play-only .vjs-big-play-button,
+.vjs-play-only .vjs-control-bar {
+  pointer-events: none !important;
+}
+.vjs-play-only .vjs-big-play-button {
+  display: none !important;
+}
+.vjs-play-only .vjs-volume-panel,
+.vjs-play-only .vjs-fullscreen-control {
+  pointer-events: auto !important;
+}

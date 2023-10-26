@@ -58,6 +58,7 @@ class Room extends Model implements HasMedia
     public function roomPermissions(): array
     {
         return [
+            "rooms.{$this->id}.operate-player",
             "rooms.{$this->id}.operate-playlist-item",
             "rooms.{$this->id}.invite-member",
             "rooms.{$this->id}.change-member-role",
@@ -71,14 +72,18 @@ class Room extends Model implements HasMedia
     public function roomRoles(): array
     {
         return [
+            "rooms.{$this->id}.guest" => [],
             "rooms.{$this->id}.user" => [
+                "rooms.{$this->id}.operate-player",
                 "rooms.{$this->id}.operate-playlist-item",
             ],
             "rooms.{$this->id}.uploader" => [
+                "rooms.{$this->id}.operate-player",
                 "rooms.{$this->id}.operate-playlist-item",
                 "rooms.{$this->id}.upload-medias",
             ],
             "rooms.{$this->id}.admin" => [
+                "rooms.{$this->id}.operate-player",
                 "rooms.{$this->id}.operate-playlist-item",
                 "rooms.{$this->id}.invite-member",
                 "rooms.{$this->id}.change-member-role",

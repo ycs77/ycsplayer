@@ -21,6 +21,11 @@ class RoomPolicy
         return $user->can('create-room');
     }
 
+    public function operatePlayer(User $user, Room $room): bool
+    {
+        return $user->can("rooms.{$room->id}.operate-player");
+    }
+
     public function operatePlaylistItem(User $user, Room $room): bool
     {
         return $user->can("rooms.{$room->id}.operate-playlist-item");

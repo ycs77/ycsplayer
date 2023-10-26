@@ -23,13 +23,16 @@ import 'videojs-youtube'
 import { PlayerType } from '@/types'
 import type { PlayerPausedEvent, PlayerPlayedEvent, PlayerSeekedEvent, PlayerTimeUpdateEvent } from '@/types'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   roomId: string
   src: string
   type: PlayerType
   poster?: string
+  operate?: boolean
   forcePlayFromStart?: boolean
-}>()
+}>(), {
+  operate: true,
+})
 
 const emit = defineEmits<{
   play: [event: PlayerPlayedEvent]
@@ -98,7 +101,18 @@ function syncPlayStatusOnStart(callback?: () => void) {
   }, 1)
 }
 
+function canStartPlay() {
+  return props.operate || startStatus.otherPlayerIsStarted
+}
+
 function ready() {
+  // 如果是不能播放的使用者 (僅限觀看) 以及其他使用者沒有開始播放，
+  // 就不能自動開始。
+  if (!canStartPlay()) {
+    player?.removeClass('vjs-waiting')
+    return
+  }
+
   play(() => {
     setTimeout(() => {
       const playPromise = player?.play()
@@ -226,6 +240,10 @@ onMounted(() => {
   // @ts-expect-error
   player.handleTechWaiting_()
 
+  if (!props.operate) {
+    player.addClass('vjs-play-only')
+  }
+
   player.ready(() => {
     if (props.type === PlayerType.YouTube)
       ready()
@@ -253,6 +271,8 @@ onMounted(() => {
     new (player: Player, options?: any): VideojsPosterImage
   }) {
     handleClick(event: Event) {
+      if (!canStartPlay()) return
+
       if (!this.player_.controls()) {
         return
       }
@@ -290,6 +310,8 @@ onMounted(() => {
     new (player: Player, options?: any): VideojsBigPlayButton
   }) {
     handleClick(event: KeyboardEvent) {
+      if (!canStartPlay()) return
+
       log('[YcsBigPlayButton] start play')
 
       play(() => {
@@ -348,6 +370,8 @@ onMounted(() => {
     new (player: Player, options?: any): VideojsPlayToggle
   }) {
     handleClick(event: Event) {
+      if (!props.operate) return
+
       if (this.player_.paused()) {
         log('[YcsPlayToggle] play')
 
@@ -390,6 +414,8 @@ onMounted(() => {
     }
 
     handleClick(event: Event) {
+      if (!props.operate) return
+
       emit('next')
     }
   }
@@ -403,10 +429,12 @@ onMounted(() => {
       // eslint-disable-next-line constructor-super
       super(player, options)
 
-      this.onSekked_ = debounce(seeked, 100)
+      this.onSekked_ = props.operate ? debounce(seeked, 100) : () => {}
     }
 
     handleMouseUp(event: MouseEvent) {
+      if (!props.operate) return
+
       super.handleMouseUp(event)
 
       this.onSekked_()
@@ -468,6 +496,9 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
     startStatus.paused = false
     startStatus.currentTime = e.currentTime
     startStatus.timestamp = e.timestamp
+    if (!props.operate) {
+      ready()
+    }
     return
   }
 
@@ -563,6 +594,7 @@ onBeforeUnmount(async () => {
 defineExpose({
   paused,
   currentTime,
+  canStartPlay,
   onPlayerPlayed,
   onPlayerPaused,
   onPlayerSeeked,

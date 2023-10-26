@@ -14,8 +14,14 @@ export const roles = [
   {
     label: '成員',
     value: 'user',
-    description: '成員是房間內權限最低的角色，可以同步觀看影片、新增/刪除播放項目，但無法上傳檔案、邀請成員。',
+    description: '成員可以同步觀看影片、新增/刪除播放項目，但無法上傳檔案、邀請成員。',
     color: 'green',
+  },
+  {
+    label: '訪客',
+    value: 'guest',
+    description: '訪客僅可同步觀看影片，無法操作影片播放器、新增/刪除播放項目、上傳檔案、邀請成員。',
+    color: 'red',
   },
 ] as {
   label: string
