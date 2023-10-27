@@ -60,6 +60,7 @@ class Room extends Model implements HasMedia
         return [
             "rooms.{$this->id}.operate-player",
             "rooms.{$this->id}.operate-playlist-item",
+            "rooms.{$this->id}.edit-note",
             "rooms.{$this->id}.invite-member",
             "rooms.{$this->id}.change-member-role",
             "rooms.{$this->id}.remove-member",
@@ -76,15 +77,18 @@ class Room extends Model implements HasMedia
             "rooms.{$this->id}.user" => [
                 "rooms.{$this->id}.operate-player",
                 "rooms.{$this->id}.operate-playlist-item",
+                "rooms.{$this->id}.edit-note",
             ],
             "rooms.{$this->id}.uploader" => [
                 "rooms.{$this->id}.operate-player",
                 "rooms.{$this->id}.operate-playlist-item",
+                "rooms.{$this->id}.edit-note",
                 "rooms.{$this->id}.upload-medias",
             ],
             "rooms.{$this->id}.admin" => [
                 "rooms.{$this->id}.operate-player",
                 "rooms.{$this->id}.operate-playlist-item",
+                "rooms.{$this->id}.edit-note",
                 "rooms.{$this->id}.invite-member",
                 "rooms.{$this->id}.change-member-role",
                 "rooms.{$this->id}.remove-member",

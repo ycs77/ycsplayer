@@ -53,6 +53,7 @@
                 :room="room"
                 :members-count="members.length"
                 :editing-user="editingUser"
+                :can-edit-note="can.editNote"
               />
             </div>
 
@@ -208,6 +209,7 @@ const props = defineProps<{
   can: {
     operatePlayer: boolean
     operatePlaylistItem: boolean
+    editNote: boolean
     inviteMember: boolean
     changeMemberRole: boolean
     removeMember: boolean

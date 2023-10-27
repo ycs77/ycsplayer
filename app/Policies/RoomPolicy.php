@@ -31,6 +31,11 @@ class RoomPolicy
         return $user->can("rooms.{$room->id}.operate-playlist-item");
     }
 
+    public function editNote(User $user, Room $room): bool
+    {
+        return $user->can("rooms.{$room->id}.edit-note");
+    }
+
     public function inviteMember(User $user, Room $room): bool
     {
         return $user->can("rooms.{$room->id}.invite-member");

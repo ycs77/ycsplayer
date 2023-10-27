@@ -84,6 +84,7 @@ class RoomController extends Controller
             'can' => fn () => [
                 'operatePlayer' => $user->can('operatePlayer', $room),
                 'operatePlaylistItem' => $user->can('operatePlaylistItem', $room),
+                'editNote' => $user->can('editNote', $room),
                 'inviteMember' => $user->can('inviteMember', $room),
                 'changeMemberRole' => $user->can('removeMember', $room),
                 'removeMember' => $user->can('removeMember', $room),

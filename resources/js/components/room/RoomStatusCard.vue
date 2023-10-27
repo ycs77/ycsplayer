@@ -67,6 +67,7 @@
             </div>
 
             <button
+              v-if="canEditNote"
               type="button"
               class="link disabled:text-blue-400/50"
               :disabled="!!editingUser"
@@ -89,14 +90,17 @@
 import axios from 'axios'
 import type { Room } from '@/types'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   room: Room
   membersCount: number
   editingUser: {
     id: string
     name: string
   } | null
-}>()
+  canEditNote?: boolean
+}>(), {
+  canEditNote: true,
+})
 
 const emit = defineEmits<{
   submitNote: []
@@ -120,6 +124,8 @@ function focusNoteInput() {
 }
 
 function startEditingNote() {
+  if (!props.canEditNote) return
+
   editing.value = true
   originalNote = noteForm.note
   focusNoteInput()
@@ -128,6 +134,8 @@ function startEditingNote() {
 }
 
 function saveNote() {
+  if (!props.canEditNote) return
+
   noteForm.put(`/rooms/${props.room.id}/note`, {
     only: [...globalOnly, 'room', 'editingUser'],
     preserveScroll: true,
@@ -143,6 +151,8 @@ function saveNote() {
 }
 
 function cancelEditNote() {
+  if (!props.canEditNote) return
+
   editing.value = false
   noteForm.note = originalNote
 

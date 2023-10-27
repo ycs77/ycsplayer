@@ -21,7 +21,7 @@ class RoomNoteController extends Controller
 
     public function edit(Room $room)
     {
-        $this->authorize('view', $room);
+        $this->authorize('editNote', $room);
 
         $user = Auth::user();
 
@@ -34,7 +34,7 @@ class RoomNoteController extends Controller
 
     public function update(Request $request, Room $room)
     {
-        $this->authorize('view', $room);
+        $this->authorize('editNote', $room);
 
         $request->validate([
             'note' => ['nullable', 'string', 'max:500'],
@@ -53,7 +53,7 @@ class RoomNoteController extends Controller
 
     public function destroy(Room $room)
     {
-        $this->authorize('view', $room);
+        $this->authorize('editNote', $room);
 
         $this->noteEditor->end($room->hash_id);
 
