@@ -23,18 +23,18 @@
           >
             <div class="flex w-full justify-between">
               <div>
+                <TablerBrandYoutubeFilled
+                  v-if="playerType.value === PlayerType.YouTube"
+                  class="w-9 h-9 mb-2"
+                  :class="checked ? 'text-white' : 'text-blue-500/50'"
+                />
                 <HeroiconsPlayCircle
-                  v-if="playerType.value === PlayerType.Video"
+                  v-else-if="playerType.value === PlayerType.Video"
                   class="w-9 h-9 mb-2"
                   :class="checked ? 'text-white' : 'text-blue-500/50'"
                 />
                 <HeroiconsMusicalNote
                   v-else-if="playerType.value === PlayerType.Audio"
-                  class="w-9 h-9 mb-2"
-                  :class="checked ? 'text-white' : 'text-blue-500/50'"
-                />
-                <TablerBrandYoutubeFilled
-                  v-else-if="playerType.value === PlayerType.YouTube"
                   class="w-9 h-9 mb-2"
                   :class="checked ? 'text-white' : 'text-blue-500/50'"
                 />
@@ -76,16 +76,16 @@ defineOptions({ inheritAttrs: false })
 
 const playerTypes = [
   {
+    name: 'YouTube',
+    value: PlayerType.YouTube,
+  },
+  {
     name: '影片',
     value: PlayerType.Video,
   },
   {
     name: '音樂',
     value: PlayerType.Audio,
-  },
-  {
-    name: 'YouTube',
-    value: PlayerType.YouTube,
   },
 ]
 

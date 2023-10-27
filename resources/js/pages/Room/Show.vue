@@ -245,7 +245,7 @@ const tab = ref('main')
 const toast = useToast()
 
 const playlistItemForm = useForm({
-  type: PlayerType.Video,
+  type: PlayerType.YouTube,
   title: '',
   url: '',
   media_id: null,
@@ -336,7 +336,7 @@ function openAddPlaylistItemModal() {
   } else if (props.room.type === RoomType.Audio) {
     playlistItemForm.type = PlayerType.Audio
   } else {
-    playlistItemForm.type = PlayerType.Video
+    playlistItemForm.type = PlayerType.YouTube
   }
 
   playlistItemForm.title = ''

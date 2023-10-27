@@ -85,10 +85,10 @@ const filteredMediasOptions = computed(() => {
 })
 
 watch(() => form.type, () => {
-  if (form.type === PlayerType.Video || form.type === PlayerType.Audio) {
-    media.value = null
-  } else if (form.type === PlayerType.YouTube) {
+  if (form.type === PlayerType.YouTube) {
     form.url = ''
+  } else if (form.type === PlayerType.Video || form.type === PlayerType.Audio) {
+    media.value = null
   }
 })
 
