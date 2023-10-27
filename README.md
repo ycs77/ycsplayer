@@ -8,7 +8,7 @@
 </strong>
 </p>
 <p align="center">
-<img src="docs/screenshot.png" />
+<img src="docs/screenshot-20231027.png" />
 </p>
 
 ## 功能
