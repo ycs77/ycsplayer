@@ -155,6 +155,8 @@ class Room extends Model implements HasMedia
 
                 if ($role) {
                     $member->role_name = Str::after($role, "rooms.{$this->id}.");
+                } else {
+                    $member->role_name = 'user';
                 }
 
                 return $member;
