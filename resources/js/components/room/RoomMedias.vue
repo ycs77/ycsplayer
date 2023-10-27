@@ -1,14 +1,29 @@
 <template>
   <div>
-    <div>
-      <button
-        type="button"
-        class="btn btn-list-item rounded-lg mb-[--layout-gap]"
-        @click="$emit('clickUpload')"
+    <div class="mb-[--layout-gap]">
+      <FileUpload
+        :key="fileInputKey"
+        :target="`/rooms/${room.id}/upload`"
+        :file-type="['mp4', 'mp3']"
+        :csrf-token="csrfToken"
+        :error="fileError"
+        button-class="relative btn btn-list-item rounded-lg"
+        @start="uploadStart"
+        @success="uploaded"
+        @error="uploadFail"
       >
-        <HeroiconsCloudArrowUp class="w-4 h-4 mr-1" />
-        上傳檔案
-      </button>
+        <template #progressing="{ progressPer }">
+          <div class="relative btn btn-list-item hover:bg-blue-950/50 rounded-lg overflow-hidden">
+            <div class="text-center">上傳中... </div>
+            <div class="absolute inset-x-0 bottom-0 h-1.5 bg-blue-900/50 overflow-hidden">
+              <div
+                class="bg-blue-500/50 h-full transition-[width] duration-500"
+                :style="{ width: `${progressPer}%` }"
+              />
+            </div>
+          </div>
+        </template>
+      </FileUpload>
     </div>
 
     <ul v-if="medias.length" class="bg-blue-950/50 rounded-lg overflow-hidden">
@@ -28,7 +43,7 @@
             <button
               type="button"
               class="btn btn-sm btn-danger"
-              @click="deleteMedia(media)"
+              @click="$emit('deleteMedia', media)"
             >
               刪除
             </button>
@@ -46,21 +61,35 @@
 <script setup lang="ts">
 import type { Media, Room } from '@/types'
 
-const props = defineProps<{
+defineProps<{
   room: Required<Room>
   medias: Media[]
+  csrfToken: string
 }>()
 
-defineEmits<{
-  clickUpload: []
+const emit = defineEmits<{
+  uploaded: [message: string | null]
+  deleteMedia: [media: Media]
 }>()
 
-function deleteMedia(media: Media) {
-  if (confirm(`確定要刪除 ${media.name} 嗎?`)) {
-    router.delete(`/rooms/${props.room.id}/medias/${media.id}`, {
-      only: [...globalOnly, 'csrfToken', 'currentPlaying', 'playlistItems', 'medias'],
-      preserveScroll: true,
-    })
-  }
+const fileInputKey = ref(Date.now())
+const fileError = ref<string | undefined>(undefined)
+
+function uploadStart() {
+  fileError.value = undefined
+}
+
+function uploaded(message: string | null) {
+  updateKey()
+  emit('uploaded', message)
+}
+
+function uploadFail(message: string) {
+  updateKey()
+  fileError.value = message
+}
+
+function updateKey() {
+  fileInputKey.value = Date.now()
 }
 </script>

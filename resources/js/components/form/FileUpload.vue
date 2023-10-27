@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!progress" class="my-6">
+  <div v-if="!progress">
     <Field
       :label="label"
       :error="error"
@@ -9,33 +9,41 @@
       <button
         ref="browseFilesBtnRef"
         type="button"
-        class="btn btn-primary"
+        :class="buttonClass"
       >
         <HeroiconsCloudArrowUp class="mr-1" />上傳檔案
       </button>
     </Field>
   </div>
 
-  <div v-else class="my-16">
-    <div class="text-center">上傳中... </div>
-    <div class="mt-4 h-2 bg-blue-900/50 rounded-full overflow-hidden">
-      <div class="bg-blue-500/50 h-full transition-[width] duration-500" :style="{ width: `${progressPer}%` }" />
-    </div>
+  <div v-else>
+    <slot name="progressing" :progress-per="progressPer">
+      <div class="text-center">上傳中... </div>
+      <div class="mt-4 h-2 bg-blue-900/50 rounded-full overflow-hidden">
+        <div
+          class="bg-blue-500/50 h-full transition-[width] duration-500"
+          :style="{ width: `${progressPer}%` }"
+        />
+      </div>
+    </slot>
   </div>
 </template>
 
 <script setup lang="ts">
 import Resumable from 'resumablejs'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   target: string
   csrfToken: string
   fileType: string[]
   label?: string
   error?: string
   tip?: string
+  buttonClass?: any
   wrapperClass?: any
-}>()
+}>(), {
+  buttonClass: 'btn btn-primary',
+})
 
 const emit = defineEmits<{
   start: []

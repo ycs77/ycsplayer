@@ -94,8 +94,10 @@
             v-else-if="tab === 'medias'"
             :room="room"
             :medias="medias"
+            :csrf-token="csrfToken"
             class="overflow-y-auto min-h-0"
-            @click-upload="showRoomUploadMediaModal = true"
+            @uploaded="onMediaUpload"
+            @delete-media="onMediaDeleting"
           />
 
           <!-- 設定分頁 -->
@@ -174,13 +176,6 @@
       :submitting="playlistItemForm.processing"
       @submit="submitPlaylistItemForm"
     />
-
-    <RoomUploadMediaModal
-      v-model="showRoomUploadMediaModal"
-      :room-id="room.id"
-      :csrf-token="csrfToken"
-      @uploaded="onMediaUpload"
-    />
   </div>
 </template>
 
@@ -235,7 +230,6 @@ const mobilePlaylist = ref(null) as Ref<InstanceType<typeof Playlist> | null>
 
 const showAddPlaylistItemModal = ref(false)
 const showMobilePlaylist = ref(false)
-const showRoomUploadMediaModal = ref(false)
 
 const trigger = ref(PlayerTrigger.Normal)
 const forcePlayFromStart = computed(() => [PlayerTrigger.Click, PlayerTrigger.Next].includes(trigger.value))
@@ -377,11 +371,19 @@ function onMediaUpload(message: string | null) {
   router.reload({
     only: [...globalOnly, 'csrfToken', 'medias'],
     onSuccess() {
-      if (message) {
+      if (message)
         toast.success(message)
-      }
     },
   })
+}
+
+function onMediaDeleting(media: Media) {
+  if (confirm(`確定要刪除 ${media.name} 嗎?`)) {
+    router.delete(`/rooms/${props.room.id}/medias/${media.id}`, {
+      only: [...globalOnly, 'csrfToken', 'currentPlaying', 'playlistItems', 'medias'],
+      preserveScroll: true,
+    })
+  }
 }
 
 function onMemberJoining(user: RoomChannelMember) {
