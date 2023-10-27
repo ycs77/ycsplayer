@@ -529,8 +529,6 @@ function onPlayerPaused(e: PlayerPausedEvent) {
 
   log('[PlayerPaused] currentTime', e.currentTime)
 
-  player.currentTime(e.currentTime)
-
   player.pause()
 }
 
