@@ -128,9 +128,12 @@ function ready() {
       if (playPromise) {
         playPromise
           .then(() => {
+            log('[StartPlay] play successfully')
             if (!player) return
 
             if (props.forcePlayFromStart) {
+              log('[StartPlay] force play from start')
+
               // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
               silencePromise(player.play())
 
@@ -139,6 +142,8 @@ function ready() {
                 timestamp: Date.now(),
               })
             } else if (startStatus.otherPlayerIsStarted) {
+              log('[StartPlay] other player is started')
+
               player.currentTime(adjustmentCurrentTime(
                 startStatus.timestamp, startStatus.currentTime
               ))
@@ -150,6 +155,8 @@ function ready() {
                 silencePromise(player.play())
               }
             } else {
+              log('[StartPlay] normal start play')
+
               // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
               silencePromise(player.play())
 
@@ -160,6 +167,7 @@ function ready() {
             }
           })
           .catch(() => {
+            log('[StartPlay] play error')
             player?.removeClass('vjs-waiting')
           })
       } else {
