@@ -43,6 +43,14 @@ const emit = defineEmits<{
   next: []
 }>()
 
+declare global {
+  interface Window {
+    HELP_IMPROVE_VIDEOJS: boolean
+  }
+}
+
+window.HELP_IMPROVE_VIDEOJS = false
+
 const videoRef = ref() as Ref<HTMLVideoElement>
 
 /**

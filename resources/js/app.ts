@@ -8,14 +8,6 @@ import { Notification } from '@/plugins/notification'
 import 'vue-final-modal/style.css'
 import '../css/app.css'
 
-declare global {
-  interface Window {
-    HELP_IMPROVE_VIDEOJS: boolean
-  }
-}
-
-window.HELP_IMPROVE_VIDEOJS = false
-
 createInertiaApp({
   resolve: async name => {
     const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue')
