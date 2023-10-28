@@ -150,12 +150,7 @@ function ready() {
           if (props.forcePlayFromStart) {
             log('[StartPlay] force play from start')
 
-            reTriggerPlay(() => {
-              emit('play', {
-                currentTime: currentTime(),
-                timestamp: Date.now(),
-              })
-            })
+            reTriggerPlay()
           } else if (startStatus.otherPlayerIsStarted) {
             const newCurrentTime = adjustmentCurrentTime(
               startStatus.timestamp, startStatus.currentTime
