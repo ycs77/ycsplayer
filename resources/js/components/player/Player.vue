@@ -134,7 +134,9 @@ function ready() {
             log('[StartPlay] force play from start')
 
             // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-            wrapPromise(player.play()).then(() => {}).catch(() => {
+            wrapPromise(player.play()).then(() => {
+              setTimeout(() => player?.removeClass('vjs-waiting'), 0)
+            }).catch(() => {
               player?.removeClass('vjs-waiting')
             })
 
@@ -156,7 +158,9 @@ function ready() {
               }, 500)
             } else {
               // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-              wrapPromise(player.play()).then(() => {}).catch(() => {
+              wrapPromise(player.play()).then(() => {
+                setTimeout(() => player?.removeClass('vjs-waiting'), 0)
+              }).catch(() => {
                 player?.removeClass('vjs-waiting')
               })
             }
@@ -164,7 +168,9 @@ function ready() {
             log('[StartPlay] normal start play')
 
             // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-            wrapPromise(player.play()).then(() => {}).catch(() => {
+            wrapPromise(player.play()).then(() => {
+              setTimeout(() => player?.removeClass('vjs-waiting'), 0)
+            }).catch(() => {
               player?.removeClass('vjs-waiting')
             })
 
