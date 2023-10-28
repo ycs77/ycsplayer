@@ -240,6 +240,7 @@ onMounted(() => {
     videojsOptions.youtube = {
       hl: navigator.language,
       origin: location.origin,
+      ytControls: 0,
       disablekb: 1,
     }
   }

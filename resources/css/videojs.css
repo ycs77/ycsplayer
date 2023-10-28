@@ -120,8 +120,11 @@
   display: none !important;
 }
 
-.vjs-youtube iframe {
+.video-js .vjs-tech {
   pointer-events: none !important;
+}
+.vjs-youtube .vjs-iframe-blocker {
+  display: none !important;
 }
 
 .vjs-play-only .vjs-poster,
