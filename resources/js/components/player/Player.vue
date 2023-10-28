@@ -157,7 +157,13 @@ function ready() {
               })
             })
           } else if (startStatus.otherPlayerIsStarted) {
-            log('[StartPlay] other player is started')
+            log('[StartPlay] other player is started', {
+              timestamp: startStatus.timestamp,
+              currentTime: startStatus.currentTime,
+              adjustment: adjustmentCurrentTime(
+                startStatus.timestamp, startStatus.currentTime
+              ),
+            })
 
             player.currentTime(adjustmentCurrentTime(
               startStatus.timestamp, startStatus.currentTime
