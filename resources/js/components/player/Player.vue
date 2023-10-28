@@ -124,61 +124,60 @@ function ready() {
 
   play(() => {
     setTimeout(() => {
-      const playPromise = player?.play()
-      if (playPromise) {
-        playPromise
-          .then(() => {
-            log('[StartPlay] play successfully')
-            if (!player) return
+      wrapPromise(player?.play())
+        .then(() => {
+          if (!player) return
 
-            if (props.forcePlayFromStart) {
-              log('[StartPlay] force play from start')
+          log('[StartPlay] play successfully')
 
-              // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-              player.play()?.then(() => {}).catch(() => {
-                player?.removeClass('vjs-waiting')
-              })
+          if (props.forcePlayFromStart) {
+            log('[StartPlay] force play from start')
 
-              emit('play', {
-                currentTime: currentTime(),
-                timestamp: Date.now(),
-              })
-            } else if (startStatus.otherPlayerIsStarted) {
-              log('[StartPlay] other player is started')
+            // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
+            wrapPromise(player.play()).then(() => {}).catch(() => {
+              player?.removeClass('vjs-waiting')
+            })
 
-              player.currentTime(adjustmentCurrentTime(
-                startStatus.timestamp, startStatus.currentTime
-              ))
+            emit('play', {
+              currentTime: currentTime(),
+              timestamp: Date.now(),
+            })
+          } else if (startStatus.otherPlayerIsStarted) {
+            log('[StartPlay] other player is started')
 
-              if (startStatus.paused) {
-                setTimeout(() => player!.pause(), 500)
-              } else {
-                // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-                player.play()?.then(() => {}).catch(() => {
-                  player?.removeClass('vjs-waiting')
-                })
-              }
+            player.currentTime(adjustmentCurrentTime(
+              startStatus.timestamp, startStatus.currentTime
+            ))
+
+            if (startStatus.paused) {
+              setTimeout(() => {
+                player!.pause()
+                player!.removeClass('vjs-waiting')
+              }, 500)
             } else {
-              log('[StartPlay] normal start play')
-
               // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-              player.play()?.then(() => {}).catch(() => {
+              wrapPromise(player.play()).then(() => {}).catch(() => {
                 player?.removeClass('vjs-waiting')
-              })
-
-              emit('play', {
-                currentTime: currentTime(),
-                timestamp: Date.now(),
               })
             }
-          })
-          .catch(() => {
-            log('[StartPlay] play error')
-            player?.removeClass('vjs-waiting')
-          })
-      } else {
-        player?.removeClass('vjs-waiting')
-      }
+          } else {
+            log('[StartPlay] normal start play')
+
+            // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
+            wrapPromise(player.play()).then(() => {}).catch(() => {
+              player?.removeClass('vjs-waiting')
+            })
+
+            emit('play', {
+              currentTime: currentTime(),
+              timestamp: Date.now(),
+            })
+          }
+        })
+        .catch(() => {
+          log('[StartPlay] play error')
+          player?.removeClass('vjs-waiting')
+        })
     }, 300)
   })
 }

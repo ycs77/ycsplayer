@@ -288,6 +288,7 @@ declare global {
   const watchTriggerable: typeof import('@vueuse/core')['watchTriggerable']
   const watchWithFilter: typeof import('@vueuse/core')['watchWithFilter']
   const whenever: typeof import('@vueuse/core')['whenever']
+  const wrapPromise: typeof import('../utils/promise')['wrapPromise']
 }
 // for type re-export
 declare global {
