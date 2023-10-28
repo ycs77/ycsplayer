@@ -239,6 +239,7 @@ onMounted(() => {
   const videojsOptions = {
     controls: true,
     fluid: true,
+    playsinline: true,
     sources: [{
       src: props.src,
       type: sourceType,
