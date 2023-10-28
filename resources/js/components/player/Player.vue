@@ -135,7 +135,9 @@ function ready() {
               log('[StartPlay] force play from start')
 
               // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-              silencePromise(player.play())
+              player.play()?.then(() => {}).catch(() => {
+                player?.removeClass('vjs-waiting')
+              })
 
               emit('play', {
                 currentTime: currentTime(),
@@ -152,13 +154,17 @@ function ready() {
                 setTimeout(() => player!.pause(), 500)
               } else {
                 // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-                silencePromise(player.play())
+                player.play()?.then(() => {}).catch(() => {
+                  player?.removeClass('vjs-waiting')
+                })
               }
             } else {
               log('[StartPlay] normal start play')
 
               // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-              silencePromise(player.play())
+              player.play()?.then(() => {}).catch(() => {
+                player?.removeClass('vjs-waiting')
+              })
 
               emit('play', {
                 currentTime: currentTime(),
