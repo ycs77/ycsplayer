@@ -86,7 +86,9 @@ function currentTime() {
 }
 
 function adjustmentCurrentTime(timestamp: number, currentTime: number) {
-  const seconds = (Date.now() - timestamp) / 1000
+  const now = Date.now()
+  const seconds = (now - timestamp) / 1000
+  log('[adjustmentCurrentTime] now', now)
   return Math.round((currentTime + seconds) * 100) / 100
 }
 
@@ -554,11 +556,11 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
 function onPlayerPaused(e: PlayerPausedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
-    log('[PlayerPaused] unclicked start button')
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = true
     startStatus.currentTime = e.currentTime
     startStatus.timestamp = e.timestamp
+    log('[PlayerPaused] unclicked start button', startStatus)
     return
   }
 
@@ -571,11 +573,11 @@ function onPlayerPaused(e: PlayerPausedEvent) {
 function onPlayerSeeked(e: PlayerSeekedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
-    log('[PlayerSeeked] unclicked start button')
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = e.paused
     startStatus.currentTime = e.currentTime
     startStatus.timestamp = e.timestamp
+    log('[PlayerSeeked] unclicked start button', startStatus)
     return
   }
 
@@ -604,11 +606,11 @@ function onPlayerTimeUpdate(e: PlayerTimeUpdateEvent) {
     if (e.currentTime < (player.duration() || 0))
       player.currentTime(e.currentTime)
   } else {
-    log('[PlayerTimeUpdate] unclicked start button')
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = e.paused
     startStatus.currentTime = e.currentTime
     startStatus.timestamp = e.timestamp
+    log('[PlayerTimeUpdate] unclicked start button', startStatus)
   }
 }
 
