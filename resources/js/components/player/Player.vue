@@ -8,8 +8,6 @@
 <script setup lang="ts">
 import { debounce } from 'lodash-es'
 import { promiseTimeout } from '@vueuse/core'
-import 'video.js/dist/video-js.css'
-import '@videojs/themes/dist/forest/index.css'
 import videojs from 'video.js'
 import videojsZhTW from 'video.js/dist/lang/zh-TW.json'
 import type Player from 'video.js/dist/types/player'
@@ -22,6 +20,9 @@ import type VideojsSeekBar from 'video.js/dist/types/control-bar/progress-contro
 import 'videojs-youtube'
 import { PlayerType } from '@/types'
 import type { PlayerPausedEvent, PlayerPlayedEvent, PlayerSeekedEvent, PlayerTimeUpdateEvent } from '@/types'
+import 'video.js/dist/video-js.css'
+import '@videojs/themes/dist/forest/index.css'
+import '@/../css/videojs.css'
 
 const props = withDefaults(defineProps<{
   roomId: string
@@ -445,7 +446,6 @@ onMounted(() => {
   const bigPlayButton = player.getChild('BigPlayButton')!
   const controlBar = player.getChild('ControlBar')!
   const playToggle = controlBar.getChild('PlayToggle')!
-  const durationDisplay = controlBar.getChild('DurationDisplay')!
   const remainingTimeDisplay = controlBar.getChild('RemainingTimeDisplay')!
   const pictureInPictureToggle = controlBar.getChild('PictureInPictureToggle')!
   const progressControl = controlBar.getChild('ProgressControl')!
@@ -456,7 +456,6 @@ onMounted(() => {
   player.removeChild(posterImage)
   player.removeChild(bigPlayButton)
   controlBar.removeChild(playToggle)
-  controlBar.removeChild(durationDisplay)
   controlBar.removeChild(remainingTimeDisplay)
   controlBar.removeChild(pictureInPictureToggle)
   if (timeTooltip) {
@@ -474,7 +473,6 @@ onMounted(() => {
   player.addChild('BigPlayButton', {}, 2)
   controlBar.addChild('PlayToggle', {}, 0)
   controlBar.addChild('NextButton', {}, 1)
-  controlBar.addChild('DurationDisplay', {}, 7)
   progressControl.addChild('SeekBar', {}, 0)
 
   player.ready(() => {

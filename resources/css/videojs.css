@@ -8,7 +8,13 @@
   background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='88' height='88' fill='%2360a5fa'%3E%3Cpath fill-rule='evenodd' d='M44 88C19.738 88 0 68.262 0 44S19.738 0 44 0s44 19.738 44 44-19.738 44-44 44zm0-85C21.393 3 3 21.393 3 44c0 22.608 18.393 41 41 41s41-18.392 41-41C85 21.393 66.607 3 44 3zm16.063 43.898L39.629 60.741a3.496 3.496 0 01-3.604.194 3.492 3.492 0 01-1.859-3.092V30.158c0-1.299.712-2.483 1.859-3.092a3.487 3.487 0 013.604.194l20.433 13.843a3.497 3.497 0 01.001 5.795zm-1.683-3.311L37.946 29.744a.49.49 0 00-.276-.09.51.51 0 00-.239.062.483.483 0 00-.265.442v27.685c0 .262.166.389.265.442.1.053.299.118.515-.028L58.38 44.414A.489.489 0 0058.6 44a.49.49 0 00-.22-.413z'/%3E%3C/svg%3E") !important; /* blue.400: #60a5fa */
 }
 
-.vjs-control-bar::before {
+.vjs-theme-forest .vjs-control-bar {
+  height: 55px;
+  padding-top: 20px;
+  margin-bottom: 0;
+}
+
+.vjs-theme-forest .vjs-control-bar::before {
   content: '';
   position: absolute;
   left: 0;
@@ -20,46 +26,87 @@
   pointer-events: none;
 }
 
-.vjs-has-started.vjs-user-inactive.vjs-playing.vjs-ended .vjs-control-bar {
+.vjs-ended .vjs-control-bar {
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: unset !important;
 }
 
-.video-js .vjs-next-control {
+.vjs-theme-forest .vjs-button > .vjs-icon-placeholder::before {
+  /* font-size: 2em; */
+}
+
+.vjs-theme-forest .vjs-play-control::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1em;
+  display: block;
+  width: 1em;
+}
+.vjs-theme-forest .vjs-play-control .vjs-icon-placeholder::before {
+  margin-left: 0.325em;
+}
+
+.vjs-theme-forest .vjs-next-control {
   cursor: pointer;
   display: none;
 }
-.video-js.vjs-ended .vjs-next-control {
+.vjs-theme-forest.vjs-ended .vjs-next-control {
   display: inline-block;
 }
-.video-js.vjs-ended .vjs-volume-panel {
+.vjs-theme-forest.vjs-ended .vjs-volume-panel {
   display: none;
 }
-.video-js .vjs-next-control .vjs-icon-placeholder {
+.vjs-theme-forest .vjs-next-control .vjs-icon-placeholder {
   font-family: VideoJS;
   font-weight: normal;
   font-style: normal;
   flex: none;
 }
-.video-js .vjs-next-control .vjs-icon-placeholder:before {
+.vjs-theme-forest .vjs-next-control .vjs-icon-placeholder::before {
   content: "\f123";
 }
 @screen sm {
-  .video-js .vjs-next-control {
+  .vjs-theme-forest .vjs-next-control {
     display: inline-block;
   }
-  .video-js.vjs-ended .vjs-volume-panel {
+  .vjs-ended .vjs-volume-panel {
     display: flex;
   }
 }
 
-.video-js .vjs-duration {
-  display: block !important;
+.vjs-theme-forest .vjs-time-control {
+  display: block;
+}
+.vjs-theme-forest .vjs-time-divider {
+  margin-left: -1.5em;
+  margin-right: -1.5em;
+}
+.vjs-theme-forest .vjs-duration {
+  margin-right: auto;
 }
 
-.video-js .vjs-progress-control:hover .vjs-time-tooltip,
-.video-js .vjs-progress-control:hover .vjs-progress-holder:focus .vjs-time-tooltip {
+.vjs-theme-forest .vjs-progress-control {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 2em;
+}
+
+.vjs-theme-forest .vjs-progress-control .vjs-progress-holder {
+  position: absolute;
+  top: 0.75em;
+  left: 10px;
+  right: 10px;
+  margin: 0;
+}
+
+.vjs-theme-forest .vjs-progress-control:hover .vjs-time-tooltip,
+.vjs-theme-forest .vjs-progress-control:hover .vjs-progress-holder:focus .vjs-time-tooltip {
   font-size: 1em !important;
 }
 
