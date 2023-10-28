@@ -332,10 +332,12 @@ onMounted(() => {
                 this.player_.tech(true).focus()
               }
 
-              emit('play', {
-                currentTime: currentTime(),
-                timestamp: Date.now(),
-              })
+              if (!startStatus.otherPlayerIsStarted || props.forcePlayFromStart) {
+                emit('play', {
+                  currentTime: currentTime(),
+                  timestamp: Date.now(),
+                })
+              }
             })
           }, () => {})
         }, false)
@@ -364,10 +366,12 @@ onMounted(() => {
 
         const playCallback = () => {
           syncPlayStatusOnStart(() => {
-            emit('play', {
-              currentTime: currentTime(),
-              timestamp: Date.now(),
-            })
+            if (!startStatus.otherPlayerIsStarted || props.forcePlayFromStart) {
+              emit('play', {
+                currentTime: currentTime(),
+                timestamp: Date.now(),
+              })
+            }
           })
         }
 
