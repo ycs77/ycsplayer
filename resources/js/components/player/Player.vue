@@ -216,6 +216,7 @@ function pause(handler?: () => void) {
 
 function seeked() {
   if (!player) return
+  if (!isClickedBigButton()) return
   if (isEnded) return
 
   log('[TriggerSeeked]')
