@@ -157,17 +157,17 @@ function ready() {
               })
             })
           } else if (startStatus.otherPlayerIsStarted) {
+            const newCurrentTime = adjustmentCurrentTime(
+              startStatus.timestamp, startStatus.currentTime
+            )
+
             log('[StartPlay] other player is started', {
               timestamp: startStatus.timestamp,
               currentTime: startStatus.currentTime,
-              adjustment: adjustmentCurrentTime(
-                startStatus.timestamp, startStatus.currentTime
-              ),
+              adjustment: newCurrentTime,
             })
 
-            player.currentTime(adjustmentCurrentTime(
-              startStatus.timestamp, startStatus.currentTime
-            ))
+            player.currentTime(newCurrentTime)
 
             if (startStatus.paused) {
               setTimeout(() => {
