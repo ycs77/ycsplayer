@@ -110,6 +110,10 @@
   font-size: 1em !important;
 }
 
+.vjs-youtube .vjs-poster img {
+  object-fit: cover;
+}
+
 .vjs-waiting .vjs-loading-spinner {
   z-index: 1 !important;
 }
