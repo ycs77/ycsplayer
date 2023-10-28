@@ -544,8 +544,6 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
 
   if (newCurrentTime < (player.duration() || 0)) {
     player.currentTime(newCurrentTime)
-  } else {
-    player.currentTime(0)
   }
 
   silencePromise(player.play())
