@@ -502,12 +502,14 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
     return
   }
 
-  const newCurrentTime = adjustmentCurrentTime(e.timestamp, e.currentTime)
+  const newCurrentTime = e.currentTime
 
   log('[PlayerPlayed] currentTime', newCurrentTime)
 
   if (newCurrentTime < (player.duration() || 0)) {
     player.currentTime(newCurrentTime)
+  } else {
+    player.currentTime(0)
   }
 
   silencePromise(player.play())
