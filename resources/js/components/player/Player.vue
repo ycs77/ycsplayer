@@ -122,6 +122,23 @@ function ready() {
     return
   }
 
+  /**
+   * 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
+   */
+  function reTriggerPlay(resolve?: () => void) {
+    if (!player) return
+
+    wrapPromise(player.play()).then(() => {
+      setTimeout(() => {
+        player?.removeClass('vjs-waiting')
+      }, 10)
+
+      resolve?.()
+    }).catch(() => {
+      player?.removeClass('vjs-waiting')
+    })
+  }
+
   play(() => {
     setTimeout(() => {
       wrapPromise(player?.play())
@@ -133,16 +150,11 @@ function ready() {
           if (props.forcePlayFromStart) {
             log('[StartPlay] force play from start')
 
-            // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-            wrapPromise(player.play()).then(() => {
-              setTimeout(() => player?.removeClass('vjs-waiting'), 0)
-            }).catch(() => {
-              player?.removeClass('vjs-waiting')
-            })
-
-            emit('play', {
-              currentTime: currentTime(),
-              timestamp: Date.now(),
+            reTriggerPlay(() => {
+              emit('play', {
+                currentTime: currentTime(),
+                timestamp: Date.now(),
+              })
             })
           } else if (startStatus.otherPlayerIsStarted) {
             log('[StartPlay] other player is started')
@@ -157,26 +169,16 @@ function ready() {
                 player!.removeClass('vjs-waiting')
               }, 500)
             } else {
-              // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-              wrapPromise(player.play()).then(() => {
-                setTimeout(() => player?.removeClass('vjs-waiting'), 0)
-              }).catch(() => {
-                player?.removeClass('vjs-waiting')
-              })
+              reTriggerPlay()
             }
           } else {
             log('[StartPlay] normal start play')
 
-            // 有些時候 `play()` 不會成功觸發，需要再呼叫一次。
-            wrapPromise(player.play()).then(() => {
-              setTimeout(() => player?.removeClass('vjs-waiting'), 0)
-            }).catch(() => {
-              player?.removeClass('vjs-waiting')
-            })
-
-            emit('play', {
-              currentTime: currentTime(),
-              timestamp: Date.now(),
+            reTriggerPlay(() => {
+              emit('play', {
+                currentTime: currentTime(),
+                timestamp: Date.now(),
+              })
             })
           }
         })
