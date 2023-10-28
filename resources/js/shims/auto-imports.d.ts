@@ -6,6 +6,9 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
+  const IS_ANDROID: typeof import('../utils/device')['IS_ANDROID']
+  const IS_MOBILE: typeof import('../utils/device')['IS_MOBILE']
+  const IS_iOS: typeof import('../utils/device')['IS_iOS']
   const PlayerLoggerKey: typeof import('../composables/usePlayerLogger')['PlayerLoggerKey']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']

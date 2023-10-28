@@ -131,9 +131,9 @@ function ready() {
     if (!player) return
 
     wrapPromise(player.play()).then(() => {
-      setTimeout(() => {
+      if (IS_MOBILE) {
         player?.removeClass('vjs-waiting')
-      }, 10)
+      }
 
       resolve?.()
     }).catch(() => {
