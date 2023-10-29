@@ -65,7 +65,11 @@ const startStatus = {
 }
 
 let player: Player | undefined
-let isEnded = false
+
+const playerIsCreated = ref(false)
+const playerIsEnded = ref(false)
+
+const { canAutoPlay, isDetected: canAutoPlayIsDetected } = useCanAutoPlay()
 
 const { log } = usePlayerLog()
 
@@ -214,7 +218,7 @@ function pause(handler?: () => void) {
 function seeked() {
   if (!player) return
   if (!isClickedBigButton()) return
-  if (isEnded) return
+  if (playerIsEnded.value) return
 
   log('[TriggerSeeked]')
 
@@ -227,14 +231,51 @@ function seeked() {
 
 function end() {
   if (!player) return
-  if (isEnded) return
+  if (playerIsEnded.value) return
 
-  isEnded = true
+  playerIsEnded.value = true
 
   log('[TriggerEnd]')
 
   emit('end')
 }
+
+// 自動播放
+watch([playerIsCreated, canAutoPlayIsDetected], () => {
+  if (!player) return
+  if (!(playerIsCreated.value && canAutoPlayIsDetected.value)) return
+  if (!canAutoPlay.value) {
+    log('[AutoPlay]', false)
+
+    player?.removeClass('vjs-waiting')
+
+    return
+  }
+
+  log('[AutoPlay]', true)
+
+  if (props.type === PlayerType.YouTube) {
+    player.ready(() => {
+      ready()
+    })
+  }
+
+  if (props.type === PlayerType.Video ||
+      props.type === PlayerType.Audio
+  ) {
+    player.on('canplay', () => {
+      // @ts-expect-error
+      player.handleTechWaiting_()
+    })
+
+    player.on('canplaythrough', () => {
+      // @ts-expect-error
+      player.handleTechWaiting_()
+
+      ready()
+    })
+  }
+})
 
 onMounted(() => {
   Object.assign(videojsZhTW, {
@@ -273,32 +314,13 @@ onMounted(() => {
 
   player = videojs(videoRef.value, videojsOptions)
 
+  playerIsCreated.value = true
+
   // @ts-expect-error
   player.handleTechWaiting_()
 
   if (!props.operate) {
     player.addClass('vjs-play-only')
-  }
-
-  player.ready(() => {
-    if (props.type === PlayerType.YouTube)
-      ready()
-  })
-
-  if (props.type === PlayerType.Video ||
-      props.type === PlayerType.Audio
-  ) {
-    player.on('canplay', () => {
-      // @ts-expect-error
-      player.handleTechWaiting_()
-    })
-
-    player.on('canplaythrough', () => {
-      // @ts-expect-error
-      player.handleTechWaiting_()
-
-      ready()
-    })
   }
 
   player.on('ended', end)
@@ -549,7 +571,7 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
 
   silencePromise(player.play())
 
-  isEnded = false
+  playerIsEnded.value = false
 }
 
 // 監聽暫停事件
@@ -629,7 +651,7 @@ onBeforeUnmount(async () => {
 defineExpose({
   paused,
   currentTime,
-  canStartPlay,
+  isClickedBigButton,
   onPlayerPlayed,
   onPlayerPaused,
   onPlayerSeeked,

@@ -388,7 +388,7 @@ function onMediaDeleting(media: Media) {
 
 function onMemberJoining(user: RoomChannelMember) {
   if (!player.value) return
-  if (!player.value.canStartPlay()) return
+  if (!player.value.isClickedBigButton()) return
   channel?.whisper('currenttime', {
     user,
     paused: player.value.paused(),
