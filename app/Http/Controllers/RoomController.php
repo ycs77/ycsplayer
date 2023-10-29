@@ -95,6 +95,13 @@ class RoomController extends Controller
         ])->title($room->name);
     }
 
+    public function timestamp(Room $room)
+    {
+        $this->authorize('view', $room);
+
+        return (int) floor(microtime(true) * 1000);
+    }
+
     public function update(Request $request, Room $room)
     {
         $this->authorize('settings', $room);

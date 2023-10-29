@@ -393,7 +393,7 @@ function onMemberJoining(user: RoomChannelMember) {
     user,
     paused: player.value.paused(),
     currentTime: player.value.currentTime(),
-    timestamp: Date.now(),
+    timestamp: player.value.toServerTimestamp(Date.now()),
   })
 }
 
@@ -517,7 +517,7 @@ function onClientUpdateCurrentTime({ user, paused, currentTime, timestamp }: {
   // 清除過期的數值
   currentTimeLock.prune()
 
-  player.value?.onPlayerTimeUpdate({ paused, currentTime, timestamp })
+  player.value?.onOtherPlayerTimeUpdate({ paused, currentTime, timestamp })
 }
 
 function onClientChatMessageSent(message: RoomChatMessage) {
@@ -554,9 +554,9 @@ watch(player, (player, _, onInvalidate) => {
   channel.listen('RoomMediaConverted', onRoomMediaConverted)
   channel.listen('RoomMediaRemoved', onRoomMediaRemoved)
   channel.listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)
-  channel.listenForWhisper('play', safeListenFn(player?.onPlayerPlayed))
-  channel.listenForWhisper('pause', safeListenFn(player?.onPlayerPaused))
-  channel.listenForWhisper('seek', safeListenFn(player?.onPlayerSeeked))
+  channel.listenForWhisper('play', safeListenFn(player?.onOtherPlayerPlayed))
+  channel.listenForWhisper('pause', safeListenFn(player?.onOtherPlayerPaused))
+  channel.listenForWhisper('seek', safeListenFn(player?.onOtherPlayerSeeked))
   channel.listenForWhisper('currenttime', onClientUpdateCurrentTime)
   channel.listenForWhisper('chat', onClientChatMessageSent)
 

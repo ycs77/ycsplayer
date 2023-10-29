@@ -22,6 +22,8 @@ Route::middleware([
     Route::put('/rooms/{room}', [RoomController::class, 'update'])->name('rooms.update');
     Route::delete('/rooms/{room}', [RoomController::class, 'destroy'])->name('rooms.destroy');
 
+    Route::post('/rooms/{room}/timestamp', [RoomController::class, 'timestamp'])->name('rooms.timestamp');
+
     Route::post('/rooms/{room}/note', [RoomNoteController::class, 'edit'])->name('rooms.note.edit');
     Route::put('/rooms/{room}/note', [RoomNoteController::class, 'update'])->name('rooms.note.update');
     Route::delete('/rooms/{room}/note', [RoomNoteController::class, 'destroy'])->name('rooms.note.destroy');

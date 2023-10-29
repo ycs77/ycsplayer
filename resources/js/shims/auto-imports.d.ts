@@ -215,6 +215,7 @@ declare global {
   const usePermission: typeof import('@vueuse/core')['usePermission']
   const usePlayerLog: typeof import('../composables/usePlayerLogger')['usePlayerLog']
   const usePlayerLogger: typeof import('../composables/usePlayerLogger')['usePlayerLogger']
+  const usePlayerServerTimestamp: typeof import('../composables/usePlayerServerTimestamp')['usePlayerServerTimestamp']
   const usePointer: typeof import('@vueuse/core')['usePointer']
   const usePointerLock: typeof import('@vueuse/core')['usePointerLock']
   const usePointerSwipe: typeof import('@vueuse/core')['usePointerSwipe']

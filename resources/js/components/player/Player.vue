@@ -66,8 +66,16 @@ const startStatus = {
 
 let player: Player | undefined
 
-const playerIsCreated = ref(false)
-const playerIsEnded = ref(false)
+const playerCreated = ref(false)
+const playerEnded = ref(false)
+const playerReady = ref(false)
+
+const {
+  timestampFetched,
+  offsetTimestamp,
+  toServerTimestamp,
+  toClientTimestamp,
+} = usePlayerServerTimestamp(props.roomId)
 
 const { canAutoPlay, isDetected: canAutoPlayIsDetected } = useCanAutoPlay()
 
@@ -92,8 +100,9 @@ function currentTime() {
 function adjustmentCurrentTime(timestamp: number, currentTime: number) {
   const now = Date.now()
   const seconds = (now - timestamp) / 1000
-  log('[adjustmentCurrentTime] now', now)
-  return Math.round((currentTime + seconds) * 100) / 100
+  const newCurrentTime = Math.round((currentTime + seconds) * 100) / 100
+  log('[adjustmentCurrentTime]', { now, timestamp, seconds, currentTime, newCurrentTime })
+  return newCurrentTime
 }
 
 function syncPlayStatusOnStart(callback?: () => void) {
@@ -135,12 +144,21 @@ function ready() {
     if (!player) return
 
     wrapPromise(player.play()).then(() => {
+      log('[StartPlay] retrigger play successfully')
+
       if (IS_MOBILE) {
         player?.removeClass('vjs-waiting')
+
+        setTimeout(() => {
+          if (player?.paused())
+            player?.removeClass('vjs-waiting')
+        }, 500)
       }
 
       resolve?.()
     }).catch(() => {
+      log('[StartPlay] retrigger play error')
+
       player?.removeClass('vjs-waiting')
     })
   }
@@ -184,13 +202,14 @@ function ready() {
             reTriggerPlay(() => {
               emit('play', {
                 currentTime: currentTime(),
-                timestamp: Date.now(),
+                timestamp: toServerTimestamp(Date.now()),
               })
             })
           }
         })
         .catch(() => {
           log('[StartPlay] play error')
+
           player?.removeClass('vjs-waiting')
         })
     }, 300)
@@ -218,12 +237,12 @@ function pause(handler?: () => void) {
 function seeked() {
   if (!player) return
   if (!isClickedBigButton()) return
-  if (playerIsEnded.value) return
+  if (playerEnded.value) return
 
   const status = {
     paused: player.paused(),
     currentTime: currentTime(),
-    timestamp: Date.now(),
+    timestamp: toServerTimestamp(Date.now()),
   } satisfies PlayerSeekedEvent
 
   log('[TriggerSeeked]', status)
@@ -233,9 +252,9 @@ function seeked() {
 
 function end() {
   if (!player) return
-  if (playerIsEnded.value) return
+  if (playerEnded.value) return
 
-  playerIsEnded.value = true
+  playerEnded.value = true
 
   log('[TriggerEnd]')
 
@@ -243,9 +262,12 @@ function end() {
 }
 
 // 自動播放
-watch([playerIsCreated, canAutoPlayIsDetected], () => {
+watch([playerReady, canAutoPlayIsDetected, timestampFetched], () => {
   if (!player) return
-  if (!(playerIsCreated.value && canAutoPlayIsDetected.value)) return
+  if (!(playerReady.value && canAutoPlayIsDetected.value && timestampFetched.value)) return
+
+  log('[ServerTimestamp] offset ms', offsetTimestamp.value)
+
   if (!canAutoPlay.value) {
     log('[AutoPlay]', false)
 
@@ -256,27 +278,7 @@ watch([playerIsCreated, canAutoPlayIsDetected], () => {
 
   log('[AutoPlay]', true)
 
-  if (props.type === PlayerType.YouTube) {
-    player.ready(() => {
-      ready()
-    })
-  }
-
-  if (props.type === PlayerType.Video ||
-      props.type === PlayerType.Audio
-  ) {
-    player.on('canplay', () => {
-      // @ts-expect-error
-      player.handleTechWaiting_()
-    })
-
-    player.on('canplaythrough', () => {
-      // @ts-expect-error
-      player.handleTechWaiting_()
-
-      ready()
-    })
-  }
+  ready()
 })
 
 onMounted(() => {
@@ -316,13 +318,35 @@ onMounted(() => {
 
   player = videojs(videoRef.value, videojsOptions)
 
-  playerIsCreated.value = true
+  playerCreated.value = true
 
   // @ts-expect-error
   player.handleTechWaiting_()
 
   if (!props.operate) {
     player.addClass('vjs-play-only')
+  }
+
+  if (props.type === PlayerType.YouTube) {
+    player.ready(() => {
+      playerReady.value = true
+    })
+  }
+
+  if (props.type === PlayerType.Video ||
+      props.type === PlayerType.Audio
+  ) {
+    player.on('canplay', () => {
+      // @ts-expect-error
+      player.handleTechWaiting_()
+    })
+
+    player.on('canplaythrough', () => {
+      // @ts-expect-error
+      player.handleTechWaiting_()
+
+      playerReady.value = true
+    })
   }
 
   player.on('ended', end)
@@ -353,10 +377,10 @@ onMounted(() => {
                 this.player_.tech(true).focus()
               }
 
-              if (!startStatus.otherPlayerIsStarted || props.forcePlayFromStart) {
+              if (!startStatus.otherPlayerIsStarted) {
                 emit('play', {
                   currentTime: currentTime(),
-                  timestamp: Date.now(),
+                  timestamp: toServerTimestamp(Date.now()),
                 })
               }
             })
@@ -387,10 +411,10 @@ onMounted(() => {
 
         const playCallback = () => {
           syncPlayStatusOnStart(() => {
-            if (!startStatus.otherPlayerIsStarted || props.forcePlayFromStart) {
+            if (!startStatus.otherPlayerIsStarted) {
               emit('play', {
                 currentTime: currentTime(),
-                timestamp: Date.now(),
+                timestamp: toServerTimestamp(Date.now()),
               })
             }
           })
@@ -443,7 +467,7 @@ onMounted(() => {
           this.player_.play().then(() => {
             const status = {
               currentTime: currentTime(),
-              timestamp: Date.now(),
+              timestamp: toServerTimestamp(Date.now()),
             } satisfies PlayerPlayedEvent
 
             log('[YcsPlayToggle] play status', status)
@@ -459,7 +483,7 @@ onMounted(() => {
 
           emit('pause', {
             currentTime: currentTime(),
-            timestamp: Date.now(),
+            timestamp: toServerTimestamp(Date.now()),
           })
         })
       }
@@ -553,14 +577,14 @@ onMounted(() => {
 })
 
 // 監聽播放事件
-function onPlayerPlayed(e: PlayerPlayedEvent) {
+function onOtherPlayerPlayed(e: PlayerPlayedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
     log('[PlayerPlayed] unclicked start button')
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = false
     startStatus.currentTime = e.currentTime
-    startStatus.timestamp = e.timestamp
+    startStatus.timestamp = toClientTimestamp(e.timestamp)
     if (!props.operate) {
       ready()
     }
@@ -577,17 +601,17 @@ function onPlayerPlayed(e: PlayerPlayedEvent) {
 
   silencePromise(player.play())
 
-  playerIsEnded.value = false
+  playerEnded.value = false
 }
 
 // 監聽暫停事件
-function onPlayerPaused(e: PlayerPausedEvent) {
+function onOtherPlayerPaused(e: PlayerPausedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = true
     startStatus.currentTime = e.currentTime
-    startStatus.timestamp = e.timestamp
+    startStatus.timestamp = toClientTimestamp(e.timestamp)
     log('[PlayerPaused] unclicked start button', startStatus)
     return
   }
@@ -598,20 +622,22 @@ function onPlayerPaused(e: PlayerPausedEvent) {
 }
 
 // 監聽拖曳進度條事件
-function onPlayerSeeked(e: PlayerSeekedEvent) {
+function onOtherPlayerSeeked(e: PlayerSeekedEvent) {
   if (!player) return
   if (!isClickedBigButton()) {
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = e.paused
     startStatus.currentTime = e.currentTime
-    startStatus.timestamp = e.timestamp
+    startStatus.timestamp = toClientTimestamp(e.timestamp)
     log('[PlayerSeeked] unclicked start button', startStatus)
     return
   }
 
-  log('[PlayerSeeked] currentTime', e.currentTime)
+  const newCurrentTime = e.currentTime
 
-  player.currentTime(e.currentTime)
+  log('[PlayerSeeked] currentTime', newCurrentTime)
+
+  player.currentTime(newCurrentTime)
 
   // 如果是[播放]但當前使用者是[暫停]，就要執行[播放]
   if (!e.paused && player.paused()) {
@@ -625,7 +651,7 @@ function onPlayerSeeked(e: PlayerSeekedEvent) {
 }
 
 // 監聽更新播放進度事件
-function onPlayerTimeUpdate(e: PlayerTimeUpdateEvent) {
+function onOtherPlayerTimeUpdate(e: PlayerTimeUpdateEvent) {
   if (!player) return
 
   log('[PlayerTimeUpdate] currentTime', e.currentTime)
@@ -637,7 +663,7 @@ function onPlayerTimeUpdate(e: PlayerTimeUpdateEvent) {
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = e.paused
     startStatus.currentTime = e.currentTime
-    startStatus.timestamp = e.timestamp
+    startStatus.timestamp = toClientTimestamp(e.timestamp)
     log('[PlayerTimeUpdate] unclicked start button', startStatus)
   }
 }
@@ -658,9 +684,11 @@ defineExpose({
   paused,
   currentTime,
   isClickedBigButton,
-  onPlayerPlayed,
-  onPlayerPaused,
-  onPlayerSeeked,
-  onPlayerTimeUpdate,
+  toServerTimestamp,
+  toClientTimestamp,
+  onOtherPlayerPlayed,
+  onOtherPlayerPaused,
+  onOtherPlayerSeeked,
+  onOtherPlayerTimeUpdate,
 })
 </script>
