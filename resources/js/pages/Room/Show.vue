@@ -484,8 +484,27 @@ function onOnlineMembersUpdated() {
 }
 
 // 監聽當更新當前播放進度的事件
-const currentTimeLock = new Set<number>()
-const expiredTimestamp = Date.now() - 10 * 1000 // 10秒前的就算過期
+class TimeLock {
+  threshold = 500
+  expiredTimestamp: number = Date.now()
+  constructor(protected items: number[] = []) {
+    //
+  }
+
+  has(timestamp: number) {
+    return this.items.some(_timestamp =>
+      _timestamp >= timestamp - this.threshold &&
+      _timestamp <= timestamp + this.threshold
+    )
+  }
+
+  prune() {
+    this.items = this.items.filter(_timestamp => _timestamp <= this.expiredTimestamp)
+  }
+}
+const currentTimeLock = new TimeLock()
+currentTimeLock.expiredTimestamp = Date.now() - 10 * 1000 // 10秒前的就算過期
+
 function onClientUpdateCurrentTime({ user, paused, currentTime, timestamp }: {
   user: RoomChannelMember
   paused: boolean
@@ -496,10 +515,7 @@ function onClientUpdateCurrentTime({ user, paused, currentTime, timestamp }: {
   if (currentTimeLock.has(timestamp)) return
 
   // 清除過期的數值
-  currentTimeLock.forEach(_timestamp => {
-    if (_timestamp <= expiredTimestamp)
-      currentTimeLock.delete(_timestamp)
-  })
+  currentTimeLock.prune()
 
   player.value?.onPlayerTimeUpdate({ paused, currentTime, timestamp })
 }
