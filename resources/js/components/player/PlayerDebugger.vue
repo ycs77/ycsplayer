@@ -32,6 +32,32 @@
         </div>
       </div>
 
+      <div
+        v-show="activeTab === 'Time'"
+        class="h-[100px] p-1 overflow-y-auto overscroll-y-contain sm:h-[150px]"
+      >
+        <div>Now date: {{ date }}</div>
+        <div>Timestamp: {{ timestamp }}</div>
+        <div class="mt-1">
+          <button
+            v-if="isNowUpdating"
+            type="button"
+            class="btn btn-primary px-3 py-1 text-xs"
+            @click="stopUpdateNow"
+          >
+            暫停
+          </button>
+          <button
+            v-else
+            type="button"
+            class="btn btn-primary px-3 py-1 text-xs"
+            @click="startUpdateNow"
+          >
+            繼續
+          </button>
+        </div>
+      </div>
+
       <button type="button" class="absolute top-0 right-0 p-1" @click="show = false">
         [X]
       </button>
@@ -46,17 +72,41 @@
 <script setup lang="ts">
 const show = ref(false)
 
-const tabs = ['Client logs']
+const tabs = ['Client logs', 'Time']
 const activeTab = ref(tabs[0])
 
 const clientLogsRef = ref() as Ref<HTMLDivElement>
 
 const { logs: clientLogs } = usePlayerLog()!
 
-watch(show, show => {
+const date = ref(new Date().toLocaleString())
+const timestamp = ref(Date.now())
+const isNowUpdating = ref(true)
+let updateNowTimer: ReturnType<typeof setInterval> | undefined
+
+function updateNow() {
+  date.value = new Date().toLocaleString()
+  timestamp.value = Date.now()
+}
+function startUpdateNow() {
+  updateNowTimer = setInterval(updateNow, 1)
+  isNowUpdating.value = true
+}
+function stopUpdateNow() {
+  clearInterval(updateNowTimer)
+  updateNowTimer = undefined
+  isNowUpdating.value = false
+}
+
+watch(show, (show, _, onCleanup) => {
   if (show) {
     nextTick(() => {
       scrollToBottom(clientLogsRef)
+    })
+
+    startUpdateNow()
+    onCleanup(() => {
+      stopUpdateNow()
     })
   }
 })
