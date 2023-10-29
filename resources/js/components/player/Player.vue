@@ -220,13 +220,15 @@ function seeked() {
   if (!isClickedBigButton()) return
   if (playerIsEnded.value) return
 
-  log('[TriggerSeeked]')
-
-  emit('seek', {
+  const status = {
     paused: player.paused(),
     currentTime: currentTime(),
     timestamp: Date.now(),
-  })
+  } satisfies PlayerSeekedEvent
+
+  log('[TriggerSeeked]', status)
+
+  emit('seek', status)
 }
 
 function end() {
@@ -439,10 +441,14 @@ onMounted(() => {
 
         play(() => {
           this.player_.play().then(() => {
-            emit('play', {
+            const status = {
               currentTime: currentTime(),
               timestamp: Date.now(),
-            })
+            } satisfies PlayerPlayedEvent
+
+            log('[YcsPlayToggle] play status', status)
+
+            emit('play', status)
           }, () => {})
         })
       } else {
