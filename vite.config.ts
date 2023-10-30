@@ -9,7 +9,6 @@ import { HeadlessUiResolver } from 'unplugin-vue-components/resolvers'
 import AutoImport from 'unplugin-auto-import/vite'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver'
-import DefineOptions from 'unplugin-vue-define-options/vite'
 import { ViteS3 } from '@froxz/vite-plugin-s3'
 
 export default defineConfig(({ mode }) => {
@@ -73,7 +72,6 @@ export default defineConfig(({ mode }) => {
         dts: 'resources/js/shims/auto-imports.d.ts',
       }),
       Icons(),
-      DefineOptions(),
       ViteS3(process.env.VITE_S3_UPLOAD_VITE_ASSETS_ENABLED === 'true', {
         basePath: '/build',
         clientConfig: {
