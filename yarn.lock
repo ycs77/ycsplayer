@@ -5129,7 +5129,7 @@ validate-npm-package-license@^3.0.1:
     videojs-font "4.1.0"
     videojs-vtt.js "0.15.4"
 
-video.js@^8.5.0:
+video.js@8.5.2:
   version "8.5.2"
   resolved "https://registry.yarnpkg.com/video.js/-/video.js-8.5.2.tgz#11cebb3934a020e0e4ab04c4d454c8c3f35ff8b8"
   integrity sha512-6/uNXQV3xSaKLpaPf/bVvr7omd+82sKUp0RMBgIt4PxHIe28GtX+O+GcNfI2fuwBvcDRDqk5Ei5AG9bJJOpulA==
