@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\ChunkUpload\UploadHandler;
+use App\Events\RoomMediaUploaded;
 use App\Jobs\AddRoomMediaFile;
-use App\Models\QueueRoomFile;
 use App\Models\Room;
 use Closure;
 use Illuminate\Http\Request;
@@ -62,7 +62,7 @@ class RoomUploadMediaController extends Controller
 
             $validator->validate();
 
-            $queueFile = QueueRoomFile::create([
+            $queueFile = $room->queueFiles()->create([
                 'name' => $fileName,
                 'path' => $file->store('medias', ['disk' => 'local']),
                 'disk' => 'local',
@@ -75,11 +75,13 @@ class RoomUploadMediaController extends Controller
 
             AddRoomMediaFile::dispatch($room, $queueFile);
 
-            if (config('queue.default') !== 'sync') {
-                return ['success' => '檔案上傳成功，等待處理媒體檔案...'];
+            RoomMediaUploaded::broadcast($room->hash_id);
+
+            if (config('queue.default') === 'sync') {
+                return ['success' => null];
             }
 
-            return ['success' => null];
+            return ['success' => '檔案上傳成功，等待處理媒體檔案...'];
         }
 
         /** @var \App\ChunkUpload\UploadHandler */

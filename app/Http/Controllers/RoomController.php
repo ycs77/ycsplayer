@@ -80,6 +80,9 @@ class RoomController extends Controller
             'medias' => fn () => $user->can('operatePlaylistItem', $room) || $user->can('uploadMedias', $room)
                 ? MediaPresenter::collection($room->getMedia())
                 : [],
+            'loadingMedias' => fn () => $user->can('uploadMedias', $room)
+                ? MediaPresenter::collection($room->queueFiles->map->loadingMedia())
+                : [],
             'members' => fn () => RoomMemberPresenter::collection($room->membersForPresent()),
             'can' => fn () => [
                 'operatePlayer' => $user->can('operatePlayer', $room),

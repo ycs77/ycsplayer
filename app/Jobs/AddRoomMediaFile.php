@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Events\RoomMediaConverted;
-use App\Events\RoomMediaCreated;
 use App\Models\QueueRoomFile;
 use App\Models\Room;
 use Illuminate\Bus\Queueable;
@@ -36,14 +35,10 @@ class AddRoomMediaFile implements ShouldQueue
         $disk = Storage::disk($this->queueFile->disk);
         $path = $disk->path($this->queueFile->path);
 
-        /** @var \App\MediaLibrary\FileAdder */
         $fileAddr = $this->room->addMedia($path);
         $fileAddr->usingName($this->queueFile->name);
         $fileAddr->usingFileName(basename($this->queueFile->path));
         $fileAddr->preservingOriginal();
-        $fileAddr->onModelCreated(function () {
-            RoomMediaCreated::broadcast($this->room->hash_id);
-        });
 
         /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media */
         $media = $fileAddr->toMediaCollection();

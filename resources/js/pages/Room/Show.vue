@@ -93,7 +93,7 @@
           <RoomMedias
             v-else-if="tab === 'medias'"
             :room="room"
-            :medias="medias"
+            :medias="[...medias, ...loadingMedias]"
             :csrf-token="csrfToken"
             class="overflow-y-auto min-h-0"
             @uploaded="onMediaUpload"
@@ -200,6 +200,7 @@ const props = defineProps<{
     name: string
   } | null
   medias: Media[]
+  loadingMedias: Media[]
   members: RoomMember[]
   can: {
     operatePlayer: boolean
@@ -370,13 +371,9 @@ function MarkAllChatMessagesAsRead() {
 }
 
 function onMediaUpload(message: string | null) {
-  router.reload({
-    only: [...globalOnly, 'csrfToken', 'medias'],
-    onSuccess() {
-      if (message)
-        toast.success(message)
-    },
-  })
+  if (message) {
+    toast.success(message)
+  }
 }
 
 function onMediaDeleting(media: Media) {
@@ -455,16 +452,16 @@ function onNoteCanceled() {
 }
 
 // 監聽當檔案上傳完成檔時的事件
-function onRoomMediaCreated() {
+function onRoomMediaUploaded() {
   router.reload({
-    only: [...globalOnly, 'medias'],
+    only: [...globalOnly, 'csrfToken', 'medias', 'loadingMedias'],
   })
 }
 
 // 監聽當檔案上傳並轉換完成時的事件
 function onRoomMediaConverted(e: RoomMediaConvertedEvent) {
   router.reload({
-    only: [...globalOnly, 'medias'],
+    only: [...globalOnly, 'medias', 'loadingMedias'],
     onSuccess() {
       toast.success(e.message)
     },
@@ -474,7 +471,7 @@ function onRoomMediaConverted(e: RoomMediaConvertedEvent) {
 // 監聽當刪除檔案時的事件
 function onRoomMediaRemoved() {
   router.reload({
-    only: [...globalOnly, 'medias'],
+    only: [...globalOnly, 'currentPlaying', 'playlistItems', 'medias'],
   })
 }
 
@@ -552,7 +549,7 @@ watch(player, (player, _, onInvalidate) => {
   channel.listen('RoomNoteUpdating', onNoteUpdating)
   channel.listen('RoomNoteUpdated', onNoteUpdated)
   channel.listen('RoomNoteCanceled', onNoteCanceled)
-  channel.listen('RoomMediaCreated', onRoomMediaCreated)
+  channel.listen('RoomMediaUploaded', onRoomMediaUploaded)
   channel.listen('RoomMediaConverted', onRoomMediaConverted)
   channel.listen('RoomMediaRemoved', onRoomMediaRemoved)
   channel.listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)

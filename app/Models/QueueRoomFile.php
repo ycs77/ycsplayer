@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property string $name
@@ -19,10 +21,12 @@ class QueueRoomFile extends Model
         'path',
         'disk',
         'expired_at',
+        'room_id',
     ];
 
     protected $casts = [
         'expired_at' => 'datetime',
+        'room_id' => 'integer',
     ];
 
     protected static function booted(): void
@@ -34,6 +38,11 @@ class QueueRoomFile extends Model
         });
     }
 
+    public function room(): BelongsTo
+    {
+        return $this->belongsTo(Room::class);
+    }
+
     public function expired()
     {
         return $this->expired_at->isPast();
@@ -42,5 +51,18 @@ class QueueRoomFile extends Model
     public function scopeExpired(Builder $query)
     {
         $query->where('expired_at', '<', now());
+    }
+
+    public function loadingMedia(): Media
+    {
+        $mediaClass = config('media-library.media_model');
+        /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media $loadingMedia */
+        $loadingMedia = new $mediaClass();
+
+        $loadingMedia->name = $this->name;
+        $loadingMedia->file_name = basename($this->path);
+        $loadingMedia->converting = true;
+
+        return $loadingMedia;
     }
 }

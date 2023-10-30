@@ -124,6 +124,11 @@ class Room extends Model implements HasMedia
         return $this->hasMany(PlaylistItem::class);
     }
 
+    public function queueFiles(): HasMany
+    {
+        return $this->hasMany(QueueRoomFile::class);
+    }
+
     public function onPlayerPlayed(PlaylistItem $currentItem): void
     {
         if ($this->auto_remove) {
