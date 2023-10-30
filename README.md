@@ -88,7 +88,7 @@ cp .env.example .env
 
 必須要設定的有 DB、Mail、Pusher，`YCSPLAYER` 開頭的變數可以參考 [ycsPlayer 相關環境變數](#ycsplayer-相關環境變數) 來設定。
 
-broadcast driver 一定要設 `pusher`，關於 Pusher 可以[參考 設定 Pusher](#設定-pusher)。
+broadcast driver 一定要設 `pusher`，關於 Pusher 可以參考[設定 Pusher](#設定-pusher)。
 
 還有轉影片的部分有依賴到 FFMpeg，要確保執行環境裡有存在 (執行 `ffmpeg -version` 確認)，要安裝可以參考[安裝 FFMpeg](#安裝-ffmpeg)。
 
@@ -170,7 +170,7 @@ cp .env.example .env
 
 必須要設定的有 DB、Mail、Pusher，如果有用 HTTPS 記得 `APP_URL` 網址要加上，`YCSPLAYER` 開頭的變數可以參考 [ycsPlayer 相關環境變數](#ycsplayer-相關環境變數) 來設定。
 
-broadcast driver 一定要設 `pusher`，關於 Pusher 可以[參考 設定 Pusher](#設定-pusher)。
+broadcast driver 一定要設 `pusher`，關於 Pusher 可以參考[設定 Pusher](#設定-pusher)。
 
 還有轉影片的部分有依賴到 FFMpeg，要確保執行環境裡有安裝過，要安裝可以參考[安裝 FFMpeg](#安裝-ffmpeg)。
 
