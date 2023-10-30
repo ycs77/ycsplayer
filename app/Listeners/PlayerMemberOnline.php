@@ -6,7 +6,7 @@ use App\Broadcasting\Events\PusherMemberAdded;
 use App\Events\RoomOnlineMembersUpdated;
 use App\Models\Room;
 use App\Models\User;
-use App\Room\RoomOnlineMembersRepository;
+use App\Room\RoomOnlineMembersCacheRepository;
 
 class PlayerMemberOnline
 {
@@ -14,7 +14,7 @@ class PlayerMemberOnline
      * Create the event listener.
      */
     public function __construct(
-        protected RoomOnlineMembersRepository $onlineMembers,
+        protected RoomOnlineMembersCacheRepository $onlineMembers,
     ) {
         //
     }

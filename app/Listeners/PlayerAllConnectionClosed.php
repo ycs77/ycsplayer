@@ -4,7 +4,7 @@ namespace App\Listeners;
 
 use App\Broadcasting\Events\PusherChannelVacated;
 use App\Models\Room;
-use App\Room\RoomOnlineMembersRepository;
+use App\Room\RoomOnlineMembersCacheRepository;
 
 class PlayerAllConnectionClosed
 {
@@ -12,7 +12,7 @@ class PlayerAllConnectionClosed
      * Create the event listener.
      */
     public function __construct(
-        protected RoomOnlineMembersRepository $onlineMembers,
+        protected RoomOnlineMembersCacheRepository $onlineMembers,
     ) {
         //
     }

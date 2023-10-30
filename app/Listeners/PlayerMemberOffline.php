@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Broadcasting\Events\PusherMemberRemoved;
 use App\Events\RoomOnlineMembersUpdated;
 use App\Models\Room;
-use App\Room\RoomOnlineMembersRepository;
+use App\Room\RoomOnlineMembersCacheRepository;
 use Vinkla\Hashids\Facades\Hashids;
 
 class PlayerMemberOffline
@@ -14,7 +14,7 @@ class PlayerMemberOffline
      * Create the event listener.
      */
     public function __construct(
-        protected RoomOnlineMembersRepository $onlineMembers,
+        protected RoomOnlineMembersCacheRepository $onlineMembers,
     ) {
         //
     }

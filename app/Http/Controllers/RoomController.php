@@ -10,7 +10,7 @@ use App\Presenters\MediaPresenter;
 use App\Presenters\PlaylistItemPresenter;
 use App\Presenters\RoomMemberPresenter;
 use App\Presenters\RoomPresenter;
-use App\Room\RoomNoteEditorRepository;
+use App\Room\RoomNoteEditorCacheRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
@@ -58,7 +58,7 @@ class RoomController extends Controller
         return redirect()->route('rooms.show', $room);
     }
 
-    public function show(Room $room, RoomNoteEditorRepository $noteEditor)
+    public function show(Room $room, RoomNoteEditorCacheRepository $noteEditor)
     {
         $this->authorize('view', $room);
 

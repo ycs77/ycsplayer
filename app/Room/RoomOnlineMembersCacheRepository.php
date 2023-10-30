@@ -4,7 +4,7 @@ namespace App\Room;
 
 use Illuminate\Contracts\Cache\Repository as CacheRepository;
 
-class RoomOnlineMembersRepository
+class RoomOnlineMembersCacheRepository
 {
     public function __construct(
         protected CacheRepository $cache,

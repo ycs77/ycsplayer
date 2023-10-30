@@ -7,14 +7,14 @@ use App\Events\RoomNoteUpdated;
 use App\Events\RoomNoteUpdating;
 use App\Facades\Flash;
 use App\Models\Room;
-use App\Room\RoomNoteEditorRepository;
+use App\Room\RoomNoteEditorCacheRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class RoomNoteController extends Controller
 {
     public function __construct(
-        protected RoomNoteEditorRepository $noteEditor,
+        protected RoomNoteEditorCacheRepository $noteEditor,
     ) {
         //
     }

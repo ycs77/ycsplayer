@@ -3,7 +3,7 @@
 use App\Events\RoomNoteCanceled;
 use App\Events\RoomNoteUpdated;
 use App\Events\RoomNoteUpdating;
-use App\Room\RoomNoteEditorRepository;
+use App\Room\RoomNoteEditorCacheRepository;
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Event;
@@ -25,8 +25,8 @@ test('should start editing room note', function () {
 
     $room = room('動漫觀影室');
 
-    /** @var \App\Room\RoomNoteEditorRepository */
-    $noteEditor = app(RoomNoteEditorRepository::class);
+    /** @var \App\Room\RoomNoteEditorCacheRepository */
+    $noteEditor = app(RoomNoteEditorCacheRepository::class);
 
     post("/rooms/{$room->hash_id}/note");
 
@@ -43,8 +43,8 @@ test('should update room note', function () {
 
     $room = room('動漫觀影室');
 
-    /** @var \App\Room\RoomNoteEditorRepository */
-    $noteEditor = app(RoomNoteEditorRepository::class);
+    /** @var \App\Room\RoomNoteEditorCacheRepository */
+    $noteEditor = app(RoomNoteEditorCacheRepository::class);
 
     put("/rooms/{$room->hash_id}/note", [
         'note' => '更新了記事本內容XDD',
@@ -63,8 +63,8 @@ test('should cancel editing room note', function () {
 
     $room = room('動漫觀影室');
 
-    /** @var \App\Room\RoomNoteEditorRepository */
-    $noteEditor = app(RoomNoteEditorRepository::class);
+    /** @var \App\Room\RoomNoteEditorCacheRepository */
+    $noteEditor = app(RoomNoteEditorCacheRepository::class);
 
     delete("/rooms/{$room->hash_id}/note");
 
@@ -78,8 +78,8 @@ test('should reset editing room note when user refresh page', function () {
 
     $room = room('動漫觀影室');
 
-    /** @var \App\Room\RoomNoteEditorRepository */
-    $noteEditor = app(RoomNoteEditorRepository::class);
+    /** @var \App\Room\RoomNoteEditorCacheRepository */
+    $noteEditor = app(RoomNoteEditorCacheRepository::class);
 
     $noteEditor->start(
         $room->hash_id,

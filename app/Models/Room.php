@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Enums\RoomType;
 use App\Models\Concerns\HasHashId;
-use App\Room\RoomOnlineMembersRepository;
+use App\Room\RoomOnlineMembersCacheRepository;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -148,7 +148,7 @@ class Room extends Model implements HasMedia
         return $this->members
             ->filter(fn (User $member) => $member->id !== $user->id)
             ->map(function (User $member) {
-                $member->online = app(RoomOnlineMembersRepository::class)->has($this->hash_id, $member->hash_id);
+                $member->online = app(RoomOnlineMembersCacheRepository::class)->has($this->hash_id, $member->hash_id);
 
                 return $member;
             })
