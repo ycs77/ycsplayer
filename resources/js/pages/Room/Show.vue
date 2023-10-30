@@ -487,7 +487,7 @@ function onOnlineMembersUpdated() {
 
 // 監聽當更新當前播放進度的事件
 class TimeLock {
-  threshold = 500
+  threshold = 1500
   expiredTimestamp: number = Date.now()
   constructor(protected items: number[] = []) {
     //
