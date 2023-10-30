@@ -64,8 +64,8 @@ export default defineConfig(({ mode }) => {
         ],
         imports: [
           'vue',
-          '@vueuse/core',
           {
+            '@vueuse/core': ['useClipboard', 'watchIgnorable'],
             '@inertiajs/vue3': ['router', 'useForm', 'usePage'],
           },
         ],
