@@ -44,7 +44,7 @@ class RoomNoteEditorRepository
     {
         $user = $this->get($roomId);
 
-        if ($userId === ($user['id'] ?? null)) {
+        if (is_array($user) && $userId === ($user['id'] ?? null)) {
             $this->end($roomId);
 
             if ($callback) {
