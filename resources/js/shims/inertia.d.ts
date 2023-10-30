@@ -2,9 +2,6 @@ import '@inertiajs/core'
 
 declare module '@inertiajs/core' {
   interface PageProps {
-    app: {
-      debug: boolean
-    }
     auth: {
       user: {
         id: string
