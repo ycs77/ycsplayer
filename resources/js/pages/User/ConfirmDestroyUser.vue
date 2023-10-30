@@ -15,6 +15,8 @@ defineProps<{
   email: string
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 function deleteAccount() {
   router.delete('/user')
 }

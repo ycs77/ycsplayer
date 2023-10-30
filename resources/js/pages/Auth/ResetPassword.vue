@@ -21,6 +21,8 @@ const props = defineProps<{
   token: string
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 const form = useForm({
   token: props.token,
   email: props.email,

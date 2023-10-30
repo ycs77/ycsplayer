@@ -21,6 +21,8 @@ defineProps<{
   status: string | null
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 const form = useForm({
   email: '',
 })

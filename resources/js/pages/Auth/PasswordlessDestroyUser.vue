@@ -10,4 +10,6 @@
 defineProps<{
   email: string
 }>()
+
+defineOptions({ inheritAttrs: false })
 </script>

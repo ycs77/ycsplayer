@@ -28,6 +28,8 @@ const props = defineProps<{
   status: string | null
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 const form = useForm({
   email: '',
   password: props.passwordLess ? '__skip__' : '',

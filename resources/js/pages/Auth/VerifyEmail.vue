@@ -25,6 +25,8 @@ const props = defineProps<{
   status: string | null
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 const form = useForm({})
 
 const verificationLinkSent = computed(() => props.status === 'verification-link-sent')

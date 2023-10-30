@@ -214,6 +214,8 @@ const props = defineProps<{
   }
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 useFullPage(true, {
   moreClass: [
     'max-h-full',

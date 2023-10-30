@@ -51,6 +51,8 @@ defineProps<{
   }
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 useFullPage(true, {
   baseClass: 'min-full-page',
   scroll: true,

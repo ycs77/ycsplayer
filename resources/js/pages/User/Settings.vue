@@ -74,6 +74,8 @@ const props = defineProps<{
   }
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 const showCropImageModal = ref(false)
 
 const form = useForm({

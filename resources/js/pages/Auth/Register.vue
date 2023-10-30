@@ -24,6 +24,8 @@ defineProps<{
   passwordLess: boolean
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 const form = useForm({
   name: '',
   email: '',

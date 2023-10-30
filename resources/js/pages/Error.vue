@@ -22,5 +22,8 @@ defineProps<{
   message: string
 }>()
 
-defineOptions({ layout: false })
+defineOptions({
+  layout: false,
+  inheritAttrs: false,
+})
 </script>

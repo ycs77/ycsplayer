@@ -23,6 +23,8 @@ const props = defineProps<{
   seconds: number
 }>()
 
+defineOptions({ inheritAttrs: false })
+
 const form = useForm({
   email: props.email,
 })
