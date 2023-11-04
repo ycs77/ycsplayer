@@ -3,10 +3,14 @@
 <p align="center">
 <strong>
 線上影音點播包廂<br>
-像卡拉 OK 點歌機一樣選影片或點歌~🎵<br>
-跟遠端的朋友們一起同步觀賞~✨
+跟遠端的朋友們一起同步觀賞影片或聽歌~✨
 </strong>
 </p>
+<p align="center">
+<a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="Software License"></a>
+<a href="https://github.com/ycs77/ycsplayer/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://img.shields.io/github/actions/workflow/status/ycs77/ycsplayer/ci.yml?branch=main&label=tests&style=flat-square" alt="GitHub Tests Action Status"></a>
+</p>
+<br />
 <p align="center">
 <img src="docs/screenshot-20231027.png" />
 </p>
@@ -23,7 +27,7 @@
 
 起源是看到 LINE 有群組可以一起看 YT 的功能，但不能看其他網站的，而直播之類的又會 lag，想著想還是開始自幹一個XD~
 
-目的主要是讓朋友們可以一起看影片、聽音樂等。看影片時不用侷限在其他網站，可以自己上傳影片。一起聽音樂也可以像卡拉 OK 的點歌機一樣點想聽的歌曲。
+目的主要是讓朋友們可以一起看影片、聽音樂等。看影片時不用侷限在其他網站，可以自己上傳影片和音樂，也可以直接看 YouTube 的。
 
 ## 線上 Demo
 
