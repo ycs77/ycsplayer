@@ -17,13 +17,13 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  code: number
-  message: string
-}>()
-
 defineOptions({
   layout: false,
   inheritAttrs: false,
 })
+
+defineProps<{
+  code: number
+  message: string
+}>()
 </script>

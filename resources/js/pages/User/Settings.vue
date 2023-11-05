@@ -61,6 +61,8 @@
 <script setup lang="ts">
 import userPlaceholderSrc from '@/images/user.svg'
 
+defineOptions({ inheritAttrs: false })
+
 const props = defineProps<{
   user: {
     id: string
@@ -73,8 +75,6 @@ const props = defineProps<{
     uploadAvatar: boolean
   }
 }>()
-
-defineOptions({ inheritAttrs: false })
 
 const showCropImageModal = ref(false)
 

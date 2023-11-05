@@ -18,12 +18,12 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ inheritAttrs: false })
+
 const props = defineProps<{
   email: string
   seconds: number
 }>()
-
-defineOptions({ inheritAttrs: false })
 
 const form = useForm({
   email: props.email,

@@ -60,6 +60,8 @@
 <script setup lang="ts">
 import { PlayerType } from '@/types'
 
+defineOptions({ inheritAttrs: false })
+
 const props = defineProps<{
   modelValue: PlayerType
   id?: string
@@ -71,8 +73,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: PlayerType]
 }>()
-
-defineOptions({ inheritAttrs: false })
 
 const playerTypes = [
   {

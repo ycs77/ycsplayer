@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { type PlaylistItem } from '@/types'
+import type { PlaylistItem } from '@/types'
 
 const props = withDefaults(defineProps<{
   currentPlaying: PlaylistItem | null

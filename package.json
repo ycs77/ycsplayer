@@ -1,6 +1,6 @@
 {
-  "private": true,
   "type": "module",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -42,10 +42,10 @@
     "@types/node": "^18.0.0",
     "@types/youtube": "^0.0.47",
     "@vitejs/plugin-vue": "^4.2.0",
-    "@ycs77/eslint-config": "^0.1.4",
+    "@ycs77/eslint-config": "^1.0.2",
     "autoprefixer": "^10.4.15",
     "axios": "^1.2.0",
-    "eslint": "^8.48.0",
+    "eslint": "^8.52.0",
     "laravel-vite-plugin": "^0.7.5",
     "patch-package": "^8.0.0",
     "postcss": "^8.4.31",

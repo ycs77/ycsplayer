@@ -72,6 +72,8 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ inheritAttrs: false })
+
 withDefaults(defineProps<{
   id?: string
   defaultImage?: string | null
@@ -99,8 +101,6 @@ const emit = defineEmits<{
   remove: []
 }>()
 
-defineOptions({ inheritAttrs: false })
-
 const modelFile = defineModel<File | null>({ required: true })
 const fileEl = ref<HTMLInputElement>(null!)
 const previewImageSrc = ref<string | null>(null)
@@ -111,11 +111,11 @@ watch(modelFile, modelFile => {
   }
 })
 
-const selectFile = () => {
+function selectFile() {
   fileEl.value.click()
 }
 
-const onChangeFile = () => {
+function onChangeFile() {
   const files = fileEl.value.files
   const file = files?.[0]
 
@@ -133,7 +133,7 @@ const onChangeFile = () => {
   }
 }
 
-const removeSelectedFile = () => {
+function removeSelectedFile() {
   modelFile.value = null
 }
 </script>

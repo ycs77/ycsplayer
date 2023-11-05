@@ -189,6 +189,8 @@ import Playlist from '@/components/player/Playlist.vue'
 import type { Media, PlayerPausedEvent, PlayerPlayedEvent, PlayerSeekedEvent, PlaylistItem, PlaylistItemForm, Room, RoomChannelMember, RoomChatMessage, RoomMediaConvertedEvent, RoomMember } from '@/types'
 import { PlayerTrigger, PlayerType, RoomType } from '@/types'
 
+defineOptions({ inheritAttrs: false })
+
 const props = defineProps<{
   room: Required<Room>
   csrfToken: string
@@ -214,8 +216,6 @@ const props = defineProps<{
     delete: boolean
   }
 }>()
-
-defineOptions({ inheritAttrs: false })
 
 useFullPage(true, {
   moreClass: [

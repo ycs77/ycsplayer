@@ -19,6 +19,8 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ inheritAttrs: false })
+
 const props = withDefaults(defineProps<{
   id?: string
   type?: string
@@ -32,8 +34,6 @@ const props = withDefaults(defineProps<{
   type: 'text',
   horizontal: false,
 })
-
-defineOptions({ inheritAttrs: false })
 
 const modelValue = defineModel<string | number>()
 

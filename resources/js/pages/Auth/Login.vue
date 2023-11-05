@@ -22,13 +22,13 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ inheritAttrs: false })
+
 const props = defineProps<{
   mail: boolean
   passwordLess: boolean
   status: string | null
 }>()
-
-defineOptions({ inheritAttrs: false })
 
 const form = useForm({
   email: '',

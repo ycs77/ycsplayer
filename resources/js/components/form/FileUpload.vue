@@ -32,6 +32,8 @@
 <script setup lang="ts">
 import Resumable from 'resumablejs'
 
+defineOptions({ inheritAttrs: false })
+
 const props = withDefaults(defineProps<{
   target: string
   csrfToken: string
@@ -50,8 +52,6 @@ const emit = defineEmits<{
   success: [message: string | null]
   error: [message: string]
 }>()
-
-defineOptions({ inheritAttrs: false })
 
 const browseFilesBtnRef = ref(null!) as Ref<HTMLInputElement>
 const progress = ref(false)
@@ -73,7 +73,7 @@ onMounted(() => {
 
   resumable.assignBrowse(browseFilesBtnRef.value, false)
 
-  resumable.on('fileAdded', file => {
+  resumable.on('fileAdded', _file => {
     progress.value = true
     progressPer.value = 0
 

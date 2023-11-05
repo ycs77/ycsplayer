@@ -55,6 +55,8 @@
 <script setup lang="ts">
 import { RoomType } from '@/types'
 
+defineOptions({ inheritAttrs: false })
+
 const props = defineProps<{
   modelValue: RoomType
   id?: string
@@ -66,8 +68,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: RoomType]
 }>()
-
-defineOptions({ inheritAttrs: false })
 
 const roomTypes = [
   {

@@ -45,6 +45,8 @@
 <script setup lang="ts">
 import { VueFinalModal } from 'vue-final-modal'
 
+defineOptions({ inheritAttrs: false })
+
 withDefaults(defineProps<{
   title?: string
   maxWidthClass?: string
@@ -57,6 +59,4 @@ withDefaults(defineProps<{
 })
 
 const show = defineModel<boolean>({ required: true })
-
-defineOptions({ inheritAttrs: false })
 </script>

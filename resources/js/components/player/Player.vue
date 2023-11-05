@@ -354,7 +354,7 @@ onMounted(() => {
   class PosterImage extends (videojs.getComponent('PosterImage') as unknown as {
     new (player: Player, options?: any): VideojsPosterImage
   }) {
-    handleClick(event: Event) {
+    handleClick(_event: Event) {
       if (!canStartPlay()) return
 
       if (!this.player_.controls()) {
@@ -457,7 +457,7 @@ onMounted(() => {
   class PlayToggle extends (videojs.getComponent('PlayToggle') as unknown as {
     new (player: Player, options?: any): VideojsPlayToggle
   }) {
-    handleClick(event: Event) {
+    handleClick(_event: Event) {
       if (!props.operate) return
 
       if (this.player_.paused()) {
@@ -494,7 +494,6 @@ onMounted(() => {
     new (player: Player, options?: any): VideojsButton
   }) {
     constructor(player: Player, options?: any) {
-      // eslint-disable-next-line constructor-super
       super(player, options)
 
       this.setIcon('next-item')
@@ -505,7 +504,7 @@ onMounted(() => {
       return `vjs-next-control ${super.buildCSSClass()}`
     }
 
-    handleClick(event: Event) {
+    handleClick(_event: Event) {
       if (!props.operate) return
 
       emit('next')
@@ -518,7 +517,6 @@ onMounted(() => {
     onSekked_: () => void
 
     constructor(player: Player, options?: any) {
-      // eslint-disable-next-line constructor-super
       super(player, options)
 
       this.onSekked_ = props.operate ? debounce(seeked, 100) : () => {}

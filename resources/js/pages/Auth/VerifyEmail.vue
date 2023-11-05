@@ -21,11 +21,11 @@
 </template>
 
 <script setup lang="ts">
+defineOptions({ inheritAttrs: false })
+
 const props = defineProps<{
   status: string | null
 }>()
-
-defineOptions({ inheritAttrs: false })
 
 const form = useForm({})
 

@@ -42,7 +42,9 @@
 </template>
 
 <script setup lang="ts">
-import { type Room } from '@/types'
+import type { Room } from '@/types'
+
+defineOptions({ inheritAttrs: false })
 
 defineProps<{
   rooms: Paginator<Room>
@@ -50,8 +52,6 @@ defineProps<{
     create: boolean
   }
 }>()
-
-defineOptions({ inheritAttrs: false })
 
 useFullPage(true, {
   baseClass: 'min-full-page',
