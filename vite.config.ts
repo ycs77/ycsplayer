@@ -111,7 +111,6 @@ export default defineConfig(({ mode }) => {
           path.join(__dirname, 'tests/**'),
           path.join(__dirname, 'vendor/**'),
         ],
-        usePolling: true,
       },
     },
     resolve: {
