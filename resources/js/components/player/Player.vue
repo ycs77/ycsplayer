@@ -336,17 +336,26 @@ onMounted(() => {
   if (props.type === PlayerType.Video ||
       props.type === PlayerType.Audio
   ) {
-    player.on('canplay', () => {
-      // @ts-expect-error
-      player.handleTechWaiting_()
-    })
+    if (IS_iOS) {
+      player.on('loadedmetadata', () => {
+        // @ts-expect-error
+        player.handleTechWaiting_()
 
-    player.on('canplaythrough', () => {
-      // @ts-expect-error
-      player.handleTechWaiting_()
+        playerReady.value = true
+      })
+    } else {
+      player.on('canplay', () => {
+        // @ts-expect-error
+        player.handleTechWaiting_()
+      })
 
-      playerReady.value = true
-    })
+      player.on('canplaythrough', () => {
+        // @ts-expect-error
+        player.handleTechWaiting_()
+
+        playerReady.value = true
+      })
+    }
   }
 
   player.on('ended', end)
