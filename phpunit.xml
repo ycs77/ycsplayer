@@ -29,5 +29,10 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="YCSPLAYER_OPEN_ROOM_CREATION" value="false"/>
+        <env name="YCSPLAYER_UPLOAD_AVATAR" value="true"/>
+        <env name="YCSPLAYER_DEBUG" value="false"/>
+        <env name="YCSPLAYER_MAIL" value="true"/>
+        <env name="YCSPLAYER_PASSWORD_LESS" value="false"/>
     </php>
 </phpunit>
