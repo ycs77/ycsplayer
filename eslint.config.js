@@ -4,10 +4,6 @@ export default ycs77(
   {
     vue: true,
     typescript: true,
-    ignores: [
-      '**/auto-components.d.ts',
-      '**/auto-imports.d.ts',
-    ],
   },
   {
     files: [GLOB_TS, GLOB_VUE],

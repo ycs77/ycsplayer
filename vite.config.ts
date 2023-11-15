@@ -55,7 +55,7 @@ export default defineConfig(({ mode }) => {
           from: '@inertiajs/vue3',
           names: ['Link'],
         }],
-        dts: 'resources/js/shims/auto-components.d.ts',
+        dts: 'resources/js/shims/components.d.ts',
       }),
       AutoImport({
         dirs: [
