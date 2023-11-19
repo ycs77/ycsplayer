@@ -52,7 +52,7 @@
       </li>
     </ul>
 
-    <div v-else class="py-24 flex justify-center items-centers text-center bg-blue-950/50 text-lg rounded-lg">
+    <div v-else class="px-2 py-24 flex justify-center items-centers text-center bg-blue-950/50 text-lg rounded-lg">
       在這裡可以上傳影片/音樂一起來觀賞~
     </div>
   </div>
