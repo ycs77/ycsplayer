@@ -42,7 +42,7 @@
     "@types/node": "^18.0.0",
     "@types/youtube": "^0.0.47",
     "@vitejs/plugin-vue": "^4.2.0",
-    "@ycs77/eslint-config": "^1.0.2",
+    "@ycs77/eslint-config": "^1.0.6",
     "autoprefixer": "^10.4.15",
     "axios": "^1.6.0",
     "eslint": "^8.52.0",
