@@ -16,6 +16,7 @@
         "grosv/laravel-passwordless-login": "^1.9",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.9",
+        "jenssegers/agent": "^2.6",
         "laravel/fortify": "^1.17",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
