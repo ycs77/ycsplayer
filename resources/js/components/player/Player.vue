@@ -97,10 +97,17 @@ const { canAutoPlay, isDetected: canAutoPlayIsDetected } = useCanAutoPlay()
 // - 需要等觸發 `onOtherPlayerTimeUpdate()` 後
 //   waitedOtherPlayers 轉為 true
 const waitedOtherPlayers = ref(!props.waitOtherPlayers)
+
 // 等待其他播放器連線最多 5 秒後就會自動開始播放
-setTimeout(() => {
+let waitedOtherPlayersTimer: ReturnType<typeof setTimeout> | undefined
+waitedOtherPlayersTimer = setTimeout(() => {
   waitedOtherPlayers.value = true
 }, 5000)
+function finishWaitingOtherPlayers() {
+  waitedOtherPlayers.value = true
+  clearTimeout(waitedOtherPlayersTimer)
+  waitedOtherPlayersTimer = undefined
+}
 
 const { log } = usePlayerLog()
 
@@ -700,7 +707,8 @@ function onOtherPlayerTimeUpdate(e: PlayerTimeUpdateEvent) {
     if (e.currentTime < (player.duration() || 0))
       player.currentTime(e.currentTime)
   } else {
-    waitedOtherPlayers.value = true
+    finishWaitingOtherPlayers()
+
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = e.paused
     startStatus.currentTime = e.currentTime
