@@ -14,6 +14,7 @@
               :poster="currentPlaying.preview ?? undefined"
               :operate="can.operatePlayer"
               :force-play-from-start="forcePlayFromStart"
+              :wait-other-players="shouldWaitOtherPlayers"
               @play="onPlayerPlayed"
               @pause="onPlayerPaused"
               @seek="onPlayerSeeked"
@@ -237,7 +238,11 @@ const showMobilePlaylist = ref(false)
 const trigger = ref(PlayerTrigger.Normal)
 const forcePlayFromStart = computed(() => [PlayerTrigger.Click, PlayerTrigger.Next].includes(trigger.value))
 
+const shouldWaitOtherPlayers = ref(false)
+
 const tab = ref('main')
+
+const { user: authUser } = useAuth()
 
 const toast = useToast()
 
@@ -385,6 +390,13 @@ function onMediaDeleting(media: Media) {
   }
 }
 
+function onCurrentMemberJoining(users: RoomChannelMember[]) {
+  const otherUsers = users.filter(user => user.id !== authUser.value?.id)
+  if (otherUsers.length > 0) {
+    shouldWaitOtherPlayers.value = true
+  }
+}
+
 function onMemberJoining(user: RoomChannelMember) {
   if (!player.value) return
   if (!player.value.isClickedBigButton()) return
@@ -510,7 +522,7 @@ function onClientUpdateCurrentTime({ user, paused, currentTime, timestamp }: {
   currentTime: number
   timestamp: number
 }) {
-  if (user.id !== useAuth().user.value?.id) return
+  if (user.id !== authUser.value?.id) return
   if (currentTimeLock.has(timestamp)) return
 
   // 清除過期的數值
@@ -541,6 +553,7 @@ watch(player, (player, _, onInvalidate) => {
   if (props.currentPlaying && !player) return
 
   channel = Echo.join(`player.${props.room.id}`)
+  channel.here(onCurrentMemberJoining)
   channel.joining(onMemberJoining)
   channel.listen('PlayerlistItemAdded', onPlayerlistItemAdded)
   channel.listen('PlayerlistItemClicked', onPlayerlistItemClicked)

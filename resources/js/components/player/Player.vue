@@ -31,8 +31,11 @@ const props = withDefaults(defineProps<{
   poster?: string
   operate?: boolean
   forcePlayFromStart?: boolean
+  waitOtherPlayers?: boolean
 }>(), {
   operate: true,
+  forcePlayFromStart: false,
+  waitOtherPlayers: false,
 })
 
 const emit = defineEmits<{
@@ -78,6 +81,26 @@ const {
 } = usePlayerServerTimestamp(props.roomId)
 
 const { canAutoPlay, isDetected: canAutoPlayIsDetected } = useCanAutoPlay()
+
+// props.waitOtherPlayers 為 true 時 (當觸發 `onOtherPlayerTimeUpdate()`)，
+// 是因為有其他播放器有連線，需要等待其他播放器連線成功後才能播放。
+//
+// waitedOtherPlayers 則是當完成確認其他播放器的狀態。
+//
+// 如果當前播放器第一個上線，沒有其他播放器，因此：
+// - props.waitOtherPlayers 為 false
+// - waitedOtherPlayers 為 true
+//
+// 如果當前播放器上線時已經有其他播放器，則會：
+// - props.waitOtherPlayers 為 true
+// - waitedOtherPlayers 為 false
+// - 需要等觸發 `onOtherPlayerTimeUpdate()` 後
+//   waitedOtherPlayers 轉為 true
+const waitedOtherPlayers = ref(!props.waitOtherPlayers)
+// 等待其他播放器連線最多 5 秒後就會自動開始播放
+setTimeout(() => {
+  waitedOtherPlayers.value = true
+}, 5000)
 
 const { log } = usePlayerLog()
 
@@ -262,9 +285,19 @@ function end() {
 }
 
 // 自動播放
-watch([playerReady, canAutoPlayIsDetected, timestampFetched], () => {
+watch([
+  playerReady,
+  canAutoPlayIsDetected,
+  timestampFetched,
+  waitedOtherPlayers,
+], () => {
   if (!player) return
-  if (!(playerReady.value && canAutoPlayIsDetected.value && timestampFetched.value)) return
+  if (!(
+    playerReady.value &&
+    canAutoPlayIsDetected.value &&
+    timestampFetched.value &&
+    waitedOtherPlayers.value
+  )) return
 
   log('[ServerTimestamp] offset ms', offsetTimestamp.value)
 
@@ -667,6 +700,7 @@ function onOtherPlayerTimeUpdate(e: PlayerTimeUpdateEvent) {
     if (e.currentTime < (player.duration() || 0))
       player.currentTime(e.currentTime)
   } else {
+    waitedOtherPlayers.value = true
     startStatus.otherPlayerIsStarted = true
     startStatus.paused = e.paused
     startStatus.currentTime = e.currentTime
