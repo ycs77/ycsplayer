@@ -15,14 +15,15 @@ class RoomPresenter extends FlexiblePresenter
             'id' => $this->hash_id,
             'type' => $this->type->value,
             'name' => $this->name,
-            'auto_play' => $this->auto_play,
-            'auto_remove' => $this->auto_remove,
         ];
     }
 
     public function presetShow()
     {
         return $this->with(fn () => [
+            'auto_play' => $this->auto_play,
+            'auto_remove' => $this->auto_remove,
+            'debug' => $this->debug,
             'note' => $this->note,
         ]);
     }

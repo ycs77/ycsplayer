@@ -7,6 +7,7 @@
         <RoomTypeSelectField id="type" v-model="form.type" />
         <SwitchField id="auto_play" v-model="form.auto_play" label="連續播放" />
         <SwitchField id="auto_remove" v-model="form.auto_remove" label="播放完畢自動刪除" />
+        <SwitchField id="debug" v-model="form.debug" label="偵錯模式" />
       </div>
 
       <div class="mt-6">
@@ -38,6 +39,7 @@ const form = useForm({
   type: props.room.type,
   auto_play: props.room.auto_play,
   auto_remove: props.room.auto_remove,
+  debug: props.room.debug,
 })
 
 function updateRoom() {

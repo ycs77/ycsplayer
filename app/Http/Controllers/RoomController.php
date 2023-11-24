@@ -73,7 +73,6 @@ class RoomController extends Controller
         return Inertia::render('Room/Show', [
             'room' => fn () => RoomPresenter::make($room)->preset('show'),
             'csrfToken' => fn () => csrf_token(),
-            'debug' => fn () => config('ycsplayer.debug', false),
             'currentPlaying' => fn () => PlaylistItemPresenter::make($room->current_playing)->preset('play'),
             'playlistItems' => fn () => PlaylistItemPresenter::collection($room->playlist_items),
             'editingUser' => fn () => $noteEditor->get($room->hash_id),
@@ -114,9 +113,10 @@ class RoomController extends Controller
             'type' => [new Enum(RoomType::class)],
             'auto_play' => ['required', 'boolean'],
             'auto_remove' => ['required', 'boolean'],
+            'debug' => ['required', 'boolean'],
         ]);
 
-        $room->update($request->only('name', 'type', 'auto_play', 'auto_remove'));
+        $room->update($request->only('name', 'type', 'auto_play', 'auto_remove', 'debug'));
 
         Flash::success('房間設定更新成功');
     }

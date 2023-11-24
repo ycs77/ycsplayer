@@ -1,5 +1,5 @@
 <template>
-  <Field :error="error">
+  <Field :error="error || (id ? $page.props.errors[id] : undefined)">
     <SwitchGroup as="div" class="flex items-center">
       <div class="flex-1">
         <FormLabel :as="SwitchLabel" :value="label" />
@@ -14,6 +14,7 @@
 import { SwitchDescription, SwitchLabel } from '@headlessui/vue'
 
 defineProps<{
+  id?: string
   label?: string
   error?: string
   tip?: string

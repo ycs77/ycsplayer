@@ -26,6 +26,7 @@ use Spatie\Permission\PermissionRegistrar;
  * @property int|null $current_playing_id
  * @property bool $auto_play
  * @property bool $auto_remove
+ * @property bool $debug
  * @property string|null $note
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
@@ -45,6 +46,7 @@ class Room extends Model implements HasMedia
         'current_playing_id',
         'auto_play',
         'auto_remove',
+        'debug',
         'note',
     ];
 
@@ -53,6 +55,7 @@ class Room extends Model implements HasMedia
         'current_playing_id' => 'integer',
         'auto_play' => 'boolean',
         'auto_remove' => 'boolean',
+        'debug' => 'boolean',
     ];
 
     public function roomPermissions(): array

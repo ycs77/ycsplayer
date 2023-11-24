@@ -55,6 +55,7 @@ test('should visit room page with no playing', function () {
                 ->where('name', '動漫觀影室')
                 ->where('auto_play', false)
                 ->where('auto_remove', true)
+                ->where('debug', false)
                 ->where('note', '記事本文字欄...')
             )
             ->where('currentPlaying', null)
@@ -125,6 +126,7 @@ test('should update room settings', function () {
         'type' => RoomType::Audio->value,
         'auto_play' => true,
         'auto_remove' => false,
+        'debug' => false,
     ]);
 
     $room->refresh();

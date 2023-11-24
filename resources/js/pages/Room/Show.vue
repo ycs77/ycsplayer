@@ -31,7 +31,7 @@
             </div>
           </div>
 
-          <PlayerDebugger v-if="debug" />
+          <PlayerDebugger v-if="room.debug" />
         </div>
       </div>
 
@@ -195,7 +195,6 @@ defineOptions({ inheritAttrs: false })
 const props = defineProps<{
   room: Required<Room>
   csrfToken: string
-  debug: boolean
   currentPlaying: PlaylistItem | null
   playlistItems: PlaylistItem[]
   editingUser: {
@@ -256,7 +255,7 @@ const playlistItemForm = useForm({
 const chatMessages = ref([]) as Ref<RoomChatMessage[]>
 const chatUnread = computed(() => chatMessages.value.some(message => !message.read))
 
-usePlayerLogger({ debug: props.debug })
+usePlayerLogger(() => props.room.debug)
 
 // 廣播播放事件
 function onPlayerPlayed(e: PlayerPlayedEvent) {

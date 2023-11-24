@@ -319,10 +319,6 @@ VITE_S3_UPLOAD_VITE_ASSETS_ENABLED=true
 
 `YCSPLAYER_UPLOAD_AVATAR` 會決定用戶是否可以上傳頭像圖片。
 
-### 播放器偵錯模式
-
-`YCSPLAYER_DEBUG` 會決定是否開啟播放器偵錯模式，用於排查錯誤時使用。
-
 ### 寄送 E-mail
 
 `YCSPLAYER_MAIL` 會決定是否要寄送 E-mail 的功能，開啟後會在註冊成功時寄送認證的 E-mail，以及在「無密碼登入」模式中寄送登入、刪除帳號前的確認 E-mail。

@@ -1,4 +1,4 @@
-import type { InjectionKey } from 'vue'
+import type { InjectionKey, MaybeRefOrGetter } from 'vue'
 import type { ClientLog } from '@/types'
 
 export interface PlayerLogger {
@@ -6,19 +6,15 @@ export interface PlayerLogger {
   log(message: string, context?: any): void
 }
 
-export interface PlayerLoggerOptions {
-  debug?: boolean
-}
-
 export const PlayerLoggerKey = Symbol('PlayerLogger') as InjectionKey<PlayerLogger>
 
-export function usePlayerLogger(options: PlayerLoggerOptions = {}) {
-  const { debug = false } = options
+export function usePlayerLogger(debug: MaybeRefOrGetter<boolean> = false) {
+  const _debug = toRef(debug)
 
   const logs = ref([]) as Ref<ClientLog[]>
 
   function log(message: string, context?: any) {
-    if (debug) {
+    if (_debug.value) {
       logs.value.push({ message, context })
 
       console.log(message, context)
