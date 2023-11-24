@@ -178,7 +178,6 @@ function ready() {
 
       if (IS_MOBILE) {
         player?.removeClass('vjs-waiting')
-
         setTimeout(() => {
           if (player?.paused())
             player?.removeClass('vjs-waiting')
@@ -312,6 +311,9 @@ watch([
     log('[AutoPlay]', false)
 
     player?.removeClass('vjs-waiting')
+    setTimeout(() => {
+      player?.removeClass('vjs-waiting')
+    }, 500)
 
     return
   }
