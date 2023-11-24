@@ -4,6 +4,10 @@ export default ycs77(
   {
     vue: true,
     typescript: true,
+    ignores: [
+      'composer.json',
+      'lang/**/*',
+    ],
   },
   {
     files: [GLOB_TS, GLOB_VUE],
