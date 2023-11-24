@@ -479,13 +479,6 @@ function onRoomMediaConverted(e: RoomMediaConvertedEvent) {
   })
 }
 
-// 監聽當刪除檔案時的事件
-function onRoomMediaRemoved() {
-  router.reload({
-    only: [...globalOnly, 'currentPlaying', 'playlistItems', 'medias'],
-  })
-}
-
 // 監聽當有其他人上線或離線時的事件
 function onOnlineMembersUpdated() {
   router.reload({
@@ -563,7 +556,6 @@ watch(player, (player, _, onInvalidate) => {
   channel.listen('RoomNoteCanceled', onNoteCanceled)
   channel.listen('RoomMediaUploaded', onRoomMediaUploaded)
   channel.listen('RoomMediaConverted', onRoomMediaConverted)
-  channel.listen('RoomMediaRemoved', onRoomMediaRemoved)
   channel.listen('RoomOnlineMembersUpdated', onOnlineMembersUpdated)
   channel.listenForWhisper('play', safeListenFn(player?.onOtherPlayerPlayed))
   channel.listenForWhisper('pause', safeListenFn(player?.onOtherPlayerPaused))

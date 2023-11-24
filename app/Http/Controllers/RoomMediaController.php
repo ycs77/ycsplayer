@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\RoomMediaRemoved;
 use App\Facades\Flash;
 use App\Jobs\RemoveRoomMediaFile;
 use App\Models\Room;
@@ -15,8 +14,6 @@ class RoomMediaController extends Controller
         $this->authorize('uploadMedias', $room);
 
         RemoveRoomMediaFile::dispatch($media);
-
-        RoomMediaRemoved::broadcast($room->hash_id);
 
         Flash::success('檔案刪除成功');
     }
