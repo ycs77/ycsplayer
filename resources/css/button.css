@@ -29,13 +29,13 @@
   }
 
   .btn-secondary {
-    @apply bg-white text-blue-950;
+    @apply text-blue-400/50;
   }
   a.btn-secondary {
-    @apply hover:bg-gray-50;
+    @apply hover:bg-blue-900/50;
   }
   button.btn-secondary {
-    @apply enabled:hover:bg-gray-50 disabled:text-gray-300;
+    @apply enabled:hover:bg-blue-900/50 disabled:text-blue-600/50;
   }
 
   .btn-danger {
