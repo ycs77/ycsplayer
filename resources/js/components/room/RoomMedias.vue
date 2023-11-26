@@ -14,7 +14,7 @@
       >
         <template #progressing="{ progressPer }">
           <div class="relative btn btn-list-item hover:bg-blue-950/50 rounded-lg overflow-hidden">
-            <div class="text-center">上傳中... </div>
+            <div class="text-center">上傳中... 先不要離開...</div>
             <div class="absolute inset-x-0 bottom-0 h-1.5 bg-blue-900/50 overflow-hidden">
               <div
                 class="bg-blue-500/50 h-full transition-[width] duration-500"
