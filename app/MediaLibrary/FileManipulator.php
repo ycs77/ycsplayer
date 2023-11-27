@@ -10,8 +10,8 @@ use Spatie\MediaLibrary\Conversions\FileManipulator as MediaLibraryFileManipulat
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
- * 修改函數目的是為了防止再次從遠端的硬碟下載檔案回來，
- * 直接讀取本地的檔案生成完縮圖之後才上傳。
+ * 修改函數目的是為了防止再次從遠端的硬碟下載檔案回來。
+ * 改成直接讀取本地的檔案生成完縮圖之後才上傳。
  */
 class FileManipulator extends MediaLibraryFileManipulator
 {
