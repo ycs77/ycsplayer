@@ -5,8 +5,17 @@
         <div class="flex gap-2">
           <Avatar class="w-9 h-9 mt-1" :src="message.user.avatar" />
           <div class="grow min-w-0">
-            <div class="text-sm text-gray-400 truncate">{{ message.user.name }}</div>
-            <div class="break-all">{{ message.content }}</div>
+            <div class="flex">
+              <div class="grow min-w-0 text-sm text-gray-400 truncate">
+                {{ message.user.name }}
+              </div>
+              <div class="text-xs text-gray-400">
+                {{ dayjs(message.timestamp).format('HH:mm') }}
+              </div>
+            </div>
+            <div class="break-all">
+              {{ message.content }}
+            </div>
           </div>
         </div>
       </li>
@@ -25,6 +34,7 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import type { RoomChatMessage } from '@/types'
 
 const props = defineProps<{

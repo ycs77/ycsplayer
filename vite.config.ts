@@ -89,15 +89,15 @@ export default defineConfig(({ mode }) => {
     ],
     server: {
       host: true,
+      hmr: {
+        host: 'localhost',
+      },
       https: process.env.VITE_DEV_SERVER_KEY && process.env.VITE_DEV_SERVER_CERT
         ? {
             key: fs.readFileSync(process.env.VITE_DEV_SERVER_KEY),
             cert: fs.readFileSync(process.env.VITE_DEV_SERVER_CERT),
           }
         : undefined,
-      hmr: {
-        host: 'localhost',
-      },
       watch: {
         ignored: [
           path.join(__dirname, 'app/**'),
