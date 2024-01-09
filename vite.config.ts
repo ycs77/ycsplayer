@@ -36,9 +36,6 @@ export default defineConfig(({ mode }) => {
             includeAbsolute: false,
           },
         },
-        script: {
-          defineModel: true,
-        },
       }),
       Components({
         dirs: [
