@@ -116,7 +116,7 @@ watch(() => props.src, src => {
 
   // If guess is not work, return the default mime-type
   if (mimeType.value === 'auto' ||
-      !(mimeType.value in Object.keys(mimetypeMap))
+    !(mimeType.value in Object.keys(mimetypeMap))
   ) {
     mimeType.value = 'image/jpeg'
   }

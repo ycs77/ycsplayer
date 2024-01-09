@@ -375,9 +375,7 @@ onMounted(() => {
     })
   }
 
-  if (props.type === PlayerType.Video ||
-      props.type === PlayerType.Audio
-  ) {
+  if (props.type === PlayerType.Video || props.type === PlayerType.Audio) {
     if (IS_iOS) {
       player.on('loadedmetadata', () => {
         // @ts-expect-error
