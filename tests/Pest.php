@@ -20,6 +20,8 @@ function user(string $name = null, string $email = null): ?User
             ->when($email, fn ($query) => $query->where('email', $email))
             ->first();
     }
+
+    return null;
 }
 
 function loginUser(string $email = 'admin@example.com'): ?User
@@ -29,6 +31,8 @@ function loginUser(string $email = 'admin@example.com'): ?User
 
         return $user;
     }
+
+    return null;
 }
 
 function passwordless()
