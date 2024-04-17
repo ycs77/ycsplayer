@@ -230,7 +230,15 @@ PUSHER_APP_CLUSTER=[你的cluster]
 
 然後因為有使用到 Client event，需要在 Pusher APP 的 App settings 設定開啟 **Enable client events**。
 
-最後在 Pusher APP 的 Webhooks 設定裡加上兩個 `https://[your-domain]/pusher/webhook` 連結，**Event type** 選擇 *Channel existence* 和 *Presence*。如果在本地需要測試時，可以使用 ngrok 建立臨時網址來測試，但每次測試都需要更新網址到 Pusher 的後台。
+最後在 Pusher APP 的 Webhooks 設定裡加上兩個 `https://[your-domain]/pusher/webhook` 連結：
+
+* Webhook URL: `https://[your-domain]/pusher/webhook`
+* Event type: **Channel existence**
+
+* Webhook URL: `https://[your-domain]/pusher/webhook`
+* Event type: **Presence**
+
+如果在本地需要測試時，可以使用 ngrok 建立臨時網址來測試，但每次測試都需要更新網址到 Pusher 的後台。
 
 ### 安裝 FFMpeg
 
@@ -331,8 +339,8 @@ VITE_S3_UPLOAD_VITE_ASSETS_ENABLED=true
 
 | 功能                   | 指令                              | 說明                                                         |
 | ---------------------- | --------------------------------- | ------------------------------------------------------------ |
-| 新增管理員角色         | php artisan app:admin 1           | 讓 User ID 1 增加管理員角色。                                |
-| 刪除管理員角色         | php artisan app:admin 1 --remove  | 刪除 User ID 1 的管理員角色。                          |
+| 附加管理員角色         | php artisan app:admin 1           | 讓 User ID 1 擁有管理員角色。                                |
+| 刪除管理員角色         | php artisan app:admin 1 --remove  | 取消 User ID 1 的管理員角色。                          |
 | 同步房間權限資料       | php artisan room:sync-permissions | 如果有新增或刪除權限時，可以執行當前指令來同步。             |
 | 清除過時的上傳暫存檔案 | php artisan room:queue-file:purge | 清除過時的上傳暫存檔案，設定 Schedule 之後會每天固定清一次。 |
 
