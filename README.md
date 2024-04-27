@@ -263,9 +263,9 @@ DO_ACCESS_KEY_ID=[你的Key]
 DO_SECRET_ACCESS_KEY=[你的Secret]
 DO_DEFAULT_REGION=[你的region]
 DO_BUCKET=[你的bucket]
-DO_CDN_ENDPOINT=https://api.digitalocean.com/v2/cdn/endpoints/[你的CDN-ID]
 DO_URL=https://[你的bucket].[你的region].cdn.digitaloceanspaces.com
-DO_ENDPOINT=https://[你的region].digitaloceanspaces.com/
+DO_ENDPOINT=https://[你的region].digitaloceanspaces.com
+DO_CDN_ENDPOINT=https://api.digitalocean.com/v2/cdn/endpoints/[你的CDN-ID]
 DO_USE_PATH_STYLE_ENDPOINT=false
 ```
 
