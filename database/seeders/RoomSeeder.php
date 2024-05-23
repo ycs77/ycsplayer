@@ -37,12 +37,12 @@ class RoomSeeder extends Seeder
             $videoRoom->join($soyo);
         }
 
-        if (! $videoRoom->playlist_items()
+        if (! $videoRoom->playlistItems()
             ->where('type', PlayerType::YouTube)
             ->where('title', '春日影')
             ->exists()
         ) {
-            $videoRoom->playlist_items()->create([
+            $videoRoom->playlistItems()->create([
                 'type' => PlayerType::YouTube,
                 'title' => '春日影',
                 'url' => 'https://www.youtube.com/watch?v=W8DCWI_Gc9c',
@@ -50,12 +50,12 @@ class RoomSeeder extends Seeder
             ]);
         }
 
-        if (! $videoRoom->playlist_items()
+        if (! $videoRoom->playlistItems()
             ->where('type', PlayerType::YouTube)
             ->where('title', 'メリーゴーランド')
             ->exists()
         ) {
-            $videoRoom->playlist_items()->create([
+            $videoRoom->playlistItems()->create([
                 'type' => PlayerType::YouTube,
                 'title' => 'メリーゴーランド',
                 'url' => 'https://www.youtube.com/watch?v=eWeSqrRk-gs',
@@ -63,12 +63,12 @@ class RoomSeeder extends Seeder
             ]);
         }
 
-        if (! $videoRoom->playlist_items()
+        if (! $videoRoom->playlistItems()
             ->where('type', PlayerType::YouTube)
             ->where('title', '星座になれたら')
             ->exists()
         ) {
-            $videoRoom->playlist_items()->create([
+            $videoRoom->playlistItems()->create([
                 'type' => PlayerType::YouTube,
                 'title' => '星座になれたら',
                 'url' => 'https://www.youtube.com/watch?v=fJh5UeiULZs',
@@ -76,12 +76,12 @@ class RoomSeeder extends Seeder
             ]);
         }
 
-        if (! $videoRoom->playlist_items()
+        if (! $videoRoom->playlistItems()
             ->where('type', PlayerType::YouTube)
             ->where('title', 'spiral')
             ->exists()
         ) {
-            $videoRoom->playlist_items()->create([
+            $videoRoom->playlistItems()->create([
                 'type' => PlayerType::YouTube,
                 'title' => 'spiral',
                 'url' => 'https://www.youtube.com/watch?v=fE9trKOuT3Q',
@@ -102,12 +102,12 @@ class RoomSeeder extends Seeder
             $audioRoom->join($user, 'admin');
         }
 
-        if (! $audioRoom->playlist_items()
+        if (! $audioRoom->playlistItems()
             ->where('type', PlayerType::YouTube)
             ->where('title', '色違いの翼')
             ->exists()
         ) {
-            $audioRoom->playlist_items()->create([
+            $audioRoom->playlistItems()->create([
                 'type' => PlayerType::YouTube,
                 'title' => '色違いの翼',
                 'url' => 'https://www.youtube.com/watch?v=Melo0YFiDSY',
@@ -115,12 +115,12 @@ class RoomSeeder extends Seeder
             ]);
         }
 
-        if (! $audioRoom->playlist_items()
+        if (! $audioRoom->playlistItems()
             ->where('type', PlayerType::YouTube)
             ->where('title', 'メリーゴーランド')
             ->exists()
         ) {
-            $audioRoom->playlist_items()->create([
+            $audioRoom->playlistItems()->create([
                 'type' => PlayerType::YouTube,
                 'title' => 'メリーゴーランド',
                 'url' => 'https://www.youtube.com/watch?v=P9cuGQNDf-A',
@@ -128,12 +128,12 @@ class RoomSeeder extends Seeder
             ]);
         }
 
-        if (! $audioRoom->playlist_items()
+        if (! $audioRoom->playlistItems()
             ->where('type', PlayerType::YouTube)
             ->where('title', '詩超絆')
             ->exists()
         ) {
-            $audioRoom->playlist_items()->create([
+            $audioRoom->playlistItems()->create([
                 'type' => PlayerType::YouTube,
                 'title' => '詩超絆',
                 'url' => 'https://www.youtube.com/watch?v=wWf9k4e2xEo',

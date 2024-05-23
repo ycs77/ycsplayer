@@ -54,7 +54,7 @@ class RoomPlaylistController extends Controller
                 ]);
             }
 
-            $room->playlist_items()->create([
+            $room->playlistItems()->create([
                 'type' => $type,
                 'title' => $request->input('title'),
                 'url' => $media->getUrl(),
@@ -88,7 +88,7 @@ class RoomPlaylistController extends Controller
 
             $url = "https://www.youtube.com/watch?v={$youtubeId}";
 
-            $room->playlist_items()->create([
+            $room->playlistItems()->create([
                 'type' => $type,
                 'title' => $request->input('title'),
                 'url' => $url,
@@ -187,18 +187,18 @@ class RoomPlaylistController extends Controller
 
             if ($room->current_playing_id === $requestedCurrentPlayingId) {
                 // 提前先計算當前播放項目的 index
-                $itemIndex = $room->playlist_items
+                $itemIndex = $room->playlistItems
                     ->search(fn ($item) => $item->id === $room->current_playing_id);
 
                 // 播放完畢後自動刪除
                 if ($autoRemove) {
-                    $room->current_playing->delete();
+                    $room->currentPlaying->delete();
                 }
 
                 // 播放完畢後自動順位播下一個
-                // 注意這裡的 `$room->playlist_items` 還是舊的快取，包含未刪除的當前播放項目。
+                // 注意這裡的 `$room->playlistItems` 還是舊的快取，包含未刪除的當前播放項目。
                 if (is_numeric($itemIndex)) {
-                    $item = $room->playlist_items[$itemIndex + 1] ?? null;
+                    $item = $room->playlistItems[$itemIndex + 1] ?? null;
                 }
 
                 $this->updateCurrentPlayingItem($room, $item);

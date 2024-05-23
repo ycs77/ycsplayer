@@ -30,8 +30,8 @@ use Spatie\Permission\PermissionRegistrar;
  * @property string|null $note
  * @property \Illuminate\Support\Carbon $created_at
  * @property \Illuminate\Support\Carbon $updated_at
- * @property \App\Models\PlaylistItem|null $current_playing
- * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaylistItem> $playlist_items
+ * @property \App\Models\PlaylistItem|null $currentPlaying
+ * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\PlaylistItem> $playlistItems
  * @property \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $members
  */
 class Room extends Model implements HasMedia
@@ -117,12 +117,12 @@ class Room extends Model implements HasMedia
         });
     }
 
-    public function current_playing(): BelongsTo
+    public function currentPlaying(): BelongsTo
     {
         return $this->belongsTo(PlaylistItem::class);
     }
 
-    public function playlist_items(): HasMany
+    public function playlistItems(): HasMany
     {
         return $this->hasMany(PlaylistItem::class);
     }

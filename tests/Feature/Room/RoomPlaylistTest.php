@@ -42,7 +42,7 @@ test('should add video playlist item', function () {
         'media_id' => $media->uuid,
     ]);
 
-    $item = $room->playlist_items()->latest('id')->first();
+    $item = $room->playlistItems()->latest('id')->first();
     expect($item->type)->toBe(PlayerType::Video);
     expect($item->title)->toBe('Big Buck Bunny');
     expect($item->url)->toContain('/storage/1/mov_bbb.mp4');
@@ -71,7 +71,7 @@ test('should add audio playlist item', function () {
         'media_id' => $media->uuid,
     ]);
 
-    $item = $room->playlist_items()->latest('id')->first();
+    $item = $room->playlistItems()->latest('id')->first();
     expect($item->type)->toBe(PlayerType::Audio);
     expect($item->title)->toBe('Big Buck Bunny');
     expect($item->url)->toContain('/storage/1/mov_bbb.mp3');
@@ -89,7 +89,7 @@ test('should add youtube playlist item', function () {
         'media_id' => null,
     ]);
 
-    $item = $room->playlist_items()->latest('id')->first();
+    $item = $room->playlistItems()->latest('id')->first();
     expect($item->type)->toBe(PlayerType::YouTube);
     expect($item->title)->toBe('迷星叫');
     expect($item->url)->toBe('https://www.youtube.com/watch?v=B8k6JtF6WrU');
@@ -105,7 +105,7 @@ test('should auto format youtube playlist item url with more query string', func
         'media_id' => null,
     ]);
 
-    $item = $room->playlist_items()->latest('id')->first();
+    $item = $room->playlistItems()->latest('id')->first();
     expect($item->url)->toBe('https://www.youtube.com/watch?v=B8k6JtF6WrU');
 });
 
@@ -119,7 +119,7 @@ test('should auto format youtube playlist item url with standard youtube music u
         'media_id' => null,
     ]);
 
-    $item = $room->playlist_items()->latest('id')->first();
+    $item = $room->playlistItems()->latest('id')->first();
     expect($item->url)->toBe('https://www.youtube.com/watch?v=DhGsNjooWl8');
 });
 
@@ -133,7 +133,7 @@ test('should auto format youtube playlist item url with youtube music url and mo
         'media_id' => null,
     ]);
 
-    $item = $room->playlist_items()->latest('id')->first();
+    $item = $room->playlistItems()->latest('id')->first();
     expect($item->url)->toBe('https://www.youtube.com/watch?v=DhGsNjooWl8');
 });
 
@@ -147,7 +147,7 @@ test('should auto format shortened youtube playlist item url', function () {
         'media_id' => null,
     ]);
 
-    $item = $room->playlist_items()->latest('id')->first();
+    $item = $room->playlistItems()->latest('id')->first();
     expect($item->url)->toBe('https://www.youtube.com/watch?v=B8k6JtF6WrU');
 });
 
@@ -161,7 +161,7 @@ test('should auto format shortened youtube playlist item url and more query stri
         'media_id' => null,
     ]);
 
-    $item = $room->playlist_items()->latest('id')->first();
+    $item = $room->playlistItems()->latest('id')->first();
     expect($item->url)->toBe('https://www.youtube.com/watch?v=B8k6JtF6WrU');
 });
 

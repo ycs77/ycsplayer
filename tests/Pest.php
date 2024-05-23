@@ -47,7 +47,7 @@ function room(string $name): ?Room
 
 function playlist(Room $room, string $itemTitle): ?PlaylistItem
 {
-    return $room->playlist_items()
+    return $room->playlistItems()
         ->where('title', $itemTitle)
         ->first();
 }
