@@ -7,10 +7,12 @@ use Illuminate\Support\Facades\Http;
 
 class DOCdnService implements CdnService
 {
-    public function purge(string $fileName)
+    public function purge(string|array $files): void
     {
-        Http::asJson()->delete(config('filesystems.disks.do.cdn_endpoint').'/cache', [
-            'files' => [$fileName],
-        ]);
+        Http::asJson()
+            ->withToken(config('services.digitalocean.api_token'))
+            ->delete(config('filesystems.disks.do.cdn_endpoint').'/cache', [
+                'files' => is_array($files) ? $files : [$files],
+            ]);
     }
 }

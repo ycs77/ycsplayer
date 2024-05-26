@@ -22,6 +22,10 @@ return [
         'scheme' => 'https',
     ],
 
+    'digitalocean' => [
+        'api_token' => env('DO_API_TOKEN'),
+    ],
+
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
