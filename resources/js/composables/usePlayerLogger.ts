@@ -3,7 +3,7 @@ import type { ClientLog } from '@/types'
 
 export interface PlayerLogger {
   logs: Ref<ClientLog[]>
-  log(message: string, context?: any): void
+  log: (message: string, context?: any) => void
 }
 
 export const PlayerLoggerKey = Symbol('PlayerLogger') as InjectionKey<PlayerLogger>

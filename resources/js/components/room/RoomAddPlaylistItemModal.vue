@@ -106,7 +106,7 @@ watch(media, () => {
 watch(() => form.url, () => {
   if (form.type === PlayerType.YouTube && form.url &&
     (
-      /^https:\/\/(www|music)\.youtube\.com\/watch\?v=/.test(form.url) ||
+      /^https:\/\/(?:www|music)\.youtube\.com\/watch\?v=/.test(form.url) ||
       /^https:\/\/youtu\.be\//.test(form.url)
     ) && !form.title
   ) {

@@ -362,7 +362,7 @@ onMounted(() => {
 
   playerCreated.value = true
 
-  // @ts-expect-error
+  // @ts-ignore
   player.handleTechWaiting_()
 
   if (!props.operate) {
@@ -378,19 +378,19 @@ onMounted(() => {
   if (props.type === PlayerType.Video || props.type === PlayerType.Audio) {
     if (IS_iOS) {
       player.on('loadedmetadata', () => {
-        // @ts-expect-error
+        // @ts-ignore
         player.handleTechWaiting_()
 
         playerReady.value = true
       })
     } else {
       player.on('canplay', () => {
-        // @ts-expect-error
+        // @ts-ignore
         player.handleTechWaiting_()
       })
 
       player.on('canplaythrough', () => {
-        // @ts-expect-error
+        // @ts-ignore
         player.handleTechWaiting_()
 
         playerReady.value = true

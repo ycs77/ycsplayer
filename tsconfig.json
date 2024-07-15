@@ -1,32 +1,32 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "jsx": "preserve",
-    "lib": ["ESNext", "DOM"],
-    "useDefineForClassFields": true,
-    "baseUrl": ".",
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+    "noImplicitThis": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "noEmit": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": ["resources/js/*"]
     },
-    "resolveJsonModule": true,
-    "types": [
-      "vite/client",
-      "unplugin-icons/types/vue3",
-      "youtube"
-    ],
-    "strict": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "skipLibCheck": true
+    "types": []
   },
   "include": [
     "vite.config.*",
+    "resources/js/shims/env.d.ts",
     "resources/js/shims/components.d.ts",
     "resources/js/shims/auto-imports.d.ts",
-    "resources/js/**/*.ts",
+    "resources/js/shims/inertia.d.ts",
+    "resources/js/shims/resumable.d.ts",
+    "resources/js/**/*",
     "resources/js/**/*.vue"
   ]
 }

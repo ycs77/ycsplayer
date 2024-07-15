@@ -25,6 +25,7 @@ const colorClass = computed(() => {
   } else if (props.color === 'blue') {
     return 'bg-blue-600'
   }
+  return ''
 })
 
 const sizeClass = computed(() => {
@@ -33,5 +34,6 @@ const sizeClass = computed(() => {
   } else if (props.size === 'lg') {
     return 'px-3.5 py-0.5 text-sm'
   }
+  return ''
 })
 </script>
