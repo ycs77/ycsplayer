@@ -17,6 +17,10 @@ export default ycs77({
 
       'antfu/curly': 'off',
 
+      'ts/no-unsafe-function-type': 'off',
+      'ts/prefer-namespace-keyword': 'off',
       'ts/prefer-ts-expect-error': 'off',
+
+      'unused-imports/no-unused-vars': 'off',
     },
   })
