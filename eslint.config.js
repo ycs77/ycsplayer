@@ -19,7 +19,6 @@ export default ycs77({
 
       'ts/no-unsafe-function-type': 'off',
       'ts/prefer-namespace-keyword': 'off',
-      'ts/prefer-ts-expect-error': 'off',
 
       'unused-imports/no-unused-vars': 'off',
     },
