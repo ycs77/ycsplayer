@@ -72,7 +72,7 @@ Demo 環境資源有限，建立的帳號和房間將會於 2 小時後刪除。
 
 * PHP 8.1
 * MySQL 8
-* Node.js 18
+* Node.js 20
 * Yarn 1
 * Mailgun (或是其他送信的 driver 都可以)
 * Pusher
