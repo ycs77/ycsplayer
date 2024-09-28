@@ -1,0 +1,13 @@
+diff --git a/node_modules/@inertiajs/vue3/types/types.d.ts b/node_modules/@inertiajs/vue3/types/types.d.ts
+index 5db6f69..7d9aac2
+--- a/node_modules/@inertiajs/vue3/types/types.d.ts
++++ b/node_modules/@inertiajs/vue3/types/types.d.ts
+@@ -9,7 +9,7 @@ declare module '@inertiajs/core' {
+         form: typeof useForm;
+     }
+ }
+-declare module '@vue/runtime-core' {
++declare module 'vue' {
+     interface ComponentCustomProperties {
+         $inertia: typeof router;
+         $page: Page;
