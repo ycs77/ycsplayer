@@ -65,6 +65,8 @@ test('should upload file', function () {
     Event::assertDispatched(RoomMediaUploaded::class);
 
     Queue::assertPushed(AddRoomMediaFile::class);
+
+    Str::createRandomStringsNormally();
 });
 
 test('QueueRoomFile should generate loading media model', function () {

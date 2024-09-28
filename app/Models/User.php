@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\DeletesUnusedAttachment;
 use App\Models\Concerns\HasHashId;
 use App\Models\Concerns\HasRoomMemberAttributes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -30,6 +31,7 @@ use Spatie\Permission\Traits\HasRoles;
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
+    use DeletesUnusedAttachment;
     use HasApiTokens;
     use HasFactory;
     use HasHashId;
@@ -71,11 +73,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     protected static function booted(): void
     {
-        static::deleting(function (User $user) {
-            if ($user->avatar && Storage::exists($user->avatar)) {
-                Storage::delete($user->avatar);
-            }
-        });
+        static::deleteUnusedAttachment('avatar');
     }
 
     protected function avatarUrl(): Attribute

@@ -76,14 +76,7 @@ class UserController extends Controller
 
         /** @var \App\Models\User */
         $user = Auth::user();
-
-        if ($user->avatar) {
-            if (Storage::exists($user->avatar)) {
-                Storage::delete($user->avatar);
-            }
-
-            $user->update(['avatar' => null]);
-        }
+        $user->update(['avatar' => null]);
 
         Flash::success('用戶頭像刪除成功，恢復成用戶預設頭像');
     }
