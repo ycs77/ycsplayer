@@ -39,8 +39,7 @@ jobs:
 
       - name: Setup environment key
         run: |
-          touch .env.testing
-          echo -e "APP_KEY=" > .env.testing
+          php -r "file_exists('.env.testing') || copy('.env.example', '.env.testing');"
           php artisan key:generate --env=testing
 
       - name: Run Pint
