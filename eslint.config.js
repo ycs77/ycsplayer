@@ -4,9 +4,10 @@ export default ycs77({
   vue: true,
   typescript: true,
   ignores: [
-    'composer.json',
-    'tsconfig.json',
-    'lang/**/*',
+    '**/composer.json',
+    '**/tsconfig.json',
+    '**/pint.json',
+    '**/lang/**/*',
   ],
 })
   .append({
