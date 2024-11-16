@@ -26,7 +26,6 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, mysql, mysqli, pdo_mysql, bcmath, intl, gd, exif, iconv, imagick, fileinfo
-          tools: phpstan
           coverage: none
 
       - name: Setup problem matchers
@@ -46,7 +45,7 @@ jobs:
         run: vendor/bin/pint
 
       - name: Run PHPStan
-        run: phpstan analyse
+        run: vendor/bin/phpstan analyse
 
       - name: Run tests
         run: vendor/bin/pest
