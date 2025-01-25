@@ -13,7 +13,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
  */
 class Filesystem extends MediaLibraryFilesystem
 {
-    public function add(string $file, Media $media, string $targetFileName = null): bool
+    public function add(string $file, Media $media, ?string $targetFileName = null): bool
     {
         app(FileManipulator::class)->createDerivedFilesFromLocal($media, $file);
 

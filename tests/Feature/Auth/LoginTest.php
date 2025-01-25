@@ -2,6 +2,7 @@
 
 use App\Providers\RouteServiceProvider;
 use Database\Seeders\UserSeeder;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertAuthenticated;
 use function Pest\Laravel\assertGuest;

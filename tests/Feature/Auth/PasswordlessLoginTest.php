@@ -6,6 +6,7 @@ use Database\Seeders\UserSeeder;
 use Grosv\LaravelPasswordlessLogin\UserClass;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
+
 use function Pest\Laravel\assertAuthenticatedAs;
 use function Pest\Laravel\assertGuest;
 use function Pest\Laravel\get;

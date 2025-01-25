@@ -51,7 +51,7 @@ class UploadHandler extends ResumableJSUploadHandler
             // ensure that the chunk name is for unique for the client session
             $useSession = $this->config->chunkUseSessionForName();
             $useBrowser = $this->config->chunkUseBrowserInfoForName();
-            if ($useSession && false === static::canUseSession()) {
+            if ($useSession && static::canUseSession() === false) {
                 $useBrowser = true;
                 $useSession = false;
             }

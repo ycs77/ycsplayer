@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
 use function Pest\Laravel\delete;
 use function Pest\Laravel\post;
 use function Pest\Laravel\seed;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 beforeEach(function () {
     seed(UserSeeder::class);

@@ -5,6 +5,7 @@ use App\Enums\RoomType;
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\UserSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
+
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;

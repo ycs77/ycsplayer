@@ -7,6 +7,7 @@ use App\Room\RoomNoteEditorCacheRepository;
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Event;
+
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;

@@ -23,9 +23,9 @@ class PasswordlessController extends Controller
         if (! $this->urlGenerator->hasCorrectSignature($request) ||
             ($this->urlGenerator->signatureHasNotExpired($request) && ! $this->passwordlessLoginService->requestIsNew())
         ) {
-            throw new InvalidSignatureException();
+            throw new InvalidSignatureException;
         } elseif (! $this->urlGenerator->signatureHasNotExpired($request)) {
-            throw new ExpiredSignatureException();
+            throw new ExpiredSignatureException;
         }
 
         $this->passwordlessLoginService->cacheRequest($request);

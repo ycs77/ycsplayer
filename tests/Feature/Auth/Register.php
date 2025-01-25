@@ -1,6 +1,7 @@
 <?php
 
 use App\Providers\RouteServiceProvider;
+
 use function Pest\Laravel\get;
 use function Pest\Laravel\post;
 

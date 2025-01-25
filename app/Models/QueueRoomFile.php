@@ -57,7 +57,7 @@ class QueueRoomFile extends Model
     {
         $mediaClass = config('media-library.media_model');
         /** @var \Spatie\MediaLibrary\MediaCollections\Models\Media $loadingMedia */
-        $loadingMedia = new $mediaClass();
+        $loadingMedia = new $mediaClass;
 
         $loadingMedia->name = $this->name;
         $loadingMedia->file_name = basename($this->path);

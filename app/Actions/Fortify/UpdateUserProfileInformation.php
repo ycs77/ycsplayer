@@ -7,8 +7,8 @@ use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
-use Laravel\Fortify\Rules\Password;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -30,7 +30,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             ],
         ], config('ycsplayer.password_less') ? [] : [
             'current_password' => ['nullable', 'string', 'current_password:web'],
-            'password' => ['required_with:current_password', 'nullable', 'string', new Password, 'confirmed'],
+            'password' => ['required_with:current_password', 'nullable', 'string', Password::min(8), 'confirmed'],
         ]), [
             'current_password.current_password' => __('The provided password does not match your current password.'),
         ])->validate();

@@ -14,18 +14,18 @@ class CdnManager extends Manager
         return 'null';
     }
 
-    public function disk(string $disk = null): CdnService
+    public function disk(?string $disk = null): CdnService
     {
         return $this->driver(in_array($disk, $this->supportedDisks) ? $disk : null);
     }
 
     protected function createNullDriver()
     {
-        return new NullCdnService();
+        return new NullCdnService;
     }
 
     protected function createDoDriver()
     {
-        return new DOCdnService();
+        return new DOCdnService;
     }
 }

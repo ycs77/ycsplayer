@@ -60,7 +60,7 @@ class FileManipulator extends MediaLibraryFileManipulator
                 return $onlyMissing && Storage::disk($media->disk)->exists($relativePath);
             })
             ->each(function (Conversion $conversion) use ($media, $file) {
-                (new PerformConversionAction())->execute($conversion, $media, $file);
+                (new PerformConversionAction)->execute($conversion, $media, $file);
 
                 if (is_file($conversionFile = pathinfo($file, PATHINFO_DIRNAME).'/'.$conversion->getConversionFile($media))) {
                     unlink($conversionFile);

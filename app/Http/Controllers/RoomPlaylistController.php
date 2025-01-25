@@ -170,7 +170,7 @@ class RoomPlaylistController extends Controller
     protected function changeToNextPlaylistItem(Room $room,
         int $requestedCurrentPlayingId,
         bool $autoRemove,
-        callable $callback = null)
+        ?callable $callback = null)
     {
         $roomId = $room->id;
 

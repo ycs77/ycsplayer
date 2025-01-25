@@ -11,7 +11,7 @@ class PasswordlessLoginProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('passwordless-login', function ($app) {
-            return new PasswordlessLoginManager();
+            return new PasswordlessLoginManager;
         });
     }
 

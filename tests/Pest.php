@@ -5,6 +5,7 @@ use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Config;
+
 use function Pest\Laravel\actingAs;
 
 uses(
@@ -12,7 +13,7 @@ uses(
     Illuminate\Foundation\Testing\RefreshDatabase::class,
 )->in('Feature');
 
-function user(string $name = null, string $email = null): ?User
+function user(?string $name = null, ?string $email = null): ?User
 {
     if ($name || $email) {
         return User::query()
@@ -52,7 +53,7 @@ function playlist(Room $room, string $itemTitle): ?PlaylistItem
         ->first();
 }
 
-function fakeFileFromPath(string $path, string $filename = null)
+function fakeFileFromPath(string $path, ?string $filename = null)
 {
     $filename = $filename ?? basename($path);
 
